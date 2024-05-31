@@ -1,0 +1,109 @@
+{% load static %} {% if not categories %}
+<div class="flex flex-col items-center gap-2 my-20 mx-auto">
+  <i class="fa-solid fa-box-open text-teal-900 text-9xl"></i>
+  <span>Aucune catégorie trouvé</span>
+  <a
+    href="{% url 'products' %}"
+    class="bg-yellow-400 rounded-full py-2 px-4 flex items-center gap-4 group"
+    >Ajouter une catégorie
+    <span
+      class="bg-yellow-400 rounded-full py-2 px-3 group-hover:bg-teal-900 group-hover:text-white"
+      >&rarr;</span
+    ></a
+  >
+</div>
+{% else %}
+<div class="w-full mx-auto flex flex-col gap-6">
+  <div class="category-container relative w-full mx-auto flex justify-center items-center overflow-hidden">
+    <button
+      id="prevButton"
+      class="absolute left-0 z-10 px-2 py-1 bg-yellow-200 hover:bg-yellow-300 hover:text-black rounded-full transition-all duration-300"
+    >
+      &larr;
+    </button>
+    <button
+      id="nextButton"
+      class="absolute right-0 z-10 px-2 py-1 bg-yellow-200 hover:bg-yellow-300 hover:text-black rounded-full transition-all duration-300"
+    >
+      &rarr;
+    </button>
+    <div
+      class="category-slider mx-4 w-full flex gap-1 transition-transform duration-500 ease-in-out"
+    >
+      {% for obj in categories %}
+      <!--  -->
+      {% include 'store/components/category_card.html' %}
+      <!--  -->
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endif %}
+<!--  -->
+<style>
+  .category-container {
+    position: relative;
+    width: 100%;
+  }
+
+  .category-slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+
+  .category-card {
+    box-sizing: border-box;
+    flex: 0 0 auto; /* Prevent shrinking */
+  }
+</style>
+<!--  -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const slider = document.querySelector('.category-slider');
+  const cards = document.querySelectorAll('.category-card');
+  const prevButton = document.getElementById('prevButton');
+  const nextButton = document.getElementById('nextButton');
+
+  let currentIndex = 0;
+  let itemsPerView;
+
+  function updateItemsPerView() {
+    const width = window.innerWidth;
+    if (width < 640) {
+      itemsPerView = 2; // Small screens
+    } else if (width < 1024) {
+      itemsPerView = 4; // Medium screens
+    } else {
+      itemsPerView = 6; // Large screens
+    }
+  }
+
+  function updateButtons() {
+    prevButton.disabled = currentIndex === 0;
+    nextButton.disabled = currentIndex >= cards.length - itemsPerView;
+  }
+
+  function slide(direction) {
+    if (direction === 'next' && currentIndex < cards.length - itemsPerView) {
+      currentIndex++;
+    } else if (direction === 'prev' && currentIndex > 0) {
+      currentIndex--;
+    }
+    slider.style.transform = `translateX(-${currentIndex * (100 / itemsPerView)}%)`;
+    updateButtons();
+  }
+
+  // Initial setup
+  updateItemsPerView();
+  updateButtons();
+
+  prevButton.addEventListener('click', () => slide('prev'));
+  nextButton.addEventListener('click', () => slide('next'));
+  window.addEventListener('resize', () => {
+    updateItemsPerView();
+    updateButtons();
+    slider.style.transform = `translateX(-${currentIndex * (100 / itemsPerView)}%)`;
+  });
+});
+</script>

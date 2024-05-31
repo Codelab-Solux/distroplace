@@ -1,0 +1,171 @@
+{% load static %}
+
+<!-- Footer start -->
+
+<footer class="bg-teal-900 text-center text-white lg:text-left">
+  <div class="p-8 w-full max-w-5xl mx-auto rounded-b-xl shadow-xl bg-teal-700 flex mx-auto justify-between items-center">
+    <div
+      class="flex items-center justify-between items-center text-white gap-3"
+    >
+      <i class="fa-regular fa-envelope-open text-3xl"></i>
+      <div class="flex flex-col">
+        <h3 class="font-bold text-lg">Inscrivez vouas a notre Newsletter</h3>
+        <small> ... et recevez votre pemiere livraison gratuite. </small>
+      </div>
+    </div>
+    <form
+      class="w-full max-w-[400px] flex items-center gap-4 bg-white hover:bg-yellow-100 rounded-full p-2 text-sm text-gray-700"
+      method="POST"
+    >
+      <input
+        class="px-2 py-1 border-none w-full rounded-full outline-none focus:bg-yellow-50"
+        type="text"
+        name="query"
+        placeholder="Votre adresse mail..."
+      />
+      <button
+        type="submit"
+        class="px-4 py-1 bg-teal-700 hover:bg-yellow-300 hover:text-black rounded-full text-white"
+      >
+        Souscrire!
+      </button>
+    </form>
+  </div>
+  <div class="p-8 w-full max-w-7xl mx-auto text-center md:text-left grid gap-4">
+
+    <div class="grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+      <!-- section Information -->
+      <div class="text-gray-300 text-sm">
+        <h3 class="mb-4 text-white text-lg font-bold">Informations</h3>
+        <p class="mb-2">
+          <a href="{% url 'blog' %}" class="hover:text-yellow-300">Blog</a>
+        </p>
+        <p class="mb-2">
+          <a href="{% url 'about' %}" class="hover:text-yellow-300">À propos</a>
+        </p>
+        <p class="mb-2">
+          <a href="{% url 'home' %}" class="hover:text-yellow-300"
+            >Accessibilité</a
+          >
+        </p>
+        <p class="mb-2">
+          <a href="{% url 'contact' %}" class="hover:text-yellow-300"
+            >Contactez-nous
+          </a>
+        </p>
+      </div>
+
+      <!-- section Liens utiles -->
+      <div class="text-gray-300 text-sm">
+        <h3 class="mb-4 text-white text-lg font-bold">Liens utiles</h3>
+        <p class="mb-2">
+          <a href="{% url 'feedbacks' %}" class="hover:text-yellow-300">
+            Feedbacks</a
+          >
+        </p>
+        <p class="mb-2">
+          <a href="{% url 'home' %}" class="hover:text-yellow-300">
+            Aide et support</a
+          >
+        </p>
+        <p class="mb-2">
+          <a href="{% url 'home' %}" class="hover:text-yellow-300">
+            Foire aux questions</a
+          >
+        </p>
+        <p class="mb-2">
+          <a href="{% url 'home' %}" class="hover:text-yellow-300">
+            Comment ça marche</a
+          >
+        </p>
+      </div>
+
+      <!-- section Mentions légales -->
+      <div class="text-gray-300 text-sm">
+        <h3 class="mb-4 text-white text-lg font-bold">Mentions légales</h3>
+        <p class="mb-2">
+          <a href="{% url 'terms_of_use' %}" class="hover:text-yellow-300"
+            >Termes et Conditions</a
+          >
+        </p>
+        <p class="mb-2">
+          <a href="{% url 'return_policy' %}" class="hover:text-yellow-300"
+            >Politiques de retour
+          </a>
+        </p>
+        <p class="mb-2">
+          <a href="{% url 'delivery_policy' %}" class="hover:text-yellow-300"
+            >Politiques de livraison
+          </a>
+        </p>
+        <p class="mb-2">
+          <a href="{% url 'privacy_policy' %}" class="hover:text-yellow-300"
+            >Politiques de confidentialité</a
+          >
+        </p>
+      </div>
+
+      <!-- section demande aide -->
+      <div class="text-gray-300 text-sm">
+        <h3 class="mb-4 text-white text-lg font-bold">Besoin d'aide ?</h3>
+        <p class="mb-2">
+          <a href="{% url 'home' %}" class="hover:text-yellow-300"
+            >Service Client</a
+          >
+        </p>
+        <p class="mb-2">
+          <a href="{% url 'home' %}" class="hover:text-yellow-300"
+            >Condition générale de vente</a
+          >
+        </p>
+      </div>
+    </div>
+    <!--Copyright-->
+    <div class="pt-10 flex flex-col md:flex-row justify-between items-center">
+      <div
+        class="flex flex-col md:flex-row gap-2 items-center text-gray-200 text-xs"
+      >
+        <img
+          src="{% static 'imgs/logo-w.png' %}"
+          class="h-7 w-auto"
+          alt="..."
+        />
+        <span>Copyright &copy; {% now "Y" %}</span>
+        <a class="font-semibold text-white dark:text-neutral-400" href=""
+          >Distroplace, tous droits reservés
+        </a>
+      </div>
+      <div class="flex gap-4 items-center justify-between">
+        <a
+          href="https://www.facebook.com/profile.php?id=61550334065685"
+          target="_blank"
+          class="mr-6 text-gray-200 hover:text-yellow-300"
+        >
+          <i class="fa-brands fa-facebook text-xl"></i>
+        </a>
+        <a
+          href="https://www.youtube.com/channel/UCrjDxAvNw9e9awAMnFMLABw"
+          target="_blank"
+          class="mr-6 text-gray-200 hover:text-yellow-300"
+        >
+          <i class="fa-brands fa-youtube text-xl"></i>
+        </a>
+        <a
+          href="https://twitter.com/Afridemia23"
+          target="_blank"
+          class="mr-6 text-gray-200 hover:text-yellow-300"
+        >
+          <i class="fa-brands fa-twitter text-xl"></i>
+        </a>
+        <a
+          href="https://www.linkedin.com/company/98545936/admin/feed/posts/?feedType=following"
+          target="_blank"
+          class="mr-6 text-gray-200 hover:text-yellow-300"
+        >
+          <i class="fa-brands fa-linkedin text-xl"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- and all footer -->

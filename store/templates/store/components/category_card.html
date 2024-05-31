@@ -1,0 +1,21 @@
+{% load static %}
+<a
+  href="{% url 'products' %}?query={{obj.name}}"
+  class="category-card flex-shrink-0 px-2 py-1 w-1/2 md:w-1/4 lg:w-1/6 rounded-full border border-yellow-400 bg-yellow-50 hover:bg-yellow-200 flex justify-center items-center gap-4"
+>
+  {% if obj.image %}
+  <img
+    src="{{ obj.image.url }}"
+    alt="{{ obj.name }}"
+    class="w-10 h-10 object-cover rounded-full bg-white"
+  />
+  {% else %}
+  <img
+    src="{% static 'imgs/logo-g.png' %}"
+    alt="image"
+    class="w-10 h-10 object-cover rounded-full bg-white"
+  />
+  {% endif %}
+
+  <span>{{obj.name}}</span>
+</a>

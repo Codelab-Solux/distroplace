@@ -1,0 +1,48 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<section class="p-4 lg:p-8 w-full max-w-5xl mx-auto grid shadow-lg">
+  <h3 class="font-bold text-3xl text-teal-900 mb-2">Feedback</h3>
+  <p>
+    Chez Distroplace, votre opinion compte ! Nous apprécions vos commentaires,
+    suggestions et avis, car ils nous aident à améliorer nos produits et
+    services. Merci de prendre le temps de partager votre expérience avec nous.
+  </p>
+  <div class="text-sm">
+    <article>
+      <h2 class="mt-4 font-bold text-lg">Partagez Votre Avis</h2>
+      <p>
+        Avez-vous récemment effectué un achat chez nous ? Nous aimerions savoir
+        comment s'est passée votre expérience. Veuillez remplir le formulaire
+        ci-dessous pour nous faire part de vos commentaires.
+      </p>
+
+      <form action="/envoyer-feedback" method="POST"> <label for="nom">Nom :</label><br> <input type="text" id="nom" name="nom" required><br><br>
+<label for="email">Email :</label><br> <input type="email" id="email" name="email" required><br><br>
+<label for="produit">Produit Acheté :</label><br> <input type="text" id="produit" name="produit" required><br><br>
+<label for="note">Note (sur 5) :</label><br> <select id="note" name="note" required> <option value="5">5 - Excellent</option> <option value="4">4 - Très bon</option> <option value="3">3 - Bon</option> <option value="2">2 - Moyen</option> <option value="1">1 - Mauvais</option> </select><br><br>
+<label for="commentaire">Commentaire :</label><br>
+<textarea id="commentaire" name="commentaire" rows="4" required></textarea><br><br>
+<button type="submit">Envoyer</button>
+</form>
+    </article>
+
+    <article>
+      <h2 class="mt-4 font-bold text-lg">
+        Pourquoi Votre Feedback est Important
+      </h2>
+      <p>Votre feedback nous permet de :</p>
+      <ul class="ml-4">
+        <li>
+          - Comprendre ce que vous aimez ou n'aimez pas dans nos produits.
+        </li>
+        <li>
+          - Identifier les domaines où nous pouvons améliorer notre service.
+        </li>
+        <li>
+          - Développer de nouveaux produits qui répondent mieux à vos besoins.
+        </li>
+      </ul>
+    </article>
+  </div>
+
+</section>
+{% endblock %}

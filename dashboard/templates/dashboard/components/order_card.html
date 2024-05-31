@@ -1,0 +1,28 @@
+{% load static %}
+
+<div
+  class="p-2 w-full bg-white hover:bg-gray-100 text-xs lg:text-sm flex justify-between items-center rounded-lg border hover:shadow-lg transition duration-200 ease-in"
+>
+  <h3 class="font-bold text-black">Commande N°{{obj.id}}</h3>
+  <p>
+    <i class="fa-solid fa-money-bill mr-2"></i>
+    {{obj.amount}} CFA
+  </p>
+  <p>
+    <i class="fa-solid fa-calendar-days mr-2"></i>
+    {{obj.timestamp.date}}
+  </p>
+  <p>
+    <i class="fa-solid fa-clock mr-2"></i>
+    {{obj.timestamp.time}}
+  </p>
+  <small class="bg-red-200 text-black px-2 py-1 rounded-full">
+    {{obj.get_status_display}}
+  </small>
+  <button
+    onclick="toggle_sentry()"
+    class="text-gray-400 hover:text-teal-900 p-2 transition duration-200 ease-in"
+  >
+    <i class="fa-solid fa-ellipsis-vertical"></i>
+  </button>
+</div>

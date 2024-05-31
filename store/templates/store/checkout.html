@@ -1,0 +1,122 @@
+{% extends "main.html" %}
+<!--  -->
+{% load static %} {% block content %}
+
+<div class="p-8 w-full max-w-7xl mx-auto flex flex-col justify-between gap-6">
+  <div class="flex justify-between">
+    <div
+      class="bg-teal-900 py-2 px-4 rounded-full flex items-center text-white gap-4"
+    >
+      <a
+        id="back-button"
+        class="px-2 py-1 hover:bg-yellow-400 hover:text-black rounded-full  transition-all duration-300"
+        href="#"
+        >&larr;</a
+      >
+      Retourner
+    </div>
+    <span
+      class="flex items-center gap-4 py-2 px-4 rounded-full bg-yellow-200 text-black"
+      ><i class="fa-solid fa-scroll"></i>Résumé d'achat
+    </span>
+  </div>
+
+  <div class="flex gap-4">
+    <!-- cart details -->
+    <div class="overflow-x-auto w-full overflow-y-hidden rounded-xl">
+      <table id="items_table" class="w-full text-left db-table">
+        <thead
+          class="bg-teal-900 border border-teal-900 bg-teal-900 text-white"
+        >
+          <tr>
+            <th class="px-3 py-4 text-sm">Image</th>
+            <th class="px-3 py-4 text-sm">Nom</th>
+            <th class="px-3 py-4 text-sm">Prix</th>
+            <th class="px-3 py-4 text-sm text-center">Quantité</th>
+            <th class="px-3 py-4 text-sm">Total</th>
+          </tr>
+        </thead>
+
+        <tbody class="border">
+          {% for item in cart_items %}
+          <tr
+            class="text-gray-600 border text-sm hover:bg-white hover:text-black transition-all duration-300"
+          >
+            <td class="px-3 py-1">
+              {% if item.product.image %}
+              <img
+                class="h-10 text-gray-200"
+                src="{{item.product.image.url}}"
+                alt="item image"
+              />
+              {% else %}
+              <img
+                class="h-10 text-gray-200"
+                src="{% static 'imgs/logo-g.png' %}"
+                alt="image"
+              />
+              {% endif %}
+            </td>
+            <td class="px-3 py-1">{{item.product.name}}</td>
+            {% if item.product.is_promoted %}
+            <td class="px-3 py-1">{{item.product.promo_price}}</td>
+            {% else %}
+            <td class="px-3 py-1">{{ item.product.price }}</td>
+            {% endif %}
+            <td class="px-3 py-1 text-center">{{ item.quantity }}</td>
+            <td class="px-3 py-1">{{ item.total_price }} Cfa</td>
+          </tr>
+          <input type="hidden" id="csrf_token" value="{{ csrf_token }}" />
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+<!-- shipping info -->
+    <div class="grid gap-2 w-full max-w-60 xl:max-w-80">
+      <div class="p-4 flex flex-col gap-1 bg-yellow-400 rounded-lg">
+        
+          <p>Articles : {{ cart_count }} </p>
+        
+        
+          <p>Quantité : {{ cart_items|length }} </p>
+    
+        
+          <p>Grand Total : {{ total_price }} Cfa</p>
+
+        {% if shipping_info %}
+        <a href="{% url 'place_order' %}" class="px-4 py-2 flex justify-between items-center w-full bg-teal-700 hover:bg-teal-900 text-white rounded-full group  transition-all duration-300">Placer ma commande
+          <span class="px-2 py-1 group-hover:bg-yellow-400 group-hover:text-black rounded-full  transition-all duration-300">&rarr;</span>
+        </a>
+      {% endif %}
+      </div>
+      {% if not shipping_info %}
+      <form id="form" action="{% url 'checkout' %}" method="POST" class="bg-teal-900 text-white text-sm p-4 rounded-lg flex flex-col gap-2">
+        <h2 class="my-4 font-bold text-gray-700 text-xl">Infos de livraison</h2>
+
+        <input
+          class="mt-4 px-4 h-12 w-full font-medium tracking-wider bg-green-700 hover:bg-black text-white"
+          type="submit"
+          value="Enregistrer"
+        />
+      </form>
+      {% else %}
+      <div  class="bg-teal-900 text-white text-sm p-4 rounded-lg flex flex-col gap-2">
+        <p>Telephone : {{ shipping_info.phone}}</p>
+        <p>Adresse : {{ shipping_info.address}}</p>
+        <p>Quartier : {{ shipping_info.district}}</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+  document
+    .getElementById("back-button")
+    .addEventListener("click", function (event) {
+      console.log("going back");
+      event.preventDefault();
+      window.history.go(-1);
+    });
+</script>
+{% endblock %}

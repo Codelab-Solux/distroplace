@@ -1,0 +1,115 @@
+{% extends 'main_alt.html' %} {% load static %} {% block content %}
+<div class="w-full max-w-7xl mx-auto flex flex-col gap-4">
+  <div class="flex justify-between items-center">
+    <h3 class="bg-teal-900 rounded-full text-white py-2 px-4">
+      <a
+        id="back-button"
+        class="inline-block px-2 py-1 text-white bg-teal-900 hover:bg-yellow-400 hover:text-black rounded-full transition-all duration-300"
+        href="#"
+        >&larr;</a
+      >
+      Liste des commandes
+      <i class="fa-solid fa-dolly ml-2"></i>
+    </h3>
+    <a
+      href="{% url 'deliveries' %}"
+      class="bg-yellow-100 rounded-full py-2 px-4 text-xs flex items-center gap-4 group"
+      >Commandes du jour
+      <span
+        class="bg-yellow-400 rounded-full py-2 px-3 group-hover:bg-teal-900 group-hover:text-white"
+        >&rarr;</span
+      ></a
+    >
+  </div>
+  <form
+    id="filter"
+    hx-post="{% url 'filter_orders' %}"
+    hx-target=".orders_list"
+    class="p-2 w-full bg-yellow-100 rounded-full flex justify-between items-center gap-1 text-sm xl:text-sm"
+  >
+    {% csrf_token %}
+    <section class="w-full flex justify-between items-center gap-1 text-xs">
+      <!-- date margins -->
+      {% include 'dashboard/components/date_margins.html' %}
+      <!-- phone field -->
+      <input
+        hx-post="{% url 'filter_orders' %}"
+        hx-target=".orders_list"
+        hx-trigger="keyup changed delay:500ms"
+        placeholder="Telephone"
+        name="phone"
+        type="text"
+        class="px-3 py-2 rounded-full focus:bg-gray-100 outilne-none w-full cursor-pointer"
+      />
+      <!-- amount field -->
+      <input
+        hx-post="{% url 'filter_orders' %}"
+        hx-target=".orders_list"
+        hx-trigger="keyup changed delay:500ms"
+        placeholder="Montant"
+        name="amount"
+        type="text"
+        class="px-3 py-2 rounded-full focus:bg-gray-100 outilne-none w-full cursor-pointer"
+      />
+      <!-- items counts -->
+      <select
+        name="items"
+        class="hidden md:inline px-3 py-2 rounded-full focus:bg-gray-100 outilne-none w-fit"
+      >
+        <option value="" selected disabled>Nombre d'articles</option>
+        <option value="10">1 - 10</option>
+        <option value="30">11 - 30</option>
+        <option value="50">31 - 50</option>
+        <option value="100">51 - 100</option>
+        <option value="101">plus de 100</option>
+      </select>
+      <!-- statuses -->
+      <select
+        name="status"
+        class="hidden sm:flex px-3 py-2 rounded-full focus:bg-gray-100 outilne-none w-full cursor-pointer"
+      >
+        <option value="" selected="true" disabled="disabled">Status</option>
+        <option value="pending">En attente</option>
+        <option value="processed">En cours</option>
+        <option value="delivered">Livrée</option>
+      </select>
+    </section>
+    <button
+      class="px-3 py-2 bg-teal-700 hover:bg-teal-900 text-white hover:text-yellow-400 rounded-full transition duration-200 ease-in"
+      type="submit"
+    >
+      <i class="fa-solid fa-filter"></i>
+    </button>
+    <button
+      class="px-3 py-2 bg-yellow-50 hover:bg-yellow-400 hover:text-black rounded-full transition duration-200 ease-in"
+      hx-on:click="clearForm('filter')"
+      type="submit"
+    >
+      <i class="fa-solid fa-rotate-right"></i>
+    </button>
+  </form>
+
+  <!--  -->
+
+  <div
+    class="orders_list"
+    hx-get="{% url 'orders_list' %}"
+    hx-trigger="load, db_changed from:body"
+    hx-target="this"
+  ></div>
+</div>
+
+<script>
+  function clearForm(div_id) {
+    var form = document.getElementById(div_id);
+    form.reset();
+  }
+
+  document
+    .getElementById("back-button")
+    .addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent the default anchor behavior
+      window.history.go(-1); // Go back two pages
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<section class="p-4 lg:p-8 w-full max-w-5xl mx-auto grid shadow-lg">
+  <section class="bg-white py-8">
+    <div class="container max-w-6xl mx-auto m-8 px-8">
+      <div class="grid lg:grid-cols-2 md:grid-cols-2 gap-16">
+        <div class="mt-4 rounded sm:ml-4 md:ml-4 lg:ml-0">
+          <div class="w-full overflow-hidden">
+            <img
+              src="{% static 'imgs/logo.png' %}"
+              alt=""
+              class="rounded-t-lg w-full"
+              id="cat_img"
+            />
+          </div>
+        </div>
+        <div class="">
+          <h1
+            class="text-black my-4 text-5xl font-bold leading-tight"
+            style="font-size: 60px"
+          >
+            Découvrez l'histoire et la mission de Distroplace
+          </h1>
+
+          <p class="leading-normal text-2xl mb-8">
+            Plongez dans notre passion pour la littérature africaine et explorez
+            notre engagement envers les auteurs et les lecteurs.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <article>
+    <h2 class="mt-4 font-bold text-lg">Notre Histoire</h2>
+    <p>
+      Fondé en 2022, Distroplace est né de la passion pour la grande
+      distribution. Nous avons commencé comme une petite entreprise avec une
+      grande vision : offrir des produits de haute qualité à des prix
+      compétitifs, tout en garantissant une expérience client exceptionnelle.
+    </p>
+  </article>
+  <article>
+    <h2 class="mt-4 font-bold text-lg">Notre Mission</h2>
+    <p>
+      Chez Distroplace, notre mission est simple : satisfaire nos clients avec
+      des produits innovants et un service client inégalé. Nous croyons que
+      chaque client mérite le meilleur, et nous nous efforçons de le leur offrir
+      à chaque étape.
+    </p>
+  </article>
+  <article>
+    <h2 class="mt-4 font-bold text-lg">Notre Valeurs</h2>
+    <ul class="ml-4">
+      <li>
+        <b> - Qualité : </b>Nous sélectionnons rigoureusement nos produits pour
+        garantir leur excellence.
+      </li>
+      <li>
+        <b> - Intégrité : </b>Nous sommes transparents et honnêtes dans toutes
+        nos interactions.
+      </li>
+      <li>
+        <b> - Innovation : </b>Nous cherchons constamment à innover pour
+        répondre aux besoins changeants de nos clients.
+      </li>
+      <li>
+        <b> - Service Client : </b>Votre satisfaction est notre priorité
+        absolue.
+      </li>
+    </ul>
+  </article>
+
+  <article>
+    <h2 class="mt-4 font-bold text-lg">Notre équipe</h2>
+    <p>
+      Notre équipe est composée de professionnels passionnés par la grande
+      distribution. Ensemble, nous travaillons pour offrir des produits
+      exceptionnels et un service client réactif et attentif.
+    </p>
+  </article>
+
+  <article>
+    <h2 class="mt-4 font-bold text-lg">Nos Produits</h2>
+    <p>
+      Chez Distroplace, nous proposons une large gamme de produits, notamment :
+    </p>
+    <ul class="ml-4 font-bold text-teal-700">
+      <li>- Agroalimentaire</li>
+      <li>- Electroménager</li>
+      <li>- Electroniques</li>
+      <li>- Vêtements</li>
+      <li>- Autres</li>
+    </ul>
+    <p>
+      Chaque produit est sélectionné avec soin pour garantir qu'il répond à nos
+      critères de qualité et de performance.
+    </p>
+  </article>
+
+  <article>
+    <h2 class="mt-4 font-bold text-lg">Contactez-nous</h2>
+    <p>
+      Nous aimerions avoir de vos nouvelles ! Pour toute question ou
+      commentaire, n'hésitez pas à nous contacter via
+      <a href="{% url 'contact' %}">notre page de contact</a> . Merci de faire
+      partie de la famille Distroplace. Nous sommes impatients de vous servir !
+    </p>
+  </article>
+
+  <article>
+    <h2 class="mt-4 font-bold text-lg">Pourquoi Choisir Distroplace ?</h2>
+    <ul class="ml-4">
+      <li>
+        <b> - Sélection Rigoureuse : </b>Chaque produit est soigneusement
+        sélectionné pour répondre à nos normes de qualité strictes.
+      </li>
+      <li>
+        <b> - Prix Compétitifs : </b>Nous offrons des prix compétitifs sans
+        compromettre la qualité.
+      </li>
+      <li>
+        <b> - Livraison Rapide : </b>Profitez d'une livraison rapide et fiable
+        pour tous vos achats.
+      </li>
+      <li>
+        <b> - Service Client Exceptionnel : </b>Notre équipe est toujours prête
+        à vous aider, avant, pendant et après votre achat.
+      </li>
+    </ul>
+  </article>
+</section>
+{% endblock %}

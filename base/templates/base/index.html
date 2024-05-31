@@ -1,0 +1,245 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<div class="flex flex-col justify-between">
+  <section class="p-8 w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-4">
+    <div class="relative w-full max-w-3xl h-[600px] rounded-lg overflow-hidden">
+      <img
+        src="{% static 'imgs/hero_1.webp' %}"
+        alt="image"
+        class="w-full h-full object-cover"
+      />
+      <article
+        class="p-4 lg:p-8 absolute top-0 right-0 w-full h-full flex flex-col justify-center gap-4 z-5"
+      >
+        <span>{{ promo_1.catch_phrase}}</span>
+        <h2 class="text-black font-bold text-4xl">{{ promo_1.title }}</h2>
+        <p>
+          A partir de
+          <span class="text-red-500 font-bold text-2xl ml-2"
+            >{{ promo_1.price }} Cfa</span
+          >
+        </p>
+        <a
+          href="{% url 'promo_details' promo_1.id %}"
+          class="w-fit bg-teal-700 hover:bg-teal-900 rounded-full py-2 px-4 text-white flex items-center gap-4"
+        >
+          Voir les produits <span> &rarr; </span>
+        </a>
+      </article>
+    </div>
+
+    <div class="w-full lg:max-w-[442px] grid gap-4 text-sm">
+      <div class="relative w-full rounded-lg overflow-hidden">
+        {% if promo_1.image %}
+        <img
+          src="{{ promo_1.image.url }}"
+          alt="{{ promo_1.name }}"
+          class="w-full object-contain rounded-lg border"
+        />
+        {% else %}
+        <img
+          src="{% static 'imgs/hero_2.webp' %}"
+          alt="image"
+          class="w-full object-contain rounded-lg border"
+        />
+        {% endif %}
+        <article
+          class="p-6 lg:p-10 absolute top-0 right-0 w-full h-full flex flex-col justify-center gap-1 z-5"
+        >
+          <span>{{ promo_1.catch_phrase}}</span>
+          <h2 class="text-black font-bold text-2xl">{{ promo_1.title }}</h2>
+          <small>
+            A partir de
+            <span class="text-red-500 font-bold text-xl ml-2"
+              >{{ promo_1.price }} Cfa</span
+            >
+          </small>
+          <a
+            href="{% url 'promo_details' promo_2.id %}"
+            class="w-fit bg-teal-700 hover:bg-teal-900 rounded-full py-2 px-4 text-white flex items-center gap-4"
+          >
+            Voir les produits <span> &rarr; </span>
+          </a>
+        </article>
+      </div>
+      <!--  -->
+      <div class="relative w-full rounded-lg overflow-hidden">
+        {% if promo_3.image %}
+        <img
+          src="{{ promo_3.image.url }}"
+          alt="{{ promo_3.name }}"
+          class="w-full object-cover rounded-lg"
+        />
+        {% else %}
+        <img
+          src="{% static 'imgs/hero_3.webp' %}"
+          alt="image"
+          class="w-full object-cover rounded-lg"
+        />
+        {% endif %}
+        <article
+          class="p-4 lg:p-8 absolute top-0 right-0 w-full h-full flex flex-col justify-center gap-1 z-5"
+        >
+          <span>{{ promo_3.catch_phrase}}</span>
+          <h2 class="text-black font-bold text-2xl">{{ promo_3.title }}</h2>
+          <small>
+            A partir de
+            <span class="text-red-500 font-bold text-xl ml-2"
+              >{{ promo_3.price }} Cfa</span
+            >
+          </small>
+          <a
+            href="{% url 'promo_details' promo_3.id %}"
+            class="w-fit bg-teal-700 hover:bg-teal-900 rounded-full py-2 px-4 text-white flex items-center gap-4"
+          >
+            Voir les produits <span> &rarr; </span>
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- edibles -->
+  <section class="bg-yellow-100 p-8 w-full flex flex-col gap-2">
+    <div class="p-8 w-full max-w-7xl mx-auto">
+      <div class="flex justify-between items-center">
+        <h3 class="font-bold text-black text-lg">Fruits & Légumes</h3>
+        <div class="flex justify-between gap-1 text-xs tabbar h-fit w-60">
+          <button
+            class="tabBtn px-2 py-1 bg-white hover:bg-yellow-300 text-xs rounded-full w-full"
+            onclick="openTab(event, 'visits_listview')"
+            id="defaultTab"
+          >
+            Fruits
+          </button>
+          <button
+            class="tabBtn px-2 py-1 bg-white hover:bg-yellow-300 text-xs rounded-full w-full"
+            onclick="openTab(event, 'visits_gridview')"
+          >
+            Legumes
+          </button>
+          <button
+            class="tabBtn px-2 py-1 bg-white hover:bg-yellow-300 text-xs rounded-full w-full"
+            onclick="openTab(event, 'visits_gridview')"
+          >
+            Voir +
+          </button>
+        </div>
+      </div>
+      <p>Buy farm fresh fruits and vegetables online at the best prices</p>
+      <div class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+        {% for obj in fruits_veggies_spices %}
+        <!--  -->
+        {% include 'store/components/product_grid_card.html' %}
+        <!--  -->
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  <!-- electronics -->
+  <section class="bg-teal-100 p-8 w-full flex flex-col gap-2">
+    <div class="p-8 w-full max-w-7xl mx-auto">
+      <div class="flex justify-between items-center">
+        <h3 class="font-bold text-black text-lg">Appareils Electro Menager</h3>
+        <div class="flex justify-between gap-1 text-xs tabbar h-fit w-60">
+          <button
+            class="tabBtn px-2 py-1 bg-teal-200 hover:bg-teal-300 text-xs rounded-full w-full"
+            onclick="openTab(event, 'visits_listview')"
+            id="defaultTab"
+          >
+            Refrigirateurs
+          </button>
+          <button
+            class="tabBtn px-2 py-1 bg-teal-200 hover:bg-teal-300 text-xs rounded-full w-full"
+            onclick="openTab(event, 'visits_gridview')"
+          >
+            Mixeurs
+          </button>
+          <button
+            class="tabBtn px-2 py-1 bg-teal-200 hover:bg-teal-300 text-xs rounded-full w-full"
+            onclick="openTab(event, 'visits_gridview')"
+          >
+            Voir +
+          </button>
+        </div>
+      </div>
+      <p>Les appareils electronique pour votre maison</p>
+      <div class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+        {% for obj in appliances %}
+        <!--  -->
+        {% include 'store/components/product_grid_card.html' %}
+        <!--  -->
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  <!-- cloths -->
+  <section class="bg-white p-8 w-full flex flex-col gap-2">
+    <div class="p-8 w-full max-w-7xl mx-auto">
+      <div class="flex justify-between items-center">
+        <h3 class="font-bold text-black text-lg">Vêtements</h3>
+        <div class="flex justify-between gap-1 text-xs tabbar h-fit w-60">
+          <button
+            class="tabBtn px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-xs rounded-full w-full"
+            onclick="openTab(event, 'visits_listview')"
+            id="defaultTab"
+          >
+            Chemises
+          </button>
+          <button
+            class="tabBtn px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-xs rounded-full w-full"
+            onclick="openTab(event, 'visits_gridview')"
+          >
+            Pantalons
+          </button>
+
+          <button
+            class="tabBtn px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-xs rounded-full w-full"
+            onclick="openTab(event, 'visits_gridview')"
+          >
+            Voir +
+          </button>
+        </div>
+      </div>
+      <p>De bons vetements a la porté de tous</p>
+      <div class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+        {% for obj in cloths %}
+        <!--  -->
+        {% include 'store/components/product_grid_card.html' %}
+        <!--  -->
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+<!-- cta -->
+  <div class="px-8 w-full max-w-7xl mx-auto grid grid-cols-2 gap-4">
+    <img
+      src="{% static 'imgs/banner_1.webp' %}"
+      alt="image"
+      class="w-full object-cover rounded-t-xl"
+    />
+    <img
+      src="{% static 'imgs/banner_2.webp' %}"
+      alt="image"
+      class="w-full object-cover rounded-t-xl"
+    />
+  </div>
+  <!-- blogposts -->
+  <section class="bg-yellow-100 p-8 w-full flex flex-col gap-2">
+    <div class="p-8 w-full max-w-7xl mx-auto">
+      <h3 class="font-bold text-black text-xl">Nouvelles publications</h3>
+      <p>
+        Present posts in a best way to highlight interesting moments of your
+        blog.
+      </p>
+      <div class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+        {% for obj in latest_posts %}
+        <!--  -->
+        {% include 'base/components/blog_card.html' %}
+        <!--  -->
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+</div>
+
+{% endblock %}

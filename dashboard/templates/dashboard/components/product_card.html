@@ -1,0 +1,63 @@
+{% load static %}
+
+<div
+  class="relative w-full bg-white flex flex-col gap-2 rounded-xl border hover:shadow-lg hover:border-teal-900 cursor-pointer group transition duration-200 ease-in overflow-hidden"
+>
+  {% if obj.image %}
+  <img
+    src="{{ obj.image.url }}"
+    alt="{{ obj.name }}"
+    class="w-full h-60 object-contain"
+  />
+  {% else %}
+  <img
+    src="{% static 'imgs/logo.png' %}" 
+    alt="image"
+    class="w-full h-60 object-contain"
+  />
+  {% endif %}
+  <!--  -->
+
+  {% if obj.is_promoted %}
+  <span
+    class="absolute top-3 right-3 bg-white rounded-md px-2 py-1 text-yellow-400 text-lg"
+  >
+    <i class="fa-solid fa-crown"></i>
+  </span>
+  {% endif %}
+
+  <article class="p-2 h-full flex flex-col gap-1 bg-gray-100 text-sm">
+    <h3 class="font-bold text-black text-lg">{{obj.name}}</h3>
+    {% if obj.is_promoted %}
+    <p class="text-gray-500 line-through text-red-700">
+      <i class="fa-solid fa-tag mr-2"></i>
+      {{obj.price}} CFA / {{obj.unit}}
+    </p>
+    <p>
+      <i class="fa-solid fa-tags mr-2"></i>
+      {{obj.promo_price}} CFA / {{obj.unit}}
+    </p>
+    {% else %}
+    <p>
+      <i class="fa-solid fa-tag mr-2"></i>
+      {{obj.price}} CFA / {{obj.unit}}
+    </p>
+    {% endif %}
+
+    <div class="flex justify-between items-center text-xs">
+      <button
+        onclick="add_to_cart('{{ obj.id }}')"
+        class="bg-teal-700 hover:bg-teal-900 text-white px-4 py-2 rounded-full transition duration-200 ease-in"
+      >
+        Ajouter au panier <i class="fa-solid fa-cart-plus ml-2"></i>
+      </button>
+
+      <a href="{% url 'product_details' obj.id %}" class="bg-white hover:bg-yellow-100 border border-teal-900 px-3 py-2 rounded-full"
+        >Voir</a
+      >
+    </div>
+  </article>
+</div>
+<!-- Hidden CSRF token input -->
+<input type="hidden" id="csrf_token" value="{{ csrf_token }}">
+

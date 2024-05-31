@@ -1,0 +1,182 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<div class="p-8 w-full max-w-7xl mx-auto flex flex-col justify-between gap-6">
+  <div class="flex justify-between">
+    <div
+      class="bg-teal-900 py-2 px-4 rounded-full flex items-center text-white gap-4"
+    >
+      <a
+        id="back-button"
+        class="inline-block px-2 py-1 font-bold hover:bg-yellow-400 hover:text-black rounded-full transition-all duration-300"
+        href="#"
+        >&larr;</a
+      >
+      Retourner
+    </div>
+    <span
+      class="flex items-center gap-4 py-2 px-4 rounded-full bg-yellow-200 text-black"
+      ><i class="fa-solid fa-newspaper"></i>{{ curr_obj.title }}</span
+    >
+  </div>
+
+  <!--------------------------------------- blogpost layout --------------------------------------->
+
+  <section class="grid lg:flex lg:flex-row items-start gapy-4">
+    <!--------------------- current blogpost -------------------------->
+
+    <div
+      class="relative bg-white border rounded-xl flex flex-col w-full overflow-hidden"
+    >
+      {% if user.is_staff %}
+      <button
+        hx-target="#content_dialog"
+        class="absolute top-4 right-4 px-3 py-2 bg-white z-10 rounded-full transition duration-300 ease-in-out"
+        hx-get="{% url 'blogpost' curr_obj.id %}"
+      >
+        <i class="fa-solid fa-pen-to-square text-black text-sm"></i>
+      </button>
+      {% endif %}
+      <!--  -->
+      {% if not curr_obj.image %}
+      <img
+        class="h-80 w-full rounded-t-md object-cover"
+        src="{% static 'imgs/guac.webp' %}"
+        alt="blogpost image"
+      />
+      {% else %}
+      <img
+        class="h-80 w-full rounded-t-md object-cover"
+        src="{{curr_obj.image.url}}"
+        alt="blogpost image"
+      />
+      {% endif %}
+
+      <div class="p-4 lg:p-6 flex flex-col gap-4">
+        <!--  -->
+        <div class="flex justify-between items-center text-xs text-gray-500">
+          <span class="likes_count">{{ curr_obj.likes.all.count }} likes</span>
+          <a
+            hx-get="{% url 'blogpost' curr_obj.id %}"
+            class="px-3 py-1 bg-gray-100 hover:bg-teal-100 hover:text-black rounded-full flex items-center gap-1 cursor-pointer"
+          >
+            <i
+              id="likeIcon"
+              class="fa-solid fa-thumbs-up {% if user in obj.likes.all %} text-teal-700 {% endif %}"
+            ></i>
+            <span>Liker</span>
+          </a>
+
+          <button
+            onclick="toggleCommentBox()"
+            class="px-2 py-1 bg-gray-100 hover:bg-yellow-200 hover:text-black rounded-full flex items-center gap-1 cursor-pointer"
+          >
+            <i class="fa-solid fa-comments"></i>
+            <span> Commenter </span>
+          </button>
+          <span>{{obj_comments.all|length}} commentaires</span>
+        </div>
+
+        <hr />
+
+        <section class="comment_box my-2 hidden flex flex-col gap-2">
+          <form
+            hx-post="{% url 'blogpost' curr_obj.id %}"
+            class="flex flex-col w-full gap-2"
+          >
+            {% csrf_token %}
+            <textarea
+              required
+              name="comment"
+              id="comment"
+              cols="30"
+              rows="2"
+              class="mb-2 px-4 py-2 rounded-lg border focus:border-none focus:outline-none focus:ring-1 focus:ring-yellow-400 w-full"
+            ></textarea>
+            <div class="flex flex-row-reverse gap-2 items-end text-xs">
+              <button
+                class="px-4 py-2 text-white bg-teal-700 hover:bg-teal-900 rounded-full cursor-pointer"
+                type="submit"
+              >
+                Poster
+              </button>
+              <button
+                class="bg-gray-100 px-4 py-2 rounded-full hover:bg-red-700 hover:text-white"
+                onclick="document.getElementById('comment').value = '',toggleCommentBox('') "
+              >
+                Annuler
+              </button>
+            </div>
+          </form>
+          <!-- comments -->
+          <div>
+            {% for obj in comments %}
+            <!--  -->
+            <div class="flex flex-col text-xs border-dashed border-t-2 py-1">
+              <div class="flex gap-1 items-center">
+                {% if not commentator.image %}
+                <img
+                  class="h-7 w-7 bg-white rounded-full object-cover"
+                  src="{% static 'imgs/anon.png' %}"
+                  alt="image"
+                />
+                {% else %}
+                <img
+                  class="h-7 w-7 bg-white rounded-full object-cover"
+                  src="{{commentator.image.url}}"
+                  alt="image"
+                />
+                {% endif %}
+                <span class="font-bold text-black">@{{obj.user.username}}</span>
+              </div>
+              <p class="ml-8">{{obj.comment}}</p>
+            </div>
+            <!--  -->
+            {% endfor %}
+          </div>
+        </section>
+
+        <article class="flex flex-col gap-1 pt-2">
+          <h4 class="text-black text-3xl font-bold">{{curr_obj.title}}</h4>
+          <p class="py-2 text-lg">{{curr_obj.subtitle}}</p>
+          <p
+            class="text-sm text-gray-700 overflow-wrap:break-word word-break:break-all"
+          >
+            {{curr_obj.content|safe}}
+          </p>
+        </article>
+      </div>
+    </div>
+
+    <!--------------------------------------- other blogposts --------------------------------------->
+    <div
+      class="w-full lg:w-[500px] grid md:grid-cols-2 lg:grid-cols-1 gap-4 mt-6 lg:mt-0 lg:ml-6"
+    >
+      {% for obj in blogposts %}
+      <!--  -->
+      {% include 'widgets/blog_card_alt.html' %}
+      <!--  -->
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+<script>
+  function toggleCommentBox() {
+    var box = document.querySelector(`.comment_box`);
+    if (box.classList.contains("hidden")) {
+      box.classList.remove("hidden");
+      box.classList.add("block");
+    } else {
+      box.classList.remove("block");
+      box.classList.add("hidden");
+    }
+  }
+  
+  document
+    .getElementById("back-button")
+    .addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent the default anchor behavior
+      window.history.go(-2); // Go back two pages
+    });
+</script>
+
+{% endblock %}

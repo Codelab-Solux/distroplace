@@ -1,0 +1,23 @@
+{% if not orders %}
+<div class="flex flex-col items-center gap-2 my-20 mx-auto">
+  <i class="fa-solid fa-dolly text-teal-900 text-9xl"></i>
+  <span>Aucune commande trouvée</span>
+  <a
+    href="{% url 'products' %}"
+    class="bg-yellow-400 rounded-full py-2 px-4 flex items-center gap-4 group"
+    >Parcourir le catalogue de produits
+    <span
+      class="bg-yellow-400 rounded-full py-2 px-3 group-hover:bg-teal-900 group-hover:text-white"
+      >&rarr;</span
+    ></a
+  >
+</div>
+{% else %}
+<div class="flex flex-col gap-2">
+  {% for obj in orders %}
+  <!--  -->
+  {% include 'store/components/order_card.html' %}
+  <!--  -->
+  {% endfor %}
+</div>
+{% endif %}

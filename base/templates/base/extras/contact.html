@@ -1,0 +1,94 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+
+<section class="p-4 lg:p-8 w-full h-full max-w-5xl m-auto grid shadow-lg">
+  <div class="grid lg:grid-cols-2 md:grid-cols-2 gap-16">
+    <form action="#" method="POST" class="grid gap-3">
+      {% csrf_token %}
+      <p class="text-xl font-bold text-center">Formulaire de contact</p>
+      <input
+        type="email"
+        name="email"
+        id="email"
+        placeholder="Adresse mail"
+        class="w-full rounded-full border px-3 py-2 focus:outline-none focus:ring-1 focus:ring-yellow-400"
+      />
+
+      <input
+        type="text"
+        name="subject"
+        id="subject"
+        placeholder="Sujet"
+        class="w-full rounded-full border px-3 py-2 focus:outline-none focus:ring-1 focus:ring-yellow-400"
+      />
+
+      <textarea
+        name="message"
+        id="message"
+        rows="10"
+        class="block w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-1 focus:ring-yellow-400"
+      ></textarea>
+
+      <button
+        type="submit"
+        class="block py-2 w-full rounded-full bg-teal-700 hover:bg-teal-900 text-center text-sm text-white"
+      >
+        Envoyer
+      </button>
+    </form>
+    <!--  -->
+    <div class="grid gap-2">
+      <h1 class="text-teal-900 text-5xl font-bold">
+        Restez en contact avec nous !
+      </h1>
+      <p class="text-lg">
+        Nous serions ravis de vous aider ! Que vous ayez une question sur nos
+        produits, besoin d'assistance avec une commande, ou souhaitiez
+        simplement nous donner votre avis, n'hésitez pas à nous contacter.
+      </p>
+      <article class="p-3 bg-yellow-200 rounded-lg grid gap-2">
+        <h2 class="font-bold text-lg">Horaires d'Ouverture</h2>
+        <p>Nous sommes disponibles pour vous assister durant les horaires suivants :</p>
+        <ul class="ml-4">
+          <li><b> - Lundi - Vendredi : </b>9h00 - 18h00</li>
+          <li><b> - Samedi : </b>10h00 - 14h00</li>
+          <li><b> - Dimanche : </b>9h00 - 18h00</li>
+        </ul>
+      </article>
+      <!-- <article class="p-4 bg-teal-900 text-white rounded-lg grid gap-2">
+        <h2 class="font-bold text-lg">Suivez-nous</h2>
+        <p>Restez connecté avec nous sur les réseaux sociaux pour les dernières nouvelles et offres spéciales.</p>
+      <div class="flex gap-4 items-center justify-evenly">
+        <a
+          href="https://www.facebook.com/profile.php?id=61550334065685"
+          target="_blank"
+          class="mr-6 text-gray-200 hover:text-yellow-300"
+        >
+          <i class="fa-brands fa-facebook text-xl"></i>
+        </a>
+        <a
+          href="https://www.youtube.com/channel/UCrjDxAvNw9e9awAMnFMLABw"
+          target="_blank"
+          class="mr-6 text-gray-200 hover:text-yellow-300"
+        >
+          <i class="fa-brands fa-youtube text-xl"></i>
+        </a>
+        <a
+          href="https://twitter.com/Afridemia23"
+          target="_blank"
+          class="mr-6 text-gray-200 hover:text-yellow-300"
+        >
+          <i class="fa-brands fa-twitter text-xl"></i>
+        </a>
+        <a
+          href="https://www.linkedin.com/company/98545936/admin/feed/posts/?feedType=following"
+          target="_blank"
+          class="mr-6 text-gray-200 hover:text-yellow-300"
+        >
+          <i class="fa-brands fa-linkedin text-xl"></i>
+        </a>
+      </div>
+      </article> -->
+    </div>
+  </div>
+</section>
+{% endblock %}

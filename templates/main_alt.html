@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script
+    src="https://unpkg.com/htmx.org@1.9.8"
+    integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr"
+    crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script
+    src="https://kit.fontawesome.com/f601cf3e61.js"
+    crossorigin="anonymous"
+    ></script>
+    <script src="{% static 'notifier.js' %}" defer="true"></script>
+    <script src="{% static 'main.js' %}" defer="true"></script>
+    <link href="{% static 'styles.css' %}" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Poppins"
+    />
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+      }
+    </style>
+    <title>{{title}}</title>
+  </head>
+  <body
+    hx-boost="true"
+    hx-headers='{"X-CSRFToken" : "{{ csrf_token }}"}'
+    class="flex flex-row bg-white text-gray-700 max-w-full mx-auto"
+  >
+    {% include 'sidebar.html' %}
+
+    <div  class="w-full ml-[60px] md:ml-[80px] xl:ml-[300px] min-h-screen overflow-auto">
+
+      <div
+        class="relative p-4 md:p-6 lg:p-8 w-full max-w-[1350px] mx-auto min-h-screen flex flex-col"
+      >
+
+        <section id="base">{% block content %} {% endblock %}</section>
+      </div>
+
+    </div>
+    <!--  -->
+    {% include 'modal.html' %}
+    <!--  -->
+  </body>
+
+  <!--  -->
+  {{ request.user.id|json_script:"user_id" }}
+  <script>
+    htmx.onLoad(function (content) {
+      scripts.init(content);
+    });
+
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+        .register("/static/workers.js")
+        .then(function (registration) {
+          console.log(
+            "Service Worker registered with scope:",
+            registration.scope
+          );
+        })
+        .catch(function (error) {
+          console.error("Service Worker registration failed:", error);
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      Notification.requestPermission().then(function (permission) {
+        if (permission === "granted") {
+          console.log("Notification permission granted.");
+          // You can now send notifications
+        } else {
+          console.log("Unable to get permission to notify.");
+        }
+      });
+
+      const testBtn = document.getElementById("testBtn");
+
+      testBtn.addEventListener("click", function () {
+        if (Notification.permission === "granted") {
+          console.log("Notifyinnnnnnnnnnnnnnnnnnnnnnnnnnnnnnng.");
+          new Notification("Test Notification");
+        } else {
+          console.log("Permission for notifications not granted.");
+        }
+      });
+    });
+  </script>
+</html>

@@ -1,0 +1,31 @@
+{% if not curr_obj %}
+{% if obj.status == 'pending' %}
+  <span class="bg-red-200 text-black text-xs text-center px-3 py-1 rounded-full">
+    {{obj.get_status_display}}
+  </span>
+{% elif obj.status == 'processed' %}
+  <span class="bg-yellow-200 text-black text-xs text-center px-3 py-1 rounded-full">
+    {{obj.get_status_display}}
+  </span>
+{% else %}
+  <span class="bg-green-200 text-black text-xs text-center px-3 py-1 rounded-full">
+    {{obj.get_status_display}}
+  </span>
+{% endif %}
+<!--  -->
+{% else %}
+<!--  -->
+{% if curr_obj.status == 'pending' %}
+  <span class="bg-red-200 text-black text-xs text-center px-3 py-1 rounded-full">
+    {{curr_obj.get_status_display}}
+  </span>
+{% elif curr_obj.status == 'processed' %}
+  <span class="bg-yellow-200 text-black text-xs text-center px-3 py-1 rounded-full">
+    {{curr_obj.get_status_display}}
+  </span>
+{% else %}
+  <span class="bg-green-200 text-black text-xs text-center px-3 py-1 rounded-full">
+    {{curr_obj.get_status_display}}
+  </span>
+{% endif %}
+{% endif %}

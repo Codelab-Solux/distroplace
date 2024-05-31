@@ -1,0 +1,130 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+
+<div class="p-8 w-full max-w-7xl mx-auto flex flex-col justify-between gap-6">
+  <div class="flex justify-between">
+    <div
+      class="bg-teal-900 py-2 px-4 rounded-full flex items-center text-white gap-4"
+    >
+      <a
+        id="back-button"
+        class="inline-block px-2 py-1 font-bold hover:bg-yellow-400 hover:text-black rounded-full transition-all duration-300"
+        href="#"
+        >&larr;</a
+      >
+      Retourner
+    </div>
+    <span
+      class="flex items-center gap-4 py-2 px-4 rounded-full bg-yellow-200 text-black"
+      ><i class="fa-solid fa-copyright"></i>Marque : {{ curr_obj.brand }}</span
+    >
+  </div>
+
+  <div class="mt-6 grid grid-cols-1 gap-10 sm:grid-cols-2">
+    {% if not curr_obj.image %}
+    <img
+      src="{% static 'imgs/logo-g.png' %}"
+      alt="image"
+      class="w-full h-full object-contain border rounded-xl"
+    />
+    {% else %}
+    <img
+      src="{{curr_obj.image.url}}"
+      alt="{{curr_obj.name}}"
+      class="w-full h-full object-contain border rounded-xl"
+    />
+    {% endif %}
+    <div class="w-full flex flex-col gap-2">
+      <h2 class="text-4xl font-bold text-black">{{curr_obj.name}}</h2>
+      <h4>{{curr_obj.quantity}} en stock</h4>
+
+      {% if curr_obj.is_promoted %}
+      <div class="flex gap-4">
+        <p class="text-gray-400">
+          <i class="fa-solid fa-tag mr-2"></i>
+          <span class="line-through">{{ curr_obj.price }} CFA</span>
+        </p>
+        <p class="text-yellow-500 text-lg font-bold">
+          <i class="fa-solid fa-tags text-yellow-400 mr-2"></i>
+          {{curr_obj.promo_price}} CFA
+        </p>
+      </div>
+      {% else %}
+      <p class="text-teal-700 text-lg font-bold">
+        <i class="fa-solid fa-tag text-teal-700 mr-2"></i>
+        {{curr_obj.price}} CFA
+      </p>
+      {% endif %}
+      <p><b>Description : </b> {{curr_obj.description }}</p>
+      <div class="flex gap-2">
+        <button
+          onclick="add_to_cart('{{ curr_obj.id }}')"
+          class="bg-teal-700 hover:bg-teal-900 text-white px-6 py-2 rounded-full transition duration-200 ease-in"
+        >
+          Ajouter au panier <i class="fa-solid fa-cart-plus ml-2"></i>
+        </button>
+        <!-- <button
+          onclick="toggle_comment_box()"
+          class="bg-yellow-100 hover:bg-yellow-400 text-black px-4 py-2 rounded-full transition duration-200 ease-in"
+        >
+          Faire un commentaire<i class="fa-solid fa-comments ml-2"></i>
+        </button> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- related products... -->
+  <section class="flex flex-col gap-2">
+    {% if rel_products %}
+    <div class="flex gap-4 justify-between items-center">
+      <h3 class="text-black font-bold">Autres produits</h3>
+      <a
+        href="{% url 'products' %}?query={{curr_obj.category.name}}"
+        class="tabBtn px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-sm rounded-full w-fit"
+      >
+        Voir plus</a
+      >
+    </div>
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+      {% for obj in rel_products %}
+      <!--  -->
+      {% include 'store/components/product_grid_card.html' %}
+      <!--  -->
+      {% endfor %}
+    </div>
+    {% endif %}
+
+  </section>
+</div>
+
+<script>
+  document
+    .getElementById("back-button")
+    .addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent the default anchor behavior
+      window.history.go(-2); // Go back two pages
+    });
+
+  function add_to_cart(obj_id) {
+    // alert("holla");
+    // Retrieve the CSRF token from the hidden input
+    const csrfToken = document.getElementById("csrf_token").value;
+
+    $.ajax({
+      type: "POST",
+      url: "{% url 'add_to_cart' %}",
+      data: {
+        product_id: obj_id,
+        csrfmiddlewaretoken: csrfToken,
+        action: "post",
+      },
+      success: function (json) {
+        console.log(json.cart_count); // Ensure the key matches the JSON response key
+        document.getElementById("cart_counter").textContent = json.cart_count;
+      },
+      error: function (xhr, errmsg, err) {
+        console.error(errmsg); // Log error message to console
+      },
+    });
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/f601cf3e61.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.tailwindcss.com"></script>    
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Montserrat"
+    />
+        <style>
+      body {
+        font-family: "Montserrat", sans-serif;
+      }
+    </style>
+    <title>{{title}}</title>
+  </head>
+  <body
+    class="flex flex-col items-center justify-center bg-white h-screen w-full"
+  >
+    <div
+      class="p-6 border hover border-teal-900 rounded-3xl m-auto flex md:flex-row items-center justify-center gap-8 h-80"
+    >
+      <i class="fa-solid fa-arrow-right-to-bracket text-teal-900 text-9xl"></i>
+   
+    <div class="w-full flex flex-col justify-between">
+      <h1 class="text-black text-3xl font-bold">Connexion</h1>
+      <form method="POST" action="" class="flex flex-col justify-between">
+        {% csrf_token %}
+        <div class="flex flex-col mb-2">
+          <label for="username">Email</label>
+          <input
+            type="email"
+            name="username"
+            class="mt-2 px-4 py-2 rounded-md  bg-gray-100  focus:outline-none focus:ring-1 focus:ring-yellow-400  text-sm"
+            placeholder="Email"
+            required
+          />
+        </div>
+        <div class="flex flex-col mb-4">
+          <label for="password">Mots de passe</label>
+          <input
+            type="password"
+            name="password"
+            class="mt-2 px-4 py-2 rounded-md  bg-gray-100  focus:outline-none focus:ring-1 focus:ring-yellow-400  text-sm"
+            placeholder="Mots de passe"
+            required
+          />
+        </div>
+        <!-- redirects to intended page -->
+          {% if request.GET.next %}
+          <input type="hidden" name="next" value="{{request.GET.next}}" />
+          {% endif %}
+
+        <input
+          type="submit"
+          value="Connexion"
+          class="px-3 py-2 bg-teal-900 hover:bg-yellow-400 text-white hover:text-black rounded-lg cursor-pointer"
+        />
+      </form>
+      <a href="#!" class="mt-4 text-small hover:text-yellow-400">Mot de passe oublié?</a>
+    </div>
+    </div>
+  </body>
+</html>

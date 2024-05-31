@@ -1,0 +1,41 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<div class="p-8 w-full max-w-7xl mx-auto flex flex-col justify-between gap-8">
+  <section>
+    <div class="flex justify-between items-center">
+      <h3 class="font-bold text-black text-lg">Fruits & Légumes</h3>
+      <div class="flex justify-between gap-1 text-xs tabbar h-fit w-fit">
+        <button
+          class="tabBtn px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-xs rounded-full w-full"
+          onclick="openTab(event, 'visits_listview')"
+          id="defaultTab"
+        >
+          Fruits
+        </button>
+        <button
+          class="tabBtn px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-xs rounded-full w-full"
+          onclick="openTab(event, 'visits_gridview')"
+        >
+          Legumes
+        </button>
+        <button
+          class="tabBtn px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-xs rounded-full w-full"
+          onclick="openTab(event, 'visits_gridview')"
+        >
+          Epices
+        </button>
+      </div>
+    </div>
+    <p>Buy farm fresh fruits and vegetables online at the best prices</p>
+    {% include 'store/partials/products_grid.html' %}
+  </section>
+
+  <section class="w-full flex flex-col gap-2">
+    <h3 class="font-bold text-black text-lg">Latest News</h3>
+    <p>
+      Present posts in a best way to highlight interesting moments of your blog.
+    </p>
+    {% include 'store/partials/blogposts.html' %}
+  </section>
+</div>
+
+{% endblock %}

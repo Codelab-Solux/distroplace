@@ -1,0 +1,18 @@
+{% extends 'main.html' %} {% load static %}
+{% block content %}
+<div class="p-8 w-full max-w-7xl mx-auto flex flex-col gap-6">
+   {% include 'store/partials/categories_list.html' %} 
+   <!--  -->
+   
+   <!--  -->
+   {% include 'store/partials/products_grid.html' %} 
+   <!-- <div
+    class="products_grid"
+    hx-get="{% url 'products_grid' %}"
+    hx-trigger="load, db_changed from:body"
+    hx-target="this"
+  ></div> -->
+</div>
+
+
+{% endblock %}
