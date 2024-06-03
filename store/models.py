@@ -127,17 +127,28 @@ class OrderItem(models.Model):
 
 delivery_statuses = (
     ('pending', "En attente"),
-    ('ongoing', "En cours"),
+    ('dispatched', "Expédiée"),
     ('finished', "Terminée"),
     ('cancelled', "Annulée"),
 )
 
 
+class DeliveryType(models.Model):
+    title = models.CharField(max_length=255)
+    price = models.IntegerField(default=1000)
+
+    def __str__(self):
+        return str(self.id)
+
+    def get_hashid(self):
+        return h_encode(self.id)
+
+
 class Delivery(models.Model):
-    client = models.ForeignKey(
-        CustomUser, on_delete=models.SET_NULL, null=True)
     order = models.ForeignKey(
         Order, on_delete=models.SET_NULL, null=True)
+    client = models.ForeignKey(
+        CustomUser, on_delete=models.SET_NULL, null=True)
     items = models.IntegerField(default=0)
     phone = models.CharField(max_length=255)
     address = models.CharField(max_length=255)

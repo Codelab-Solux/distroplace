@@ -104,25 +104,24 @@
       <div class="flex justify-between items-center">
         <h3 class="font-bold text-black text-lg">Fruits & Légumes</h3>
         <div class="flex justify-between gap-1 text-xs tabbar h-fit w-60">
-          <button
-            class="tabBtn px-2 py-1 bg-white hover:bg-yellow-300 text-xs rounded-full w-full"
-            onclick="openTab(event, 'visits_listview')"
-            id="defaultTab"
+          <a
+          href="{% url 'products' %}?query=fruits"
+            class="px-2 py-1 bg-white hover:bg-yellow-300 text-center text-xs rounded-full w-full"
           >
             Fruits
-          </button>
-          <button
-            class="tabBtn px-2 py-1 bg-white hover:bg-yellow-300 text-xs rounded-full w-full"
-            onclick="openTab(event, 'visits_gridview')"
+          </a>
+          <a
+          href="{% url 'products' %}?query=légumes"
+            class="px-2 py-1 bg-white hover:bg-yellow-300 text-center text-xs rounded-full w-full"
           >
             Legumes
-          </button>
-          <button
-            class="tabBtn px-2 py-1 bg-white hover:bg-yellow-300 text-xs rounded-full w-full"
-            onclick="openTab(event, 'visits_gridview')"
+          </a>
+          <a
+          href="{% url 'products' %}"
+            class="px-2 py-1 bg-white hover:bg-yellow-300 text-center text-xs rounded-full w-full"
           >
             Voir +
-          </button>
+          </a>
         </div>
       </div>
       <p>Buy farm fresh fruits and vegetables online at the best prices</p>
@@ -141,25 +140,24 @@
       <div class="flex justify-between items-center">
         <h3 class="font-bold text-black text-lg">Appareils Electro Menager</h3>
         <div class="flex justify-between gap-1 text-xs tabbar h-fit w-60">
-          <button
-            class="tabBtn px-2 py-1 bg-teal-200 hover:bg-teal-300 text-xs rounded-full w-full"
-            onclick="openTab(event, 'visits_listview')"
-            id="defaultTab"
+          <a
+          href="{% url 'products' %}?query=réfrigirateurs"
+            class="px-2 py-1 bg-teal-200 hover:bg-teal-300 text-center text-xs rounded-full w-full"
           >
-            Refrigirateurs
-          </button>
-          <button
-            class="tabBtn px-2 py-1 bg-teal-200 hover:bg-teal-300 text-xs rounded-full w-full"
-            onclick="openTab(event, 'visits_gridview')"
+            Réfrigirateurs
+          </a>
+          <a
+          href="{% url 'products' %}?query=mixeurs"
+            class="px-2 py-1 bg-teal-200 hover:bg-teal-300 text-center text-xs rounded-full w-full"
           >
             Mixeurs
-          </button>
-          <button
-            class="tabBtn px-2 py-1 bg-teal-200 hover:bg-teal-300 text-xs rounded-full w-full"
-            onclick="openTab(event, 'visits_gridview')"
+          </a>
+          <a
+          href="{% url 'products' %}?query=electroménager"
+            class="px-2 py-1 bg-teal-200 hover:bg-teal-300 text-center text-xs rounded-full w-full"
           >
             Voir +
-          </button>
+          </a>
         </div>
       </div>
       <p>Les appareils electronique pour votre maison</p>
@@ -178,26 +176,25 @@
       <div class="flex justify-between items-center">
         <h3 class="font-bold text-black text-lg">Vêtements</h3>
         <div class="flex justify-between gap-1 text-xs tabbar h-fit w-60">
-          <button
-            class="tabBtn px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-xs rounded-full w-full"
-            onclick="openTab(event, 'visits_listview')"
-            id="defaultTab"
+          <a
+          href="{% url 'products' %}?query=chemises"
+            class="px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-center text-xs rounded-full w-full"
           >
             Chemises
-          </button>
-          <button
-            class="tabBtn px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-xs rounded-full w-full"
-            onclick="openTab(event, 'visits_gridview')"
+          </a>
+          <a
+          href="{% url 'products' %}?query=pantalons"
+            class="px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-center text-xs rounded-full w-full"
           >
             Pantalons
-          </button>
+          </a>
 
-          <button
-            class="tabBtn px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-xs rounded-full w-full"
-            onclick="openTab(event, 'visits_gridview')"
+          <a
+          href="{% url 'products' %}?query=vêtements"
+            class="px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-center text-xs rounded-full w-full"
           >
             Voir +
-          </button>
+          </a>
         </div>
       </div>
       <p>De bons vetements a la porté de tous</p>
@@ -210,7 +207,7 @@
       </div>
     </div>
   </section>
-<!-- cta -->
+  <!-- cta -->
   <div class="px-8 w-full max-w-7xl mx-auto grid grid-cols-2 gap-4">
     <img
       src="{% static 'imgs/banner_1.webp' %}"

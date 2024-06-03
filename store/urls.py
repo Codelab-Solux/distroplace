@@ -24,4 +24,13 @@ urlpatterns = [
     path('orders/list/', orders_list, name='orders_list'),
     path('orders/filter/', filter_orders, name='filter_orders'),
     path('orders/new/', place_order, name='place_order'),
+    path('orders/<hashid:pk>/', order_details, name='order_details'),
+    path('orders/<hashid:pk>/cancel', cancel_order, name='cancel_order'),
+    # ----------------------- deliveries ------------------------------
+    path('deliveries/', deliveries, name='deliveries'),
+    path('deliveries/list/', deliveries_list, name='deliveries_list'),
+    path('deliveries/filter/', filter_deliveries, name='filter_deliveries'),
+    path('deliveries/<hashid:pk>/', delivery_details, name='delivery_details'),
+    path('deliveries/<hashid:pk>/postpone',
+         postpone_delivery, name='postpone_delivery'),
 ]

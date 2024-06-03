@@ -25,4 +25,4 @@ COPY . /app/
 EXPOSE 8000
 
 # Start the Django application using gunicorn
-CMD ["gunicorn", "-b", "0.0.0.0:8000", "dermepro.wsgi:application"]
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "distroplace.wsgi:application"]

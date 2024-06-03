@@ -9,7 +9,7 @@
     >
       <a
         id="back-button"
-        class="px-2 py-1 hover:bg-yellow-400 hover:text-black rounded-full  transition-all duration-300"
+        class="px-2 py-1 hover:bg-yellow-200 hover:text-black rounded-full  transition-all duration-300"
         href="#"
         >&larr;</a
       >
@@ -73,7 +73,7 @@
     </div>
 <!-- shipping info -->
     <div class="grid gap-2 w-full max-w-60 xl:max-w-80">
-      <div class="p-4 flex flex-col gap-1 bg-yellow-400 rounded-lg">
+      <div class="p-4 flex flex-col gap-1 bg-yellow-200 rounded-lg">
         
           <p>Articles : {{ cart_count }} </p>
         
@@ -85,7 +85,7 @@
 
         {% if shipping_info %}
         <a href="{% url 'place_order' %}" class="px-4 py-2 flex justify-between items-center w-full bg-teal-700 hover:bg-teal-900 text-white rounded-full group  transition-all duration-300">Placer ma commande
-          <span class="px-2 py-1 group-hover:bg-yellow-400 group-hover:text-black rounded-full  transition-all duration-300">&rarr;</span>
+          <span class="px-2 py-1 group-hover:bg-yellow-200 group-hover:text-black rounded-full  transition-all duration-300">&rarr;</span>
         </a>
       {% endif %}
       </div>
@@ -114,7 +114,6 @@
   document
     .getElementById("back-button")
     .addEventListener("click", function (event) {
-      console.log("going back");
       event.preventDefault();
       window.history.go(-1);
     });

@@ -71,6 +71,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return f' {self.email.split("@")[0]}'
+    
+    def get_full_name(self):
+        return f' {self.last_name} {self.first_name}'
 
 
 gender_list = (

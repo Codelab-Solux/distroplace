@@ -12,7 +12,7 @@
       <i class="fa-solid fa-chart-pie ml-2"></i>
     </h3>
     <a
-      href="{% url 'deliveries' %}"
+      href="{% url 'dash_deliveries' %}"
       class="bg-yellow-100 rounded-full py-2 px-4 text-xs flex items-center gap-4 group"
       >Rapports
       <span
@@ -21,6 +21,37 @@
       ></a
     >
   </div>
+
+  <section
+    class="w-full p-4 bg-yellow-200 shadow-md text-xs rounded-3xl grid md:grid-cols-3 gap-4"
+  >
+    <div class="p-4 grid gap-2 bg-white rounded-2xl text-gray-700 text-sm">
+      <p
+        class="rounded-md text-xl text-black font-bold flex items-center gap-2"
+      >
+        <i class="fa-solid fa-boxes-stacked text-teal-700 text-xl"></i>
+        Produits
+      </p>
+      <p class="bg-gray-100 rounded-full px-4 py-2">
+        Produits ajoutés :
+        <span class="text-lg font-bold ml-2 text-black"
+          >{{products|length}}</span
+        >
+      </p>
+      <p class="bg-green-200 rounded-full px-4 py-2">
+        Produits vendus :
+        <span class="text-lg font-bold ml-2 text-black"
+          >{{pending_visits}}</span
+        >
+      </p>
+      <p class="bg-red-200 rounded-full px-4 py-2">
+        Produits en rupture :
+        <span class="text-lg font-bold ml-2 text-black"
+          >{{pending_visits}}</span
+        >
+      </p>
+    </div>
+  </section>
 </div>
 
 <script>

@@ -37,7 +37,7 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = ('__all__')
         labels = {
-            'article': 'Nom',
+            'name': 'Article',
             'brand': 'Marque',
             'category': 'Catégorie',
             'subcategory': "Sous Catégorie",
@@ -51,7 +51,7 @@ class ProductForm(forms.ModelForm):
             'expiration_date': "Date de péremption",
         }
         widgets = {
-            'article': forms.TextInput(attrs={'class': "mb-1 px-3 py-2 rounded-lg border focus:border-none focus:outline-none focus:outline-none focus:ring-1 focus:ring-yellow-400 w-full"}),
+            'name': forms.TextInput(attrs={'class': "mb-1 px-3 py-2 rounded-lg border focus:border-none focus:outline-none focus:outline-none focus:ring-1 focus:ring-yellow-400 w-full"}),
             'brand': forms.TextInput(attrs={'class': "mb-1 px-3 py-2 rounded-lg border focus:border-none focus:outline-none focus:outline-none focus:ring-1 focus:ring-yellow-400 w-full"}),
             'category': forms.Select(attrs={ 'class': "input_selector mb-1 px-3 py-2 rounded-lg border focus:border-none focus:outline-none focus:outline-none focus:ring-1 focus:ring-yellow-400 w-full"}),
             'subcategory': forms.Select(attrs={ 'class': "input_selector mb-1 px-3 py-2 rounded-lg border focus:border-none focus:outline-none focus:outline-none focus:ring-1 focus:ring-yellow-400 w-full"}),

@@ -6,9 +6,11 @@ from utils import HashIdConverter
 register_converter(HashIdConverter, "hashid")
 
 urlpatterns = [
+    path('signup/', signupView, name='signup'),
     path('login/', loginView, name='login'),
     path('logout/', logoutUser, name='logout'),
     path('clients/', clients_list, name='clients_list'),
+    path('users/<hashid:pk>/', user_profile, name='user_profile'),
     # path('users/', users, name='users'),
     # path('users/new/', create_user, name='create_user'),
     # path('users/<hashid:pk>/profile', profile, name='profile'),

@@ -100,13 +100,13 @@ def filter_products(req):
 
 def product_details(req, pk):
     curr_obj = Product.objects.get(id=pk)
-    rel_products = Product.objects.filter(
+    rel_orders = Product.objects.filter(
         category=curr_obj.category).exclude(id=pk)[:4]
     context = {
         "products_page": "active",
         'title': 'Products',
         'curr_obj': curr_obj,
-        'rel_products': rel_products,
+        'rel_orders': rel_orders,
     }
     return render(req, 'store/prod_details.html', context)
 
@@ -231,6 +231,107 @@ def checkout(req):
 
 # --------------------------Orders--------------------------
 
+
+@login_required(login_url='login')
+def orders(req):
+    user = req.user
+    min_date_query = req.GET.get('min_date')
+    max_date_query = req.GET.get('max_date')
+    phone_query = req.GET.get('phone')
+    amount_query = req.GET.get('amount')
+    items_query = req.GET.get('items')
+    status_query = req.GET.get('status')
+
+    if not user.is_staff:
+        base_query = Order.objects.filter(user=user).order_by('-timestamp')
+    else:
+        base_query = Order.objects.all().order_by('-timestamp')
+
+    if min_date_query:
+        base_query = base_query.filter(timestamp__date__gte=min_date_query)
+    if max_date_query:
+        base_query = base_query.filter(timestamp__date__lte=max_date_query)
+    if phone_query:
+        base_query = base_query.filter(phone=phone_query)
+    if amount_query:
+        base_query = base_query.filter(amount=amount_query)
+    if items_query:
+        base_query = base_query.filter(items=items_query)
+    if status_query:
+        base_query = base_query.filter(status=status_query)
+
+    orders = base_query
+    objects = paginate_objects(req, orders)
+
+    context = {
+        "orders_page": "active",
+        'title': 'Orders',
+        "objects": objects,  # Use paginated objects here
+    }
+    return render(req, 'store/orders.html', context)
+
+def orders_list(req):
+    user = req.user
+    if not user.is_staff:
+        orders = Order.objects.filter(client=user).order_by('-timestamp')
+    else:
+        orders = Order.objects.all().order_by('-timestamp')
+    context = {
+        'orders': orders,
+    }
+    return render(req, 'store/partials/orders_list.html', context)
+
+def filter_orders(req):
+    user = req.user
+    # user_query = req.POST.get('user')
+    min_date_query = req.POST.get('min_date')
+    max_date_query = req.POST.get('max_date')
+    phone_query = req.POST.get('phone')
+    amount_query = req.POST.get('amount')
+    items_query = req.POST.get('items')
+    status_query = req.POST.get('status')
+
+    if not user.is_staff:
+        base_query = Order.objects.filter(user=user).order_by('-timestamp')
+    else:
+        base_query = Order.objects.all().order_by('-timestamp')
+
+    # if user_query:
+    #     base_query = base_query.filter(user_)
+
+    if min_date_query:
+        base_query = base_query.filter(timestamp__date__gte=min_date_query)
+    if max_date_query:
+        base_query = base_query.filter(timestamp__date__lte=max_date_query)
+    if phone_query:
+        base_query = base_query.filter(phone=phone_query)
+    if amount_query:
+        base_query = base_query.filter(amount=amount_query)
+    if items_query:
+        base_query = base_query.filter(items=items_query)
+    if status_query:
+        base_query = base_query.filter(status=status_query)
+
+    orders = base_query
+
+    context = {"orders": orders}
+
+    return render(req, 'store/partials/orders_list.html', context)
+
+def order_details(req, pk):
+    curr_order = Order.objects.get(id=pk)
+    order_items = OrderItem.objects.filter(order = curr_order)
+    rel_orders = Order.objects.filter(
+        client=curr_order.client).order_by('-timestamp').exclude(id=pk)[:4]
+    context = {
+        "order_details": "active",
+        'title': 'Order Details',
+        'curr_order': curr_order,
+        'order_items': order_items,
+        'rel_orders': rel_orders,
+    }
+    return render(req, 'store/order_details.html', context)
+
 @login_required(login_url='login')
 def place_order(req):
     user = req.user
@@ -273,35 +374,62 @@ def place_order(req):
         messages.info(req, "Access denied: Your cart is empty.")
         return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
 
+def cancel_order(req, pk):
+    user = req.user
+    curr_order = Order.objects.get(id=pk)
+    curr_order.status = 'cancelled'
+    curr_order.save()
+
+    return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
+
+
+# --------------------------Deliveries--------------------------
 
 @login_required(login_url='login')
-def orders(req):
+def deliveries(req):
     user = req.user
-    orders = Order.objects.filter(client=user).order_by('-timestamp')
     context = {
-        "orders_page": "active",
-        'title': 'Orders',
-        'orders': orders,
+        "deliveries_page": "active",
+        'title': 'deliveries',
     }
-    return render(req, 'store/orders.html', context)
+    return render(req, 'store/deliveries.html', context)
 
-
-def orders_list(req):
+def deliveries_list(req):
     user = req.user
     if not user.is_staff:
-        orders = Order.objects.filter(client=user).order_by('-timestamp')
-    else:    
-        orders = Order.objects.all().order_by('-timestamp')
+        deliveries = Delivery.objects.filter(client=user).order_by('-timestamp')
+    else:
+        deliveries = Delivery.objects.all().order_by('-timestamp')
     context = {
-        'orders': orders,
+        'deliveries': deliveries,
     }
-    return render(req, 'store/partials/orders_list.html', context)
+    return render(req, 'store/partials/deliveries_list.html', context)
 
+def postpone_delivery(req, pk):
+    user = req.user
+    curr_order = Delivery.objects.get(id=pk)
+    curr_order.eta = 'cancelled'
+    curr_order.save()
 
-def filter_orders(req):
+def delivery_details(req, pk):
+    curr_delivery = Delivery.objects.get(id=pk)
+    curr_order = Order.objects.get(id=curr_delivery.id)
+    order_items = OrderItem.objects.filter(order=curr_order)
+    rel_deliveries = Delivery.objects.filter(
+        client=curr_delivery.client).order_by('-timestamp').exclude(id=pk)[:4]
+    context = {
+        "order_details": "active",
+        'title': 'Order Details',
+        'curr_order': curr_order,
+        'order_items': order_items,
+        'rel_deliveries': rel_deliveries,
+    }
+    return render(req, 'store/delivery_details.html', context)
+
+def filter_deliveries(req):
     user = req.user
     # user_query = req.POST.get('user')
-    prod_date_query = req.POST.get('prod_date')
+    min_date_query = req.POST.get('min_date')
     max_date_query = req.POST.get('max_date')
     phone_query = req.POST.get('phone')
     amount_query = req.POST.get('amount')
@@ -309,29 +437,28 @@ def filter_orders(req):
     status_query = req.POST.get('status')
 
     if not user.is_staff:
-        base_query = Order.objects.filter(user=user).order_by('-timestamp')
+        base_query = Delivery.objects.filter(client=user).order_by('-timestamp')
     else:
-        base_query = Order.objects.all().order_by('-timestamp')
+        base_query = Delivery.objects.all().order_by('-timestamp')
 
     # if user_query:
     #     base_query = base_query.filter(user_)
 
-    if prod_date_query:
-        base_query = base_query.filter(timestamp__date__gte=prod_date_query)
+    if min_date_query:
+        base_query = base_query.filter(dday__gte=min_date_query)
     if max_date_query:
-        base_query = base_query.filter(timestamp__date__lte=max_date_query)
+        base_query = base_query.filter(dday__lte=max_date_query)
     if phone_query:
         base_query = base_query.filter(phone=phone_query)
     if amount_query:
-        base_query = base_query.filter(amount=amount_query)
+        base_query = base_query.filter(amount_due=amount_query)
     if items_query:
         base_query = base_query.filter(items=items_query)
     if status_query:
         base_query = base_query.filter(status=status_query)
 
-    orders = base_query
+    deliveries = base_query
 
-    context = {"orders": orders}
+    context = {"deliveries": deliveries}
 
-    return render(req, 'store/partials/orders_list.html', context)
-
+    return render(req, 'store/partials/deliveries_list.html', context)

@@ -1,6 +1,8 @@
 {% load static %}
-<nav class="text-gray-700 py-4 lg:fixed w-full bg-white z-10">
-  <div class="px-8 max-w-7xl mx-auto flex flex-col gap-4 lg:flex-row lg:items-center justify-between">
+<nav class="text-gray-700 py-4 lg:fixed w-full bg-white z-20">
+  <div
+    class="px-8 max-w-7xl mx-auto flex flex-col gap-4 lg:flex-row lg:items-center justify-between"
+  >
     <div class="flex items-center justify-between">
       <a href="{% url 'home' %}">
         <img class="h-8" src="{% static 'imgs/logo-full.png' %}" alt="Logo" />
@@ -10,29 +12,46 @@
       </span>
     </div>
 
-    <div
+    {% if products_page %}
+    <form
       class="flex justify-between items-center gap-4 w-full max-w-[500px] rounded-full bg-gray-50 border hover:border-teal-700 py-1 px-4 text-sm"
     >
       <input
+        name="query"
         type="text"
         class="w-full py-2 bg-gray-50 outline-none"
         placeholder="Rechercher un produit..."
       />
-      <button type="submit" class="px-4 py-1 rounded-full text-sm text-gray-200 bg-teal-700 hover:bg-teal-900">
+      <button
+        type="submit"
+        class="px-4 py-1 rounded-full text-sm text-gray-200 bg-teal-700 hover:bg-teal-900"
+      >
         <i class="fa-solid fa-search"></i>
       </button>
-    </div>
+    </form>
+    {% endif %}
 
-    <div class=" flex flex-col items-end gap-4 lg:flex-row lg:gap-4 lg:items-center">
-      <a href="{% url 'products' %}" class="font-bold text-gray-500 hover:text-teal-900  transition duration-200 ease-in">
+    <div
+      class="flex flex-col items-end gap-4 lg:flex-row lg:gap-4 lg:items-center"
+    >
+      <a
+        href="{% url 'products' %}"
+        class="font-bold text-gray-500 hover:text-teal-900 transition duration-200 ease-in"
+      >
         Produits
       </a>
-      <a href="{% url 'blog' %}" class="font-bold text-gray-500 hover:text-teal-900  transition duration-200 ease-in">
+      <a
+        href="{% url 'blog' %}"
+        class="font-bold text-gray-500 hover:text-teal-900 transition duration-200 ease-in"
+      >
         Blog
       </a>
-      <a href="{% url 'cart' %}" class="relative border px-3 py-2 rounded-full border hover:border-teal-700 hover:text-teal-700  transition duration-200 ease-in">
+      <a
+        href="{% url 'cart' %}"
+        class="relative border px-3 py-2 rounded-full border hover:border-teal-700 hover:text-teal-700 transition duration-200 ease-in"
+      >
         <small
-        id="cart_counter"
+          id="cart_counter"
           class="absolute top-0 right-0 bg-red-600 px-1 py-[1px] rounded-full text-white text-[10px]"
           >{{cart|length}}</small
         >
@@ -42,7 +61,7 @@
       <div class="relative">
         <button
           type="button"
-          class="border px-3 py-2 rounded-full border hover:border-teal-700 hover:text-teal-700  transition duration-200 ease-in"
+          class="border px-3 py-2 rounded-full border hover:border-teal-700 hover:text-teal-700 transition duration-200 ease-in"
           name="dropdownBtn"
           id="dropdownBtn"
           aria-expanded="false"
@@ -53,21 +72,26 @@
         </button>
 
         <div
-          class="hidden text-sm absolute right-0 top-12 w-60 shadow-lg bg-gray-100 z-10 rounded-lg overflow-hidden"
+          class="hidden text-sm absolute right-0 top-12 w-60 shadow-lg bg-gray-100 z-24 rounded-lg overflow-hidden"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="user-menu-button"
           id="dropdownMenu"
         >
-          <a
+          <!-- <a
             href="#"
             class="block px-4 py-2 text-gray-700 hover:bg-teal-900 hover:text-white"
             ><i class="fa-solid fa-user xl:mr-2"></i>Profil</a
-          >
+          > -->
           <a
             href="{% url 'orders' %}"
             class="block px-4 py-2 text-gray-700 hover:bg-teal-900 hover:text-white"
             ><i class="fa-solid fa-dolly xl:mr-2"></i> Commandes</a
+          >
+          <a
+            href="{% url 'deliveries' %}"
+            class="block px-4 py-2 text-gray-700 hover:bg-teal-900 hover:text-white"
+            ><i class="fa-solid fa-truck xl:mr-2"></i> Livraisons</a
           >
           <a
             href="#"
@@ -76,7 +100,7 @@
           >
           {% if user.is_staff %}
           <a
-            target="_blank"
+            hx-boost="false"
             href="{% url 'dashboard' %}"
             class="block px-4 py-2 text-gray-700 hover:bg-teal-900 hover:text-white"
             ><i class="fa-solid fa-chart-pie xl:mr-2"></i> Tableau de bord</a
@@ -94,6 +118,7 @@
           {% endif %}
           <hr />
           <a
+            hx-boost="false"
             href="{% url 'logout' %}"
             class="block px-4 py-2 text-red-800 hover:bg-red-700 hover:text-white"
             role="menuitem"
@@ -105,7 +130,11 @@
         </div>
       </div>
       {% else %}
-      <a href="{% url 'login' %}" class="border px-3 py-2 rounded-full border hover:border-yellow-400  hover:bg-yellow-200  transition duration-200 ease-in">
+      <a
+        hx-boost="false"
+        href="{% url 'login' %}"
+        class="border px-3 py-2 rounded-full border hover:border-yellow-400 hover:bg-yellow-200 transition duration-200 ease-in"
+      >
         <i class="fa-solid fa-arrow-right-to-bracket"></i>
       </a>
       {% endif %}
@@ -126,7 +155,6 @@
       : ((e.name = "dropdownBtn"), dropdownMenu.classList.add("hidden"));
   }
 
-  
   window.addEventListener("mouseup", function (event) {
     dropdownMenu.classList.add("hidden");
     navlinks.classList.add("hidden");
@@ -135,5 +163,4 @@
   // window.addEventListener("mouseup", function (event) {
   //   dropdownMenu.classList.add("hidden");
   // });
-  
 </script>

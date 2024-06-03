@@ -64,9 +64,9 @@
     {% endif %}
 
     <!--  -->
-    <div class="min-h-screen lg:mt-20">{% block content %} {% endblock %}</div>
+    <div id="base" class="min-h-screen lg:mt-20">{% block content %} {% endblock %}</div>
 
-    {% include 'footer_alt.html' %}
+    {% include 'footer.html' %}
     <script>
       var current_date = new Date().getFullYear();
       document.getElementById("date").innerHTML = current_date;
