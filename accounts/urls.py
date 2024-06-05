@@ -11,6 +11,7 @@ urlpatterns = [
     path('logout/', logoutUser, name='logout'),
     path('clients/', clients_list, name='clients_list'),
     path('users/<hashid:pk>/', user_profile, name='user_profile'),
+    path('users/my_profile/', my_profile, name='my_profile'),
     # path('users/', users, name='users'),
     # path('users/new/', create_user, name='create_user'),
     # path('users/<hashid:pk>/profile', profile, name='profile'),

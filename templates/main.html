@@ -65,7 +65,9 @@
 
     <!--  -->
     <div id="base" class="min-h-screen lg:mt-20">{% block content %} {% endblock %}</div>
-
+    <!--  -->
+    {% include 'modal.html' %}
+    <!--  -->
     {% include 'footer.html' %}
     <script>
       var current_date = new Date().getFullYear();

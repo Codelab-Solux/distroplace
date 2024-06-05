@@ -55,49 +55,6 @@ def products_grid(req):
     return render(req, 'store/partials/products_grid.html', context)
 
 
-def products_list(req):
-    products = Product.objects.all().order_by('name')
-    context = {
-        'products': products,
-    }
-    return render(req, 'store/partials/products_list.html', context)
-
-
-def filter_products(req):
-    name_query = req.POST.get('name')
-    price_query = req.POST.get('price')
-    quantity_query = req.POST.get('quantity')
-    category_query = req.POST.get('category')
-    subcategory_query = req.POST.get('subcategory')
-    promo_query = req.POST.get('is_promoted')
-    exp_query = req.POST.get('is_expirable')
-    prod_date_query = req.POST.get('prod_date')
-    exp_date_query = req.POST.get('exp_date')
-
-    base_query = Product.objects.all().order_by('name')
-
-    if name_query:
-        base_query = base_query.filter(name=name_query)
-    if price_query:
-        base_query = base_query.filter(price=price_query)
-    if quantity_query:
-        base_query = base_query.filter(quantity=quantity_query)
-    if category_query:
-        base_query = base_query.filter(category__id=category_query)
-    if subcategory_query:
-        base_query = base_query.filter(subcategory__id=subcategory_query)
-    if exp_query:
-        base_query = base_query.filter(is_expirable=exp_query)
-    if promo_query:
-        base_query = base_query.filter(is_promoted=promo_query)
-    
-    products = base_query
-
-    context = {"products": products}
-
-    return render(req, 'store/partials/products_list.html', context)
-
-
 def product_details(req, pk):
     curr_obj = Product.objects.get(id=pk)
     rel_orders = Product.objects.filter(

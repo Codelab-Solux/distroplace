@@ -8,7 +8,10 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.utils import timezone
 from django.db.models import Q
 from django.contrib.auth.hashers import check_password
-from .forms import *
+
+from store.cart import *
+from store.models import *
+from .forms import * # type: ignore
 from .models import *
 from datetime import datetime
 
@@ -68,8 +71,7 @@ def signupView(req):
     return render(req, 'accounts/signup.html', context)
 
 
-
-
+@login_required(login_url='login')
 def clients_list(req):
     clients = CustomUser.objects.filter(role__id=1)
     context = {
@@ -77,7 +79,7 @@ def clients_list(req):
     }
     return render(req, 'accounts/partials/clients_list.html', context)
 
-
+@login_required(login_url='login')
 def staff_list(req):
     staff = CustomUser.objects.filter(role__id__gt=1)
     context = {
@@ -86,11 +88,47 @@ def staff_list(req):
     return render(req, 'accounts/partials/staff_list.html', context)
 
 
+@login_required(login_url='login')
+def my_profile(req):
+    curr_obj = req.user
+    # 
+    cart = Cart(req)
+    cart_count = len(cart)
+    cart_count = 0
+    cart_items = cart.get_cart_items()
+    total_price = cart.get_total_price()
+
+    orders = Order.objects.filter(client=curr_obj)
+    deliveries = Delivery.objects.filter(client=curr_obj)
+
+    context = {
+        "profile_page":"active",
+        "curr_obj": curr_obj,
+        "cart_count": cart_count,
+        "cart_items": cart_items,
+        "total_price": total_price,
+        "total_price": total_price,
+        "orders": orders,
+        "deliveries": deliveries,
+    }
+    return render(req, 'accounts/user_profile.html', context)
+
+
+@login_required(login_url='login')
 def user_profile(req, pk):
     user = req.user
     curr_obj = CustomUser.objects.get(id=pk)
+    # 
+    cart = Cart(req)
+    cart_count = len(cart)
+    cart_items = cart.get_cart_items()
+    total_price = cart.get_total_price()
+
+
     context = {
         "profile_page":"active",
+        "curr_obj": curr_obj,
+        "curr_obj": curr_obj,
         "curr_obj": curr_obj,
     }
     return render(req, 'accounts/user_profile.html', context)

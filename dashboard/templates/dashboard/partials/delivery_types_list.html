@@ -1,0 +1,14 @@
+{% if not delivery_types %}
+<div class="flex flex-col items-center gap-2 my-20 mx-auto">
+  <i class="fa-solid fa-truck-fast text-teal-900 text-9xl"></i>
+  <span>Aucun type de livraison trouvé</span>
+</div>
+{% else %}
+<div class="flex flex-col gap-2">
+  {% for obj in delivery_types %}
+  <!--  -->
+  {% include 'dashboard/components/delivery_type_card.html' %}
+  <!--  -->
+  {% endfor %}
+</div>
+{% endif %}

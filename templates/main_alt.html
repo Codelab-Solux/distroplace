@@ -5,20 +5,24 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script
-    src="https://unpkg.com/htmx.org@1.9.8"
-    integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr"
-    crossorigin="anonymous"
+      src="https://unpkg.com/htmx.org@1.9.8"
+      integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr"
+      crossorigin="anonymous"
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script
-    src="https://kit.fontawesome.com/f601cf3e61.js"
-    crossorigin="anonymous"
+      src="https://kit.fontawesome.com/f601cf3e61.js"
+      crossorigin="anonymous"
     ></script>
     <script src="{% static 'notifier.js' %}" defer="true"></script>
     <script src="{% static 'main.js' %}" defer="true"></script>
@@ -41,15 +45,14 @@
   >
     {% include 'sidebar.html' %}
 
-    <div  class="w-full ml-[60px] md:ml-[80px] xl:ml-[300px] min-h-screen overflow-auto">
-
+    <div
+      class="w-full ml-[60px] md:ml-[80px] xl:ml-[300px] min-h-screen overflow-auto"
+    >
       <div
         class="relative p-4 md:p-6 lg:p-8 w-full max-w-[1350px] mx-auto min-h-screen flex flex-col"
       >
-
         <section id="dashbase">{% block content %} {% endblock %}</section>
       </div>
-
     </div>
     <!--  -->
     {% include 'modal.html' %}
@@ -64,7 +67,7 @@
     });
 
     if ("serviceWorker" in navigator) {
-        navigator.serviceWorker
+      navigator.serviceWorker
         .register("/static/workers.js")
         .then(function (registration) {
           console.log(
@@ -97,6 +100,82 @@
           console.log("Permission for notifications not granted.");
         }
       });
+    });
+
+    //  form resetter ----------------------------------------------------------------------------------------------------
+    
+    function clearForm(div_id) {
+      var form = document.getElementById(div_id);
+      form.reset();
+    }
+    
+    //  go back one page ----------------------------------------------------------------------------------------------------
+    document
+      .getElementById("back-button")
+      .addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent the default anchor behavior
+        window.history.go(-1); // Go back two pages
+      });
+
+    //  tabs control ----------------------------------------------------------------------------------------------------
+    document.getElementById("defaultTab").click();
+    function openTab(event, tabName) {
+      var i, tabcontent, tabBtn;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tabBtn = document.getElementsByClassName("tabBtn");
+      for (i = 0; i < tabBtn.length; i++) {
+        tabBtn[i].className = tabBtn[i].className.replace(" active", "");
+      }
+      document.getElementById(tabName).style.display = "block";
+      event.currentTarget.className += " active";
+      var minitabs = document.getElementsByClassName("minitabcontent");
+      if (minitabs.length != 0) {
+        minitabs = tabcontent.children;
+      }
+    }
+
+    //  accordions control ----------------------------------------------------------------------------------------------------
+    function toggleAccordion(div_id) {
+      var active_accordion = document.getElementById(div_id);
+      var active_caret = document.getElementById(`${div_id}_caret`);
+
+      // alert(div_id);
+
+      if (active_accordion.classList.contains("hidden")) {
+        for (let element of document.getElementsByClassName("accordion")) {
+          element.classList.remove("block");
+          element.classList.add("hidden");
+        }
+        for (let element of document.getElementsByClassName("fa-caret-down")) {
+          element.classList.remove("rotate-180");
+        }
+        active_accordion.classList.remove("hidden");
+        active_accordion.classList.add("block");
+        active_caret.classList.add("rotate-180");
+      } else {
+        for (let element of document.getElementsByClassName("accordion")) {
+          element.classList.remove("block");
+          element.classList.add("hidden");
+        }
+        active_caret.classList.remove("rotate-180");
+        active_accordion.classList.remove("block");
+        active_accordion.classList.add("hidden");
+      }
+    }
+
+    //  accordions control ----------------------------------------------------------------------------------------------------
+    function toggleMenu(e, obj_id) {
+      activeMenu = document.getElementById(obj_id);
+      e.name === `sentry`
+        ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
+        : ((e.name = `sentry`), activeMenu.classList.add("hidden"));
+    }
+
+    window.addEventListener("mouseup", function (event) {
+      activeMenu.classList.add("hidden");
     });
   </script>
 </html>

@@ -64,6 +64,13 @@
       <i class="fa-solid fa-user-tie xl:mr-2 text-sm"></i>
       <span class="hidden xl:inline"> Personnel </span>
     </a>
+    <a
+      class="px-1 xl:px-3 py-2 text-center xl:text-left rounded-full hover:bg-white hover:text-black transition ease-in duration-200 w-full {{dash_parameters}}"
+      href="{% url 'dash_parameters' %}"
+    >
+      <i class="fa-solid fa-gears xl:mr-2 text-sm"></i>
+      <span class="hidden xl:inline"> Parametres </span>
+    </a>
     {% endif %}
 
     <!--  -->
@@ -129,7 +136,7 @@
         </button>
 
         <div
-          class="mb-4 w-full xl:p-2 hidden absolute right-0 top-12 origin-top-left bg-white z-30 rounded-md xl:w-40 grid gap-2 overflow-hidden"
+          class="mb-4 w-full xl:p-2 hidden absolute right-0 top-12 origin-top-left bg-white z-30 rounded-xl xl:w-40 grid gap-2 overflow-hidden"
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="user-menu-button"
@@ -137,7 +144,7 @@
         >
           <a
             href="{% url 'home' %}"
-            class="p-2 flex text-sm text-gray-700 hover:text-black hover:bg-yellow-200 xl:rounded-md w-full"
+            class="px-3 py-2 flex text-sm text-gray-700 hover:text-black hover:bg-yellow-200 xl:rounded-full w-full"
           >
             <i class="fa-solid fa-user xl:mr-2 text-sm"></i>
             <span class="hidden xl:inline">Mon Profile</span>
@@ -145,7 +152,7 @@
           <a
             hx-confirm="Voulez vous vraiment vous deconnecter?"
             href="{% url 'logout' %}"
-            class="p-2 flex text-sm text-red-700 hover:bg-red-700 hover:text-white xl:rounded-md w-full"
+            class="px-3 py-2 flex text-sm text-red-700 hover:bg-red-700 hover:text-white xl:rounded-full w-full"
           >
             <i class="fa-solid fa-right-from-bracket xl:mr-2 text-sm"></i>
             <span class="hidden xl:inline">Deconnexion</span>

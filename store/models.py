@@ -136,9 +136,10 @@ delivery_statuses = (
 class DeliveryType(models.Model):
     title = models.CharField(max_length=255)
     price = models.IntegerField(default=1000)
+    eta = models.IntegerField(default=3)
 
     def __str__(self):
-        return str(self.id)
+        return str(self.title)
 
     def get_hashid(self):
         return h_encode(self.id)
