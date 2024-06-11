@@ -15,7 +15,7 @@
     </div>
     <span
       class="flex items-center gap-4 py-2 px-4 rounded-full bg-yellow-200 text-black"
-      ><i class="fa-solid fa-copyright"></i>Commande N° : 000{{ curr_delivery.id }}</span
+      ><i class="fa-solid fa-copyright"></i>Commande N° : 000{{ curr_obj.id }}</span
     >
   </div>
 
@@ -71,13 +71,13 @@
     </div>
     <!-- shipping info -->
     <div class="grid gap-2 w-full max-w-60 xl:max-w-80">
-      {% include 'store/components/order_status_badge.html' %}
+      {% include 'store/components/delivery_status_card.html' %}
       <!--  -->
-      {% if curr_delivery.status == 'delivered' %}
+      {% if curr_obj.status == 'finished' %}
       <div
         class="bg-teal-900 text-white text-sm p-4 rounded-lg flex flex-col gap-2"
       >
-        <p>Telephone : {{ shipping_info.phone}}</p>
+        <p>Telephone : {{ curr_obj.phone}}</p>
         <p>Adresse : {{ shipping_info.address}}</p>
         <p>Quartier : {{ shipping_info.district}}</p>
       </div>

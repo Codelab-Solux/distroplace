@@ -1,0 +1,77 @@
+{% load static %} {% block content %}
+<div class="p-8 w-full max-w-7xl mx-auto flex flex-col gap-6">
+  <div class="flex justify-between items-center">
+    <div
+      class="bg-teal-900 h-10 py-2 px-4 rounded-full flex items-center text-white gap-4"
+    >
+      <a
+        class="inline-block px-2 py-1 font-bold hover:bg-yellow-300 hover:text-black rounded-full transition-all duration-300"
+        href="{% url 'promos' %}"
+        >&larr;</a
+      >
+      Promotions
+    </div>
+    <div class="flex items-center gap-4 p-2 rounded-full bg-yellow-200">
+      {% if promotion.image %}
+      <img
+        src="{{ promotion.image.url }}"
+        alt="{{ promotion.name }}"
+        class="w-40 h-10 object-cover rounded-full"
+      />
+      {% else %}
+      <img
+        src="{% static 'imgs/hero_3.webp' %}"
+        alt="image"
+        class="w-40 h-10 object-cover rounded-full"
+      />
+      {% endif %}
+      <div class="grid gap-0">
+        <span>Promo : {{promotion}}</span>
+        <!-- <span>{{ promotion.catch_phrase}}</span>
+        <small>A partir de
+          <span class="text-red-500 font-bold text-xl ml-2"
+            >{{ promotion.price }} Cfa</span
+          >
+        </small> -->
+      </div>
+    </div>
+  </div>
+
+  {% if not products %}
+  <div class="flex flex-col items-center gap-2 my-20 mx-auto">
+    <i class="fa-solid fa-box-open text-teal-900 text-9xl"></i>
+    <span>Aucun produit trouvé</span>
+    <a
+      id="back-button"
+      href="#"
+      class="bg-yellow-100 rounded-full py-2 px-4 flex items-center gap-4 group"
+    >
+      <span
+        class="bg-yellow-400 rounded-full py-2 px-3 group-hover:bg-teal-900 group-hover:text-white"
+        >&larr;</span
+      >
+      Retourner
+    </a>
+  </div>
+  {% else %}
+  <div
+    class="grid gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+  >
+    {% for obj in products %}
+    <!--  -->
+    {% include 'store/components/product_grid_card.html' %}
+    <!--  -->
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+
+<script>
+  document
+    .getElementById("back-button")
+    .addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent the default anchor behavior
+      window.history.go(-1); // Go back two pages
+    });
+</script>
+{% endblock %}

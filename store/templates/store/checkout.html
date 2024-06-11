@@ -9,7 +9,7 @@
     >
       <a
         id="back-button"
-        class="px-2 py-1 hover:bg-yellow-200 hover:text-black rounded-full  transition-all duration-300"
+        class="px-2 py-1 hover:bg-yellow-300 hover:text-black rounded-full transition-all duration-300"
         href="#"
         >&larr;</a
       >
@@ -71,26 +71,34 @@
         </tbody>
       </table>
     </div>
-<!-- shipping info -->
+    <!-- shipping info -->
     <div class="grid gap-2 w-full max-w-60 xl:max-w-80">
-      <div class="p-4 flex flex-col gap-1 bg-yellow-200 rounded-lg">
-        
-          <p>Articles : {{ cart_count }} </p>
-        
-        
-          <p>Quantité : {{ cart_items|length }} </p>
-    
-        
-          <p>Grand Total : {{ total_price }} Cfa</p>
+      <div class="p-4 flex flex-col gap-1 bg-yellow-200 rounded-xl">
+        <p>Articles : {{ cart_count }}</p>
+
+        <p>Quantité : {{ cart_items|length }}</p>
+
+        <p>Grand Total : {{ total_price }} Cfa</p>
 
         {% if shipping_info %}
-        <a href="{% url 'place_order' %}" class="px-4 py-2 flex justify-between items-center w-full bg-teal-700 hover:bg-teal-900 text-white rounded-full group  transition-all duration-300">Placer ma commande
-          <span class="px-2 py-1 group-hover:bg-yellow-200 group-hover:text-black rounded-full  transition-all duration-300">&rarr;</span>
+        <a
+          href="{% url 'place_order' %}"
+          class="px-4 py-1 flex justify-between items-center w-full bg-teal-700 hover:bg-teal-900 text-white rounded-full group transition-all duration-300"
+          >Placer ma commande
+          <span
+            class="px-2 py-1 group-hover:bg-yellow-300 group-hover:text-black rounded-full transition-all duration-300"
+            >&rarr;</span
+          >
         </a>
-      {% endif %}
+        {% endif %}
       </div>
       {% if not shipping_info %}
-      <form id="form" action="{% url 'checkout' %}" method="POST" class="bg-teal-900 text-white text-sm p-4 rounded-lg flex flex-col gap-2">
+      <form
+        id="form"
+        action="{% url 'checkout' %}"
+        method="POST"
+        class="bg-teal-900 text-white text-sm p-4 rounded-xl flex flex-col gap-2"
+      >
         <h2 class="my-4 font-bold text-gray-700 text-xl">Infos de livraison</h2>
 
         <input
@@ -100,7 +108,9 @@
         />
       </form>
       {% else %}
-      <div  class="bg-teal-900 text-white text-sm p-4 rounded-lg flex flex-col gap-2">
+      <div
+        class="bg-teal-900 text-white text-sm p-4 rounded-xl flex flex-col gap-2"
+      >
         <p>Telephone : {{ shipping_info.phone}}</p>
         <p>Adresse : {{ shipping_info.address}}</p>
         <p>Quartier : {{ shipping_info.district}}</p>

@@ -5,16 +5,16 @@
 >
   <h3 class="font-bold text-black">Commande N°{{obj.id}}</h3>
   <p>
-    <i class="fa-solid fa-money-bill mr-2"></i>
-    {{obj.amount}} CFA
-  </p>
-  <p>
-    <i class="fa-solid fa-calendar-days mr-2"></i>
+    
     {{obj.timestamp.date}}
   </p>
   <p>
-    <i class="fa-solid fa-clock mr-2"></i>
+    
     {{obj.timestamp.time}}
+  </p>
+  <p>
+    
+    {{obj.amount}} CFA
   </p>
 
   {% include 'store/components/order_status.html' %}
@@ -41,23 +41,13 @@
       tabindex="-1"
       id="actionMenu{{obj.id}}"
     >
-      {% if orders_page %}
+     
       <a
         href="{% url 'order_details' obj.id %}"
         class="px-4 py-2 flex items-center hover:text-black hover:bg-gray-200 rounded-full w-full text-center cursor-pointer"
         ><i class="text-sm fa-solid fa-eye mr-2"></i>
         Voir
       </a>
-      {% else %}
-      <a
-        hx-get="{% url 'dash_order' obj.id %}"
-        hx-target="#dashbase"
-        hx-swap="outerHTML"
-        class="px-4 py-2 flex items-center hover:text-black hover:bg-gray-200 rounded-full w-full text-center cursor-pointer"
-        ><i class="text-sm fa-solid fa-eye mr-2"></i>
-        Voir
-      </a>
-      {% endif %}
       <!--  -->
       {% if obj.client == user and obj.status == 'pending' %}
       <a
@@ -67,17 +57,6 @@
         <i class="text-sm fa-solid fa-ban mr-2"></i>
         Annuler
       </a>
-      {% endif %}
-      <!--  -->
-      {% if user.is_staff and obj.status == 'pending' %}
-      <a
-        hx-post="{% url 'manage_order' obj.id 'process'  %}"
-        class="px-4 py-2 flex items-center hover:text-black hover:bg-yellow-200 rounded-full w-full text-center cursor-pointer"
-      >
-        <i class="text-sm fa-solid fa-check mr-2"></i>
-        Traiter
-      </a>
-      <!--  -->
       {% endif %}
     </div>
   </div>

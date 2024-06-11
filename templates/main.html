@@ -28,13 +28,16 @@
     <script src="{% static 'cart.js' %}" defer="true"></script>
     <script src="{% static 'main.js' %}" defer="true"></script>
     <link href="{% static 'styles.css' %}" rel="stylesheet" />
-      <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap"> -->
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Helvetica:wght@400;700&display=swap">
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap"> -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Helvetica:wght@400;700&display=swap"
+    />
 
     <style>
       body {
         /* font-family: 'Noto Sans', sans-serif; */
-        font-family: 'Helvetica', sans-serif;
+        font-family: "Helvetica", sans-serif;
         /* font-family: 'Roboto', sans-serif; */
       }
     </style>
@@ -64,7 +67,9 @@
     {% endif %}
 
     <!--  -->
-    <div id="base" class="min-h-screen lg:mt-20">{% block content %} {% endblock %}</div>
+    <div id="base" class="min-h-screen lg:mt-20">
+      {% block content %} {% endblock %}
+    </div>
     <!--  -->
     {% include 'modal.html' %}
     <!--  -->
@@ -72,6 +77,10 @@
     <script>
       var current_date = new Date().getFullYear();
       document.getElementById("date").innerHTML = current_date;
+
+      htmx.onLoad(function (content) {
+        scripts.init(content);
+      });
     </script>
   </body>
 </html>

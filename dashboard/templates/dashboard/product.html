@@ -1,6 +1,8 @@
- {% load static %} 
+{% load static %}
 
-<div class="p-8 bg-teal-100 roun h-full w-full max-w-7xl mx-auto flex flex-col justify-between gap-6">
+<div
+  class="p-8 bg-teal-200 rounded-3xl h-full w-full max-w-7xl mx-auto flex flex-col justify-between gap-6"
+>
   <div class="flex justify-between">
     <div
       class="bg-teal-900 py-2 px-4 rounded-full flex items-center text-white gap-4"
@@ -55,21 +57,12 @@
       {% endif %}
       <p><b>Description : </b> {{curr_obj.description }}</p>
       <div class="flex gap-2">
-        <button
-          onclick="add_to_cart('{{ curr_obj.id }}')"
+        <a
+          href="{% url 'edit_product' curr_obj.id %}"
           class="bg-teal-700 hover:bg-teal-900 text-white px-6 py-2 rounded-full transition duration-200 ease-in"
+          >Modifier</a
         >
-          Ajouter au panier <i class="fa-solid fa-cart-plus ml-2"></i>
-        </button>
-        <!-- <button
-          onclick="toggle_comment_box()"
-          class="bg-yellow-100 hover:bg-yellow-400 text-black px-4 py-2 rounded-full transition duration-200 ease-in"
-        >
-          Faire un commentaire<i class="fa-solid fa-comments ml-2"></i>
-        </button> -->
       </div>
     </div>
   </div>
 </div>
-
-

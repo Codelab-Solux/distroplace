@@ -19,6 +19,14 @@
     {% endif %}
   <!-- </a> -->
 
+  {% if obj.is_new %}
+  <span
+    class="absolute top-3 left-3 bg-white rounded-md px-2 py-1 text-teal-400 text-lg"
+  >
+    <i class="fa-solid fa-medal"></i>
+  </span>
+  {% endif %}
+
   {% if obj.is_promoted %}
   <span
     class="absolute top-3 right-3 bg-white rounded-md px-2 py-1 text-yellow-400 text-lg"

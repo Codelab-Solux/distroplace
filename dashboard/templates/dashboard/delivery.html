@@ -13,8 +13,9 @@
     </div>
     <span
       class="flex items-center gap-4 py-2 px-4 rounded-full bg-yellow-200 text-black"
-      ><i class="fa-solid fa-copyright"></i>livraison N° : 000{{ curr_obj.id }}</span
-    >
+      ><i class="fa-solid fa-copyright"></i>
+      livraison N° : 000{{ curr_obj.id }}
+    </span>
   </div>
 
   <div class="flex gap-4">
@@ -67,19 +68,12 @@
         </tbody>
       </table>
     </div>
-    <!-- shipping info -->
-    <div class="grid gap-2 w-full max-w-60 xl:max-w-80">
-      {% include 'store/components/delivery_status_card.html' %}
-      <!--  -->
-      {% if curr_obj.status == 'delivered' %}
-      <div
-        class="bg-teal-900 text-white text-sm p-4 rounded-lg flex flex-col gap-2"
-      >
-        <p>Telephone : {{ shipping_info.phone}}</p>
-        <p>Adresse : {{ shipping_info.address}}</p>
-        <p>Quartier : {{ shipping_info.district}}</p>
-      </div>
-      {% endif%}
-    </div>
+    <!-- delivery info -->
+    <div
+      class="w-full max-w-60 xl:max-w-80"
+      hx-get="{% url 'delivery_info' curr_obj.id %}"
+      hx-trigger="load, db_changed from:body"
+      hx-target="this"
+    ></div>
   </div>
 </div>

@@ -15,7 +15,9 @@
     </div>
     <span
       class="flex items-center gap-4 py-2 px-4 rounded-full bg-yellow-200 text-black"
-      ><i class="fa-solid fa-copyright"></i>Commande N° : 000{{ curr_obj.id }}</span
+      ><i class="fa-solid fa-copyright"></i>
+      <!--  -->
+      Commande N° : 000{{ curr_obj.id }}</span
     >
   </div>
 
@@ -70,18 +72,55 @@
       </table>
     </div>
     <!-- shipping info -->
-    <div class="flex flex-col justify-between gap-3 w-full max-w-60 xl:max-w-80">
+    <div
+      class="flex flex-col justify-between gap-3 w-full max-w-60 xl:max-w-80"
+    >
       {% include 'store/components/order_status_card.html' %}
       <!--  -->
-      {% if curr_obj.status == 'delivered' %}
       <div
-        class="bg-teal-900 text-white text-sm p-4 rounded-lg flex flex-col gap-2"
+        class="bg-teal-900 text-white text-sm p-4 rounded-xl flex flex-col gap-2"
       >
+        {% if curr_obj.status != 'cancelled' and not has_delivery %}
+        <form
+          method="POST"
+          action="{% url 'new_delivery' curr_obj.id %}"
+          class="grid gap-2"
+        >
+          <h3>Chosissez le type de livraison</h3>
+          <select
+            required
+            name="delivery_type"
+            class="mb-1 px-3 py-2 text-black rounded-full border focus:border-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"
+          >
+            <option value="" selected disabled>Type de livraison <span class="font-bold text-red-700">*</span></option>
+            {% for obj in delivery_types %}
+            <option class="py-1 px-2" value="{{obj.id}}">
+              {{obj.title}} ({{obj.price}} FCFA)
+            </option>
+            {% endfor %}
+          </select>
+          <input
+            type="text"
+            name="delivery_phone"
+            placeholder="Telephone"
+            class="mb-1 px-3 py-2 text-black rounded-full border focus:border-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"
+          />
+          <button
+            class="px-4 py-2 bg-yellow-100 hover:bg-yellow-300 text-black rounded-full"
+            type="submit"
+          >
+            Valider
+          </button>
+        </form>
+        {% endif %}
+        <!--  -->
+
+        {% if curr_obj.status == 'delivered' %}
         <p>Telephone : {{ shipping_info.phone}}</p>
         <p>Adresse : {{ shipping_info.address}}</p>
         <p>Quartier : {{ shipping_info.district}}</p>
+        {% endif %}
       </div>
-      {% endif%}
     </div>
   </div>
 </div>

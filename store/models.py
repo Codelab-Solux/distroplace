@@ -50,7 +50,8 @@ class Product(models.Model):
     expiration_date = models.DateField(null=True, blank=True)
     likes = models.ManyToManyField(
         CustomUser, related_name='product_likes', blank=True)
-    is_favorite = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
+    is_new = models.BooleanField(default=True)
     image = models.ImageField(
         upload_to='store/products/', blank=True, null=True)
 
@@ -148,6 +149,8 @@ class DeliveryType(models.Model):
 class Delivery(models.Model):
     order = models.ForeignKey(
         Order, on_delete=models.SET_NULL, null=True)
+    delivery_type = models.ForeignKey(
+        DeliveryType, on_delete=models.SET_NULL, default=1, null=True)
     client = models.ForeignKey(
         CustomUser, on_delete=models.SET_NULL, null=True)
     items = models.IntegerField(default=0)

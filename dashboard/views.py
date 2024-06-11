@@ -5,6 +5,7 @@ from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.apps import apps
 from django.contrib import messages
+from base.models import Promotion
 from store.forms import *
 from store.models import *
 
@@ -13,11 +14,13 @@ def dashboard(req):
     products = Product.objects.all()
     categories = Category.objects.all()
     subcategories = SubCategory.objects.all()
+    promotions = Promotion.objects.filter(is_active=True)
 
     context = {
         "dashboard": "dash_active",
         'title': 'dashboard',
         'products':products,
+        'promotions':promotions,
         'categories':categories,
         'subcategories':subcategories,
     }
@@ -40,9 +43,12 @@ def dash_products(req):
 def new_arrivals(req):
     categories = Category.objects.all()
     subcategories = SubCategory.objects.all()
+    products = Product.objects.filter(is_new=True)
+    objects = paginate_objects(req, products)
     context = {
         "dash_products": "dash_active",
         'title': 'Products',
+        'objects': objects,
         'categories': categories,
         'subcategories': subcategories,
     }
@@ -73,14 +79,15 @@ def add_product(req):
         messages.success = 'Nouveau produit ajouté'
         return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
     else:
-        return render(req, 'dashboard/partials/prod_form.html', context={'form': form, 'form_title': 'Nouveau Produit'})
+        return render(req, 'dashboard/partials/product_form.html', context={'form': form, 'form_title': 'Nouveau Produit'})
 
 
 @login_required(login_url='login')
 def edit_product(req, pk):
     user = req.user
     if not user.is_staff:
-        return redirect('home')
+        messages.info(req, "Access denied!!!")
+        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
 
     curr_obj = get_object_or_404(Product, id=pk)
 
@@ -90,9 +97,9 @@ def edit_product(req, pk):
         if form.is_valid():
             form.save()
         messages.success(req, 'Données modifiée avec success')
-        return HttpResponseRedirect(reverse('dash_product', args=[curr_obj.id]))
+        return redirect('dash_product', pk=curr_obj.id)
     else:
-        return render(req, 'dashboard/partials/prod_form.html', context={'form': form, 'form_title': 'Modifier ce produit', 'curr_obj': curr_obj})
+        return render(req, 'dashboard/partials/product_form.html', context={'form': form, 'form_title': 'Modifier ce produit', 'curr_obj': curr_obj})
 
 def products_list(req):
     products = Product.objects.all().order_by('name')
@@ -100,6 +107,14 @@ def products_list(req):
         'products': products,
     }
     return render(req, 'dashboard/partials/products_list.html', context)
+
+
+def products_grid(req):
+    products = Product.objects.all().order_by('name')
+    context = {
+        'products': products,
+    }
+    return render(req, 'dashboard/partials/products_grid.html', context)
 
 
 def filter_products(req):
@@ -145,15 +160,16 @@ def dash_orders(req):
     return render(req, 'dashboard/orders.html', context)
 
 
+
 def dash_order(req, pk):
-    curr_order = Order.objects.get(id=pk)
-    order_items = OrderItem.objects.filter(order=curr_order)
+    curr_obj = Order.objects.get(id=pk)
+    order_items = OrderItem.objects.filter(order=curr_obj)
     rel_orders = Order.objects.filter(
-        client=curr_order.client).order_by('-timestamp').exclude(id=pk)[:4]
+        client=curr_obj.client).order_by('-timestamp').exclude(id=pk)[:4]
     context = {
         "order_details": "dash_active",
         'title': 'Order Details',
-        'curr_order': curr_order,
+        'curr_obj': curr_obj,
         'order_items': order_items,
         'rel_orders': rel_orders,
     }
@@ -162,30 +178,92 @@ def dash_order(req, pk):
 
 def manage_order(req, pk, kp):
     user = req.user
-    curr_order = Order.objects.get(id=pk)
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+    
+    curr_obj = Order.objects.get(id=pk)
 
     if kp == 'cancel':
-        curr_order.status = 'cancelled'
-        curr_order.save()
+        curr_obj.status = 'cancelled'
+        curr_obj.save()
     elif kp == 'process':
-        curr_order.status = 'processed'
-        curr_order.save()
-        new_delivery = Delivery(
-            order=curr_order,
-            client=curr_order.client,
-            items=curr_order.items,
-            phone=curr_order.phone,
-            amount_due=curr_order.amount,
-        )
-        new_delivery.save()
+        curr_obj.status = 'processed'
+        curr_obj.save()
 
     elif kp == 'deliver':
-        curr_order.status = 'delivered'
-        curr_order.save()
+        curr_obj.status = 'delivered'
+        curr_obj.save()
     else:
-        return "error"
+        HttpResponse("error", status=400)
 
     return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
+
+
+def orders_list(req):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+
+    orders = Order.objects.all().order_by('-timestamp')
+    context = {
+        'orders': orders,
+    }
+    return render(req, 'dashboard/partials/orders_list.html', context)
+
+
+def filter_orders(req):
+    user = req.user
+    # user_query = req.POST.get('user')
+    min_date_query = req.POST.get('min_date')
+    max_date_query = req.POST.get('max_date')
+    phone_query = req.POST.get('phone')
+    amount_query = req.POST.get('amount')
+    items_query = req.POST.get('items')
+    status_query = req.POST.get('status')
+
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+    else:
+        base_query = Order.objects.all().order_by('-timestamp')
+
+    # if user_query:
+    #     base_query = base_query.filter(user_)
+
+    if min_date_query:
+        base_query = base_query.filter(timestamp__date__gte=min_date_query)
+    if max_date_query:
+        base_query = base_query.filter(timestamp__date__lte=max_date_query)
+    if phone_query:
+        base_query = base_query.filter(phone=phone_query)
+    if amount_query:
+        base_query = base_query.filter(amount=amount_query)
+    if items_query:
+        base_query = base_query.filter(items=items_query)
+    if status_query:
+        base_query = base_query.filter(status=status_query)
+
+    orders = base_query
+
+    context = {"orders": orders}
+
+    return render(req, 'dashboard/partials/orders_list.html', context)
+
+
+def order_info(req, pk):
+    curr_obj = Order.objects.get(id=pk)
+    order_items = OrderItem.objects.filter(order=curr_obj)
+    shipping_info = ShippingInfo.objects.filter(user=curr_obj.client).first()
+    context = {
+        "delivery_details": "dash_active",
+        'title': 'Delivery Details',
+        'curr_obj': curr_obj,
+        'order_items': order_items,
+        'shipping_info': shipping_info,
+    }
+    return render(req, 'dashboard/partials/order_info.html', context)
 
 
 # --------------------------------- Delivries ---------------------------------
@@ -197,22 +275,111 @@ def dash_deliveries(req):
     return render(req, 'dashboard/deliveries.html', context)
 
 
+def deliveries_list(req):
+    user = req.user
+    deliveries = Delivery.objects.all().order_by('-timestamp')
+    context = {
+        'deliveries': deliveries,
+    }
+    return render(req, 'dashboard/partials/deliveries_list.html', context)
+
+
 def dash_delivery(req, pk):
     curr_obj = Delivery.objects.get(id=pk)
     curr_order = Order.objects.get(id=curr_obj.order.id)
     order_items = OrderItem.objects.filter(order=curr_order)
+    shipping_info = ShippingInfo.objects.filter(user=curr_obj.client).first()
     context = {
         "delivery_details": "dash_active",
         'title': 'Delivery Details',
         'curr_obj': curr_obj,
         'curr_order': curr_order,
         'order_items': order_items,
+        'shipping_info': shipping_info,
     }
     return render(req, 'dashboard/delivery.html', context)
 
+def delivery_info(req, pk):
+    curr_obj = Delivery.objects.get(id=pk)
+    curr_order = Order.objects.get(id=curr_obj.order.id)
+    order_items = OrderItem.objects.filter(order=curr_order)
+    shipping_info = ShippingInfo.objects.filter(user=curr_obj.client).first()
+    context = {
+        "delivery_details": "dash_active",
+        'title': 'Delivery Details',
+        'curr_obj': curr_obj,
+        'curr_order': curr_order,
+        'order_items': order_items,
+        'shipping_info': shipping_info,
+    }
+    return render(req, 'dashboard/partials/delivery_info.html', context)
+
 
 def manage_delivery(req, pk, kp):
-    pass
+    user = req.user
+    curr_obj = Delivery.objects.get(id=pk)
+
+    if kp == 'cancel':
+        curr_obj.status = 'cancelled'
+        curr_obj.is_cancelled = True
+        curr_obj.save()
+
+    elif kp == 'dispatch':
+        curr_obj.status = 'dispatched'
+        curr_obj.save()
+
+    elif kp == 'finish':
+        curr_obj.status = 'finished'
+        curr_obj.save()
+        
+    elif kp == 'postpone':
+        new_dday = 'Date'
+        curr_obj.dday = new_dday
+        curr_obj.save()
+
+    else:
+        HttpResponse("error", status=400)
+
+    return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
+
+
+def filter_deliveries(req):
+    user = req.user
+    # user_query = req.POST.get('user')
+    min_date_query = req.POST.get('min_date')
+    max_date_query = req.POST.get('max_date')
+    phone_query = req.POST.get('phone')
+    amount_query = req.POST.get('amount')
+    items_query = req.POST.get('items')
+    status_query = req.POST.get('status')
+
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+    else:
+        base_query = Delivery.objects.all().order_by('-timestamp')
+
+    # if user_query:
+    #     base_query = base_query.filter(user_)
+
+    if min_date_query:
+        base_query = base_query.filter(dday__gte=min_date_query)
+    if max_date_query:
+        base_query = base_query.filter(dday__lte=max_date_query)
+    if phone_query:
+        base_query = base_query.filter(phone=phone_query)
+    if amount_query:
+        base_query = base_query.filter(amount_due=amount_query)
+    if items_query:
+        base_query = base_query.filter(items=items_query)
+    if status_query:
+        base_query = base_query.filter(status=status_query)
+
+    deliveries = base_query
+
+    context = {"deliveries": deliveries}
+
+    return render(req, 'dashboard/partials/deliveries_list.html', context)
 
 
 # --------------------------Promotions--------------------------
@@ -223,6 +390,30 @@ def promos(req):
     }
     return render(req, 'dashboard/promos.html', context)
 
+
+def dash_promo(req, pk):
+    promotion = get_object_or_404(Promotion, pk=pk)
+    products = promotion.products.all()
+    context = {
+        "promo_page": "active",
+        'title': 'Promo Details',
+        'promotion': promotion,
+        'products': products,
+    }
+    return render(req, 'dashboard/promo_details.html', context)
+
+
+def promo_list(req):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+    else:
+        promotions = Promotion.objects.all().order_by('-timestamp')
+    context = {
+        'promotions': promotions,
+    }
+    return render(req, 'dashboard/partials/promo_list.html', context)
 
 # --------------------------users--------------------------
 def clients(req):
@@ -250,6 +441,15 @@ def staff(req):
         'title': 'Staff',
     }
     return render(req, 'dashboard/staff.html', context)
+
+def staff_details(req,pk):
+    curr_obj = CustomUser.objects.get(id=pk)
+    context = {
+        "staff": "dash_active",
+        'title': 'Staff',
+        'curr_obj': curr_obj,
+    }
+    return render(req, 'dashboard/staff_details.html', context)
 
 
 # --------------------------finances--------------------------
@@ -306,7 +506,8 @@ def create_category(req):
 def edit_category(req, pk):
     user = req.user
     if not user.is_staff:
-        return redirect('home')
+        messages.info(req, "Access denied!!!")
+        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
 
     curr_obj = get_object_or_404(Category, id=pk)
 
@@ -349,7 +550,8 @@ def create_subcategory(req):
 def edit_subcategory(req, pk):
     user = req.user
     if not user.is_staff:
-        return redirect('home')
+        messages.info(req, "Access denied!!!")
+        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
 
     curr_obj = get_object_or_404(SubCategory, id=pk)
 
@@ -392,7 +594,8 @@ def create_delivery_type(req):
 def edit_delivery_type(req, pk):
     user = req.user
     if not user.is_staff:
-        return redirect('home')
+        messages.info(req, "Access denied!!!")
+        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
 
     curr_obj = get_object_or_404(SubCategory, id=pk)
 
@@ -410,7 +613,12 @@ def edit_delivery_type(req, pk):
 # secures the delete route and makes it only accessible by the DELETE method
 @login_required(login_url='login')
 @require_http_methods(['DELETE'])
-def delete_store_object(request, pk, model_name):
+def delete_store_object(req, pk, model_name):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+    
     try:
         # Get the model class from the model name
         ModelClass = apps.get_model('store', model_name)
@@ -421,8 +629,8 @@ def delete_store_object(request, pk, model_name):
     obj = get_object_or_404(ModelClass, pk=pk)
 
     # Check user's permission
-    if request.user.role.sec_level < 4:
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    if req.user.role.sec_level < 4:
+        return HttpResponseRedirect(req.META.get('HTTP_REFERER', '/'))
 
     # Delete the object
     obj.delete()

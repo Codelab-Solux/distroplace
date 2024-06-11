@@ -9,14 +9,14 @@ from django.db.models import Q
 def home(req):
     promos = Product.objects.filter(is_promoted=True)
     latest_posts = Blogpost.objects.all().order_by('-timestamp')[:3]
-    appliances = Product.objects.filter(is_favorite=True, category__id=1)
+    appliances = Product.objects.filter(is_featured=True, category__id=1)
     fruits_veggies_spices = Product.objects.filter(
-        is_favorite=True
+        is_featured=True
     ).filter(
         Q(category__id=4) | Q(category__id=5) | Q(category__id=8)
     )
-    spices = Product.objects.filter(is_favorite=True, category__id=8)
-    cloths = Product.objects.filter(is_favorite=True, category__id=10)
+    spices = Product.objects.filter(is_featured=True, category__id=8)
+    cloths = Product.objects.filter(is_featured=True, category__id=10)
     categories = Category.objects.filter(is_featured=True)
     subcategories = SubCategory.objects.all()
     promo_1 = Promotion.objects.first()
@@ -89,17 +89,6 @@ def promotions(req):
     return render(req, 'base/promotions.html', context)
 
 
-def promo_list(req):
-    user = req.user
-    if not user.is_staff:
-        promotions = Promotion.objects.filter(is_active=True).order_by('-timestamp')
-    else:
-        promotions = Promotion.objects.all().order_by('-timestamp')
-    context = {
-        'promotions': promotions,
-    }
-    return render(req, 'base/partials/promo_list.html', context)
-
 
 def promo_details(request, pk):
     promotion = get_object_or_404(Promotion, pk=pk)
@@ -167,10 +156,9 @@ def contact(req):
 
 
 def not_found(req, exception):
-
     context = {
         "not_found_page": "active",
-        "title": 'not_found',
+        "title": 'Page 404',
 
     }
     return render(req, 'base/extras/not_found.html', context)

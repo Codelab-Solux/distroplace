@@ -5,24 +5,24 @@
 >
   <h3 class="font-bold text-black">Livraison N°{{obj.id}}</h3>
   <p>
-    <i class="fa-solid fa-calendar-days mr-2"></i>
+    
     {{obj.d_day}}
   </p>
   <p>
-    <i class="fa-solid fa-user mr-2"></i>
-    {{obj.client.get_full_name}}
-  </p>
-  <p>
-    <i class="fa-solid fa-boxes-stacked mr-2"></i>
+  
     {{obj.items}} articles
   </p>
   <p>
-    <i class="fa-solid fa-money-bill mr-2"></i>
+
     {{obj.amount_due}} CFA
   </p>
   <p>
-    <i class="fa-solid fa-phone mr-2"></i>
+    Tel:
     {{obj.phone}}
+  </p>
+  <p>
+    
+    {{obj.delivery_type}}
   </p>
 
   {% include 'store/components/delivery_status.html' %}
@@ -49,24 +49,14 @@
       tabindex="-1"
       id="actionMenu{{obj.id}}"
     >
-    {% if deliveries_page %}
+    
       <a
         href="{% url 'delivery_details' obj.id %}"
         class="px-4 py-2 flex items-center hover:text-black hover:bg-gray-200 rounded-full w-full text-center cursor-pointer"
         ><i class="text-sm fa-solid fa-eye mr-2"></i>
         Voir
       </a>
-      {% else %}
-      <a
-        hx-get="{% url 'dash_delivery' obj.id %}"
-        hx-target="#dashbase"
-        hx-swap = 'outerHTML'
-        class="px-4 py-2 flex items-center hover:text-black hover:bg-gray-200 rounded-full w-full text-center cursor-pointer"
-        ><i class="text-sm fa-solid fa-eye mr-2"></i>
-        Voir
-      </a>
-      {% endif %}
-      <!--  -->
+
       {% if obj.client == user and obj.status == 'pending' %}
       <a
         hx-post="{% url 'postpone_delivery' obj.id %}"
@@ -76,17 +66,7 @@
         Reporter
       </a>
       {% endif %}
-      <!--  -->
-      {% if user.is_staff and obj.status == 'pending' %}
-      <a
-        hx-post="{% url 'manage_delivery' obj.id 'process'  %}"
-        class="px-4 py-2 flex items-center hover:text-black hover:bg-yellow-200 rounded-full w-full text-center  cursor-pointer"
-      >
-        <i class="text-sm fa-solid fa-check mr-2"></i>
-        Expédier
-      </a>
-      <!--  -->
-      {% endif %}
+
     </div>
   </div>
 </div>

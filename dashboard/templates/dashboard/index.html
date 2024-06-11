@@ -23,31 +23,77 @@
   </div>
 
   <section
-    class="w-full p-4 bg-yellow-200 shadow-md text-xs rounded-3xl grid md:grid-cols-3 gap-4"
+    class="w-full p-4 bg-gray-300 shadow-sm text-xs rounded-3xl grid md:grid-cols-3 gap-4"
   >
     <div class="p-4 grid gap-2 bg-white rounded-2xl text-gray-700 text-sm">
-      <p
-        class="rounded-md text-xl text-black font-bold flex items-center gap-2"
-      >
-        <i class="fa-solid fa-boxes-stacked text-teal-700 text-xl"></i>
-        Produits
-      </p>
-      <p class="bg-gray-100 rounded-full px-4 py-2">
-        Produits ajoutés :
+
+      <p class="bg-green-200 rounded-full px-4 py-2 flex items-center">
+        <i class="fa-solid fa-arrow-down text-teal-700 text-xl mr-3 "></i>
+        Produits entrés :
         <span class="text-lg font-bold ml-2 text-black"
           >{{products|length}}</span
         >
       </p>
-      <p class="bg-green-200 rounded-full px-4 py-2">
-        Produits vendus :
+      <p class="bg-red-200 rounded-full px-4 py-2 flex items-center">
+        <i class="fa-solid fa-arrow-up text-red-700 text-xl mr-3 "></i>
+        Produits sorties :
         <span class="text-lg font-bold ml-2 text-black"
-          >{{pending_visits}}</span
+          >{{sold_products}}</span
         >
       </p>
-      <p class="bg-red-200 rounded-full px-4 py-2">
-        Produits en rupture :
+      <p class="bg-gray-100 rounded-full px-4 py-2 flex items-center">
+        <i class="fa-solid fa-warehouse text-teal-700 text-xl mr-3 "></i>
+        Produits en stock :
         <span class="text-lg font-bold ml-2 text-black"
-          >{{pending_visits}}</span
+          >{{products|length}}</span
+        >
+      </p>
+    </div>
+    <!--  -->
+    <div class="p-4 grid gap-2 bg-white rounded-2xl text-gray-700 text-sm">
+      <p class="bg-gray-100 rounded-full px-4 py-2 flex items-center">
+        <i class="fa-solid fa-shapes text-teal-700 text-xl mr-3 "></i>
+        Categories :
+        <span class="text-lg font-bold ml-2 text-black"
+          >{{categories|length}}</span
+        >
+      </p>
+      <p class="bg-gray-100 rounded-full px-4 py-2 flex items-center">
+        <i class="fa-solid fa-layer-group text-teal-700 text-xl mr-3 "></i>
+        Sous-categories :
+        <span class="text-lg font-bold ml-2 text-black"
+          >{{subcategories|length}}</span
+        >
+      </p>
+      <p class="bg-gray-100 rounded-full px-4 py-2 flex items-center">
+        <i class="fa-solid fa-tags text-teal-700 text-xl mr-3 "></i>
+        Promotions :
+        <span class="text-lg font-bold ml-2 text-black"
+          >{{promotions|length}}</span
+        >
+      </p>
+    </div>
+    <!--  -->
+    <div class="p-4 grid gap-2 bg-white rounded-2xl text-gray-700 text-sm">
+      <p class="bg-gray-100 rounded-full px-4 py-2 flex items-center">
+        <i class="fa-solid fa-dolly text-teal-700 text-xl mr-3 "></i>
+        Commandes :
+        <span class="text-lg font-bold ml-2 text-black"
+          >{{subcategories|length}}</span
+        >
+      </p>
+      <p class="bg-gray-100 rounded-full px-4 py-2 flex items-center">
+        <i class="fa-solid fa-truck text-teal-700 text-xl mr-3 "></i>
+        Livraisons :
+        <span class="text-lg font-bold ml-2 text-black"
+          >{{categories|length}}</span
+        >
+      </p>
+      <p class="bg-gray-100 rounded-full px-4 py-2 flex items-center">
+        <i class="fa-solid fa-right-left text-teal-700 text-xl mr-3 "></i>
+        Retours :
+        <span class="text-lg font-bold ml-2 text-black"
+          >{{promotions|length}}</span
         >
       </p>
     </div>

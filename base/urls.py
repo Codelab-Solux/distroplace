@@ -7,7 +7,6 @@ register_converter(HashIdConverter, "hashid")
 urlpatterns = [
     path('', home, name='home'),
     path('promotions/', promotions, name='promotions'),
-    path('promotions/list/', promo_list, name='promo_list'),
     path('promotions/<hashid:pk>/', promo_details, name='promo_details'),
     # ----------------------- blogposts ------------------------------
     path('blogposts/', blog, name='blog'),
