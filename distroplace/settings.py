@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # ---------third party apps-----------
+    'corsheaders',
     'social_django',
     # ---------project apps-----------
     'base.apps.BaseConfig',
@@ -53,12 +54,19 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Place WhiteNoise here
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
+]
+
+
+CORS_ALLOWED_ORIGINS = [
+    "https://distroplace.com",  # Replace with your domain
+    "http://localhost:8000",  # Example for allowing localhost during development
 ]
 
 
