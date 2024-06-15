@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # ---------third party apps-----------
     'corsheaders',
-    # 'social_django',
     # ---------project apps-----------
     'base.apps.BaseConfig',
     'store.apps.StoreConfig',
@@ -59,7 +58,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 
@@ -98,8 +96,8 @@ WSGI_APPLICATION = 'distroplace.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        # 'NAME': '/data/db/distroplace.sqlite3', #production db
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': '/data/db/distroplace.sqlite3', #production db
     }
 }
 
@@ -152,21 +150,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-# OAuth2 settings
-# AUTHENTICATION_BACKENDS = (
-#     'social_core.backends.google.GoogleOAuth2',
-#     'django.contrib.auth.backends.ModelBackend',
-# )
-
-# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('GOOGLE_OAUTH2_KEY')
-# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('GOOGLE_OAUTH2_SECRET')
-
-# GOOGLE_OAUTH_CLIENT_ID = os.getenv('GOOGLE_OAUTH2_ID')
-# GOOGLE_OAUTH_CLIENT_SECRET = os.getenv('GOOGLE_OAUTH2_SECRET')
-
-# SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 # very important for overiding the default user model!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 LOGIN_REDIRECT_URL = "/"
