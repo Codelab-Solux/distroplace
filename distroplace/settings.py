@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # ---------third party apps-----------
     'corsheaders',
-    'social_django',
+    # 'social_django',
     # ---------project apps-----------
     'base.apps.BaseConfig',
     'store.apps.StoreConfig',
@@ -59,7 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'social_django.middleware.SocialAuthExceptionMiddleware',
+    # 'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 
@@ -155,18 +155,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # OAuth2 settings
-AUTHENTICATION_BACKENDS = (
-    'social_core.backends.google.GoogleOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
-)
+# AUTHENTICATION_BACKENDS = (
+#     'social_core.backends.google.GoogleOAuth2',
+#     'django.contrib.auth.backends.ModelBackend',
+# )
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('GOOGLE_OAUTH2_KEY')
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('GOOGLE_OAUTH2_SECRET')
+# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('GOOGLE_OAUTH2_KEY')
+# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('GOOGLE_OAUTH2_SECRET')
 
-GOOGLE_OAUTH_CLIENT_ID = os.getenv('GOOGLE_OAUTH2_ID')
-GOOGLE_OAUTH_CLIENT_SECRET = os.getenv('GOOGLE_OAUTH2_SECRET')
+# GOOGLE_OAUTH_CLIENT_ID = os.getenv('GOOGLE_OAUTH2_ID')
+# GOOGLE_OAUTH_CLIENT_SECRET = os.getenv('GOOGLE_OAUTH2_SECRET')
 
-SOCIAL_AUTH_URL_NAMESPACE = 'social'
+# SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 # very important for overiding the default user model!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 LOGIN_REDIRECT_URL = "/"
