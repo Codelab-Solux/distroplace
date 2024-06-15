@@ -1,7 +1,7 @@
 {% load static %}
 
 <div
-  class="py-2 px-4 w-full bg-white hover:bg-gray-100 text-xs xl:text-sm flex lg:grid lg:grid-cols-6 xl:grid-cols-7 justify-between items-center rounded-full border hover:shadow-lg transition duration-200 ease-in"
+  class="py-2 px-4 w-full bg-white hover:bg-gray-100 text-xs xl:text-sm flex justify-between items-center gap-4 lg:grid lg:grid-cols-7 rounded-full border hover:shadow-lg transition duration-200 ease-in"
 >
   {% if obj.image %}
   <img
@@ -31,10 +31,10 @@
   {% endif %}
   <span> {{obj.quantity}} </span>
   <span> {{obj.get_unit_display}} </span>
-  <span class="hidden xl:inline"> {{obj.category}} </span>
+  <span> {{obj.category}} </span>
 
   <div
-    class="w-full flex gap-3 justify-end items-end text-end relative text-gray-700"
+    class="w-fit flex gap-3 justify-end items-end text-end relative text-gray-700"
   >
     <button
       type="button"

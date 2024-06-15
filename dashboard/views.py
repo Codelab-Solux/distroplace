@@ -10,6 +10,7 @@ from store.forms import *
 from store.models import *
 
 
+@login_required(login_url='login')
 def dashboard(req):
     products = Product.objects.all()
     categories = Category.objects.all()
@@ -27,7 +28,8 @@ def dashboard(req):
     return render(req, 'dashboard/index.html', context)
 
 
-# --------------------------------- Products ---------------------------------
+# ------------------------------------------------- Products -------------------------------------------------
+@login_required(login_url='login')
 def dash_products(req):
     categories = Category.objects.all()
     subcategories = SubCategory.objects.all()
@@ -40,6 +42,7 @@ def dash_products(req):
     return render(req, 'dashboard/products.html', context)
 
 
+@login_required(login_url='login')
 def new_arrivals(req):
     categories = Category.objects.all()
     subcategories = SubCategory.objects.all()
@@ -55,6 +58,7 @@ def new_arrivals(req):
     return render(req, 'dashboard/new_arrivals.html', context)
 
 
+@login_required(login_url='login')
 def dash_product(req, pk):
     curr_obj = Product.objects.get(id=pk)
     context = {
@@ -65,11 +69,13 @@ def dash_product(req, pk):
     return render(req, 'dashboard/product.html', context)
 
 
+@login_required(login_url='login')
 def add_product(req):
     user= req.user
     if not user.is_staff:
         messages.info(req, "Access denied!!!")
-        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+        return redirect('home')
+        
 
     form = ProductForm()
     if req.method == 'POST':
@@ -77,9 +83,11 @@ def add_product(req):
         if form.is_valid():
             form.save()
         messages.success = 'Nouveau produit ajouté'
-        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+        
     else:
-        return render(req, 'dashboard/partials/product_form.html', context={'form': form, 'form_title': 'Nouveau Produit'})
+        return render(req, 'dashboard/partials/product_form.html', context={
+            'title': 'Products', 'form': form, 'form_title': 'Nouveau Produit'})
+
 
 
 @login_required(login_url='login')
@@ -87,11 +95,20 @@ def edit_product(req, pk):
     user = req.user
     if not user.is_staff:
         messages.info(req, "Access denied!!!")
-        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+        return redirect('home')
+        
 
     curr_obj = get_object_or_404(Product, id=pk)
 
     form = ProductForm(instance=curr_obj)
+
+    context = {
+        'title': 'Products', 
+        'form': form, 
+        'form_title': 'Modifier ce produit', 
+        'curr_obj': curr_obj,
+        }
+    
     if req.method == 'POST':
         form = ProductForm(req.POST, instance=curr_obj)
         if form.is_valid():
@@ -99,8 +116,9 @@ def edit_product(req, pk):
         messages.success(req, 'Données modifiée avec success')
         return redirect('dash_product', pk=curr_obj.id)
     else:
-        return render(req, 'dashboard/partials/product_form.html', context={'form': form, 'form_title': 'Modifier ce produit', 'curr_obj': curr_obj})
+        return render(req, 'dashboard/partials/product_form.html', context=context)
 
+@login_required(login_url='login')
 def products_list(req):
     products = Product.objects.all().order_by('name')
     context = {
@@ -109,6 +127,7 @@ def products_list(req):
     return render(req, 'dashboard/partials/products_list.html', context)
 
 
+@login_required(login_url='login')
 def products_grid(req):
     products = Product.objects.all().order_by('name')
     context = {
@@ -117,6 +136,7 @@ def products_grid(req):
     return render(req, 'dashboard/partials/products_grid.html', context)
 
 
+@login_required(login_url='login')
 def filter_products(req):
     name_query = req.POST.get('name')
     price_query = req.POST.get('price')
@@ -151,8 +171,14 @@ def filter_products(req):
 
     return render(req, 'dashboard/partials/products_list.html', context)
 
-# --------------------------------- Products ---------------------------------
+
+# ------------------------------------------------- Orders -------------------------------------------------
+@login_required(login_url='login')
 def dash_orders(req):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
     context = {
         "dash_orders": "dash_active",
         'title': 'Orders',
@@ -160,8 +186,13 @@ def dash_orders(req):
     return render(req, 'dashboard/orders.html', context)
 
 
-
+@login_required(login_url='login')
 def dash_order(req, pk):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
     curr_obj = Order.objects.get(id=pk)
     order_items = OrderItem.objects.filter(order=curr_obj)
     rel_orders = Order.objects.filter(
@@ -176,11 +207,13 @@ def dash_order(req, pk):
     return render(req, 'dashboard/order.html', context)
 
 
+@login_required(login_url='login')
 def manage_order(req, pk, kp):
     user = req.user
     if not user.is_staff:
         messages.info(req, "Access denied!!!")
-        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+        return redirect('home')
+        
     
     curr_obj = Order.objects.get(id=pk)
 
@@ -200,12 +233,8 @@ def manage_order(req, pk, kp):
     return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
 
 
+@login_required(login_url='login')
 def orders_list(req):
-    user = req.user
-    if not user.is_staff:
-        messages.info(req, "Access denied!!!")
-        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
-
     orders = Order.objects.all().order_by('-timestamp')
     context = {
         'orders': orders,
@@ -213,6 +242,7 @@ def orders_list(req):
     return render(req, 'dashboard/partials/orders_list.html', context)
 
 
+@login_required(login_url='login')
 def filter_orders(req):
     user = req.user
     # user_query = req.POST.get('user')
@@ -225,7 +255,8 @@ def filter_orders(req):
 
     if not user.is_staff:
         messages.info(req, "Access denied!!!")
-        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+        return redirect('home')
+        
     else:
         base_query = Order.objects.all().order_by('-timestamp')
 
@@ -252,6 +283,7 @@ def filter_orders(req):
     return render(req, 'dashboard/partials/orders_list.html', context)
 
 
+@login_required(login_url='login')
 def order_info(req, pk):
     curr_obj = Order.objects.get(id=pk)
     order_items = OrderItem.objects.filter(order=curr_obj)
@@ -266,8 +298,14 @@ def order_info(req, pk):
     return render(req, 'dashboard/partials/order_info.html', context)
 
 
-# --------------------------------- Delivries ---------------------------------
+# ------------------------------------------------- Delivries -------------------------------------------------
+@login_required(login_url='login')
 def dash_deliveries(req):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
     context = {
         "dash_deliveries": "dash_active",
         'title': 'Deliveries',
@@ -275,8 +313,8 @@ def dash_deliveries(req):
     return render(req, 'dashboard/deliveries.html', context)
 
 
+@login_required(login_url='login')
 def deliveries_list(req):
-    user = req.user
     deliveries = Delivery.objects.all().order_by('-timestamp')
     context = {
         'deliveries': deliveries,
@@ -284,7 +322,13 @@ def deliveries_list(req):
     return render(req, 'dashboard/partials/deliveries_list.html', context)
 
 
+@login_required(login_url='login')
 def dash_delivery(req, pk):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
     curr_obj = Delivery.objects.get(id=pk)
     curr_order = Order.objects.get(id=curr_obj.order.id)
     order_items = OrderItem.objects.filter(order=curr_order)
@@ -299,6 +343,7 @@ def dash_delivery(req, pk):
     }
     return render(req, 'dashboard/delivery.html', context)
 
+@login_required(login_url='login')
 def delivery_info(req, pk):
     curr_obj = Delivery.objects.get(id=pk)
     curr_order = Order.objects.get(id=curr_obj.order.id)
@@ -315,8 +360,8 @@ def delivery_info(req, pk):
     return render(req, 'dashboard/partials/delivery_info.html', context)
 
 
+@login_required(login_url='login')
 def manage_delivery(req, pk, kp):
-    user = req.user
     curr_obj = Delivery.objects.get(id=pk)
 
     if kp == 'cancel':
@@ -343,6 +388,7 @@ def manage_delivery(req, pk, kp):
     return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
 
 
+@login_required(login_url='login')
 def filter_deliveries(req):
     user = req.user
     # user_query = req.POST.get('user')
@@ -355,7 +401,8 @@ def filter_deliveries(req):
 
     if not user.is_staff:
         messages.info(req, "Access denied!!!")
-        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+        return redirect('home')
+        
     else:
         base_query = Delivery.objects.all().order_by('-timestamp')
 
@@ -382,8 +429,14 @@ def filter_deliveries(req):
     return render(req, 'dashboard/partials/deliveries_list.html', context)
 
 
-# --------------------------Promotions--------------------------
+# -------------------------------------------------Promotions-------------------------------------------------
+@login_required(login_url='login')
 def promos(req):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
     context = {
         "promos": "dash_active",
         'title': 'Promos',
@@ -391,7 +444,13 @@ def promos(req):
     return render(req, 'dashboard/promos.html', context)
 
 
+@login_required(login_url='login')
 def dash_promo(req, pk):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
     promotion = get_object_or_404(Promotion, pk=pk)
     products = promotion.products.all()
     context = {
@@ -403,11 +462,13 @@ def dash_promo(req, pk):
     return render(req, 'dashboard/promo_details.html', context)
 
 
+@login_required(login_url='login')
 def promo_list(req):
     user = req.user
     if not user.is_staff:
         messages.info(req, "Access denied!!!")
-        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+        return redirect('home')
+        
     else:
         promotions = Promotion.objects.all().order_by('-timestamp')
     context = {
@@ -415,8 +476,15 @@ def promo_list(req):
     }
     return render(req, 'dashboard/partials/promo_list.html', context)
 
-# --------------------------users--------------------------
+
+# ------------------------------------------------- Clients-------------------------------------------------
+@login_required(login_url='login')
 def clients(req):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
     clients = CustomUser.objects.filter(role__id =1)
     context = {
         "customers": "dash_active",
@@ -426,8 +494,28 @@ def clients(req):
     return render(req, 'dashboard/clients.html', context)
 
 
+@login_required(login_url='login')
+def clients_list(req):
+    clients = CustomUser.objects.filter(role__id=1)
+    context = {
+        'clients': clients,
+    }
+    return render(req, 'accounts/partials/clients_list.html', context)
+
+
+# ------------------------------------------------- Staff -------------------------------------------------
+@login_required(login_url='login')
+def staff_list(req):
+    staff = CustomUser.objects.filter(role__id__gt=1, is_staff=True)
+    context = {
+        'staff': staff,
+    }
+    return render(req, 'accounts/partials/staff_list.html', context)
+
+
+@login_required(login_url='login')
 def staff_grid(req):
-    staff = CustomUser.objects.filter(role__id__gt=1)
+    staff = CustomUser.objects.filter(role__id__gt=1, is_staff = True)
     context = {
         "staff": "dash_active",
         'title': 'Staff',
@@ -435,14 +523,28 @@ def staff_grid(req):
     }
     return render(req, 'dashboard/partials/staff_grid.html', context)
 
+
+@login_required(login_url='login')
 def staff(req):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
     context = {
         "staff": "dash_active",
         'title': 'Staff',
     }
     return render(req, 'dashboard/staff.html', context)
 
-def staff_details(req,pk):
+
+@login_required(login_url='login')
+def staff_details(req, pk):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
     curr_obj = CustomUser.objects.get(id=pk)
     context = {
         "staff": "dash_active",
@@ -451,16 +553,115 @@ def staff_details(req,pk):
     }
     return render(req, 'dashboard/staff_details.html', context)
 
+# ------------------------------------------------- Suppliers -------------------------------------------------
+@login_required(login_url='login')
+def suppliers(req):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
 
-# --------------------------finances--------------------------
+    context = {
+        "suppliers": "dash_active",
+        'title': 'Fournisseurs',
+    }
+    return render(req, 'dashboard/suppliers.html', context)
+
+
+@login_required(login_url='login')
+def supplier_details(req, pk):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
+    curr_obj = Supplier.objects.get(id=pk)
+    available_products = Product.objects.filter(
+        supplier=curr_obj).order_by('-name')
+    received_products = Product.objects.filter(
+        supplier=curr_obj).order_by('-name')
+    returned_products = Product.objects.filter(
+        supplier=curr_obj).order_by('-name')
+    context = {
+        "suppliers": "dash_active",
+        'title': 'Fournisseur',
+        'curr_obj': curr_obj,
+        'available_products': available_products,
+        
+        'received_products': received_products,
+        'returned_products': returned_products,
+    }
+    return render(req, 'dashboard/supplier_details.html', context)
+
+
+@login_required(login_url='login')
+def suppliers_list(req):
+    suppliers = Supplier.objects.all().order_by('name')
+    context = {
+        'suppliers': suppliers,
+    }
+    return render(req, 'dashboard/partials/suppliers_list.html', context)
+
+
+@login_required(login_url='login')
+def create_supplier(req):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
+    form = SupplierForm()
+    if req.method == 'POST':
+        form = SupplierForm(req.POST)
+        if form.is_valid():
+            form.save()
+        messages.success = 'Nouvelle catégorie ajouté'
+        return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
+    else:
+        return render(req, 'basic_form.html', context={'form': form, 'form_title': 'Nouveau fournisseur'})
+
+
+@login_required(login_url='login')
+def edit_supplier(req, pk):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
+    curr_obj = get_object_or_404(Supplier, id=pk)
+
+    form = SupplierForm(instance=curr_obj)
+    if req.method == 'POST':
+        form = SupplierForm(req.POST, instance=curr_obj)
+        if form.is_valid():
+            form.save()
+            # messages.success(req, 'Données modifiée avec success')
+        return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
+    else:
+        return render(req, 'basic_form.html', context={'form': form, 'form_title': 'Modifier ce fournisseur', 'curr_obj': curr_obj})
+
+# ------------------------------------------------- Finances -------------------------------------------------
+@login_required(login_url='login')
 def finances(req):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
     context = {
         "finances": "dash_active",
         'title': 'Finances',
     }
     return render(req, 'dashboard/finances.html', context)
 
+
+@login_required(login_url='login')
 def reports(req):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
     context = {
         "reports": "dash_active",
         'title': 'Reports',
@@ -468,8 +669,14 @@ def reports(req):
     return render(req, 'dashboard/reports.html', context)
 
 
-# --------------------------Parameters--------------------------
+# ------------------------------------------------- Parameters -------------------------------------------------
+@login_required(login_url='login')
 def dash_parameters(req):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+        
     context = {
         "dash_parameters": "dash_active",
         'title': 'Parameters',
@@ -477,6 +684,7 @@ def dash_parameters(req):
     return render(req, 'dashboard/parameters.html', context)
 
 
+@login_required(login_url='login')
 def categories_list(req):
     categories = Category.objects.all().order_by('name')
     context = {
@@ -488,7 +696,8 @@ def categories_list(req):
 @login_required(login_url='login')
 def create_category(req):
     user = req.user
-    if user.role.sec_level < 4:
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
         return redirect('home')
 
     form = CategoryForm()
@@ -507,7 +716,8 @@ def edit_category(req, pk):
     user = req.user
     if not user.is_staff:
         messages.info(req, "Access denied!!!")
-        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+        return redirect('home')
+        
 
     curr_obj = get_object_or_404(Category, id=pk)
 
@@ -522,6 +732,7 @@ def edit_category(req, pk):
         return render(req, 'basic_form.html', context={'form': form, 'form_title': 'Modifier cette catégorie', 'curr_obj': curr_obj})
 
 
+@login_required(login_url='login')
 def subcategories_list(req):
     subcategories = SubCategory.objects.all().order_by('name')
     context = {
@@ -529,11 +740,15 @@ def subcategories_list(req):
     }
     return render(req, 'dashboard/partials/subcategories_list.html', context)
 
+
 @login_required(login_url='login')
 def create_subcategory(req):
     user = req.user
-    if user.role.sec_level < 4:
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
         return redirect('home')
+        
+
 
     form = SubCategoryForm()
     if req.method == 'POST':
@@ -546,12 +761,14 @@ def create_subcategory(req):
         return render(req, 'basic_form.html', context={'form': form, 'form_title': 'Nouvelle sous-catégorie'})
 
 
+
 @login_required(login_url='login')
 def edit_subcategory(req, pk):
     user = req.user
     if not user.is_staff:
         messages.info(req, "Access denied!!!")
-        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+        return redirect('home')
+        
 
     curr_obj = get_object_or_404(SubCategory, id=pk)
 
@@ -564,7 +781,9 @@ def edit_subcategory(req, pk):
         return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
     else:
         return render(req, 'basic_form.html', context={'form': form, 'form_title': 'Modifier cette sous-catégorie', 'curr_obj': curr_obj})
-    
+
+
+@login_required(login_url='login')
 def delivery_types_list(req):
     delivery_types = DeliveryType.objects.all()
     context = {
@@ -573,11 +792,14 @@ def delivery_types_list(req):
     return render(req, 'dashboard/partials/delivery_types_list.html', context)
 
 
+
 @login_required(login_url='login')
 def create_delivery_type(req):
     user = req.user
-    if user.role.sec_level < 4:
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
         return redirect('home')
+        
 
     form = DeliveryTypeForm()
     if req.method == 'POST':
@@ -590,12 +812,14 @@ def create_delivery_type(req):
         return render(req, 'basic_form.html', context={'form': form, 'form_title': 'Nouveau type de lvraison'})
 
 
+
 @login_required(login_url='login')
 def edit_delivery_type(req, pk):
     user = req.user
     if not user.is_staff:
         messages.info(req, "Access denied!!!")
-        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+        return redirect('home')
+        
 
     curr_obj = get_object_or_404(SubCategory, id=pk)
 
@@ -611,13 +835,15 @@ def edit_delivery_type(req, pk):
 
 
 # secures the delete route and makes it only accessible by the DELETE method
-@login_required(login_url='login')
+
 @require_http_methods(['DELETE'])
+@login_required(login_url='login')
 def delete_store_object(req, pk, model_name):
     user = req.user
     if not user.is_staff:
         messages.info(req, "Access denied!!!")
-        return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+        return redirect('home')
+        
     
     try:
         # Get the model class from the model name
@@ -637,3 +863,13 @@ def delete_store_object(req, pk, model_name):
 
     # Return a success response
     return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
+
+
+@login_required(login_url='login')
+def dash_profile(req, pk):
+    curr_obj = CustomUser.objects.get(id=pk)
+    context = {
+        'title': 'Profil',
+        'curr_obj': curr_obj,
+    }
+    return render(req, 'dashboard/profile.html', context)

@@ -11,12 +11,14 @@ WORKDIR /app
 # Install dependencies
 RUN apt-get update \
     && apt-get install -y \
-    libpq-dev \
-    postgresql-client
+    && rm -rf /var/lib/apt/lists/*
 
 # Install python dependencies
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Create the directory for the database
+RUN mkdir -p /data/db
 
 # Copy the rest of the application code
 COPY . /app/

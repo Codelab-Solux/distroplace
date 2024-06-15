@@ -6,15 +6,19 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.utils import timezone
-from django.db.models import Q
 from django.contrib.auth.hashers import check_password
 
 from store.cart import *
 from store.models import *
-from .forms import * # type: ignore
+from .forms import *
 from .models import *
-from datetime import datetime
 
+
+def google_login(request):
+    return redirect(reverse('social:begin', args=['google']))
+
+def debug_view(request):
+    return HttpResponse(reverse('social:begin', args=['google']))
 
 def loginView(req):
     if req.user.is_authenticated:
@@ -59,7 +63,7 @@ def signupView(req):
             messages.success(req, "Votre compte vien d'être créé.")
             messages.add_message(
                 req, messages.SUCCESS, 'Nous venons de vous envoyer un mail pour verifier votre compte')
-            return redirect('verify')
+            return redirect('login')
 
         # send_verification_email(req, user)
 
@@ -69,23 +73,6 @@ def signupView(req):
         'form':  form,
     }
     return render(req, 'accounts/signup.html', context)
-
-
-@login_required(login_url='login')
-def clients_list(req):
-    clients = CustomUser.objects.filter(role__id=1)
-    context = {
-        'clients': clients,
-    }
-    return render(req, 'accounts/partials/clients_list.html', context)
-
-@login_required(login_url='login')
-def staff_list(req):
-    staff = CustomUser.objects.filter(role__id__gt=1)
-    context = {
-        'staff': staff,
-    }
-    return render(req, 'accounts/partials/staff_list.html', context)
 
 
 @login_required(login_url='login')
@@ -100,6 +87,7 @@ def my_profile(req):
 
     orders = Order.objects.filter(client=curr_obj)
     deliveries = Delivery.objects.filter(client=curr_obj)
+    shipping_info = get_object_or_404(ShippingInfo, user=curr_obj)
 
     context = {
         "profile_page":"active",
@@ -110,6 +98,7 @@ def my_profile(req):
         "total_price": total_price,
         "orders": orders,
         "deliveries": deliveries,
+        "shipping_info": shipping_info,
     }
     return render(req, 'accounts/user_profile.html', context)
 

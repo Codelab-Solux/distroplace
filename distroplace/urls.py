@@ -9,6 +9,7 @@ urlpatterns = [
     path('store/', include('store.urls')),
     path('accounts/', include('accounts.urls')),
     path('dashboard/', include('dashboard.urls')),
+    path('auth/', include('social_django.urls', namespace='social')),
 ]
 
 if settings.DEBUG:

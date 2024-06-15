@@ -22,7 +22,7 @@
   </div>
 
   <form
-    class="w-full max-w-3xl mx-auto p-4 bg-yellow-100 rounded-xl flex flex-col gap-3 text-sm"
+    class="w-full max-w-3xl mx-auto p-4 bg-teal-200 rounded-xl flex flex-col gap-3 text-sm"
     hx-post="{{ request.path }}"
     action=""
     enctype="multipart/form-data"
@@ -69,6 +69,10 @@
       <div>
         <h3 class="mb-1">{{form.expiration_date.label}}</h3>
         {{form.expiration_date}}
+      </div>
+      <div>
+        <h3 class="mb-1">{{form.supplier.label}}</h3>
+        {{form.supplier}}
       </div>
       <div>
         <h3 class="mb-1">{{form.image.label}}</h3>

@@ -1,7 +1,7 @@
 {% load static %}
 
 <div
-  class="py-2 px-4 w-full bg-white hover:bg-gray-100 text-xs xl:text-sm flex justify-between items-center lg:grid lg:grid-cols-6 rounded-full border hover:shadow-lg transition duration-200 ease-in"
+  class="py-2 px-4 w-full bg-white hover:bg-gray-100 text-xs xl:text-sm flex justify-between items-center gap-4 lg:grid lg:grid-cols-6 rounded-full border hover:shadow-lg transition duration-200 ease-in"
 >
   {% if obj.image %}
   <img
@@ -26,7 +26,7 @@
   <p>{{obj.products.count}} produits</p>
 
   <div
-    class="w-full flex gap-3 justify-end items-end text-end relative text-gray-700"
+    class="w-fit flex gap-3 justify-end items-end text-end relative text-gray-700"
   >
     <button
       onclick="toggleAccordion('c_{{obj.id}}')"

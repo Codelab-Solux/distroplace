@@ -32,10 +32,23 @@ urlpatterns = [
          manage_delivery, name='manage_delivery'),
     path('promos/', promos, name='promos'),
     path('promos/list/', promo_list, name='promo_list'),
+    # ----------------------------------------------------------------------------
+    path('profile/<hashid:pk>/', dash_profile, name='dash_profile'),
+    # ----------------------------------------------------------------------------
     path('clients/', clients, name='clients'),
+    path('clients/list/', clients_list, name='clients_list'),
+    # ----------------------------------------------------------------------------
     path('staff/', staff, name='staff'),
     path('staff/grid/', staff_grid, name='staff_grid'),
+    path('staff/list/', staff_list, name='staff_list'),
     path('staff/<hashid:pk>/', staff_details, name='staff_details'),
+    # ----------------------------------------------------------------------------
+    path('suppliers/', suppliers, name='suppliers'),
+    path('suppliers/create/', create_supplier, name='create_supplier'),
+    path('suppliers/list/', suppliers_list, name='suppliers_list'),
+    path('suppliers/<hashid:pk>/', supplier_details, name='supplier_details'),
+    path('suppliers/<hashid:pk>/edit/', edit_supplier, name='edit_supplier'),
+    # ----------------------------------------------------------------------------
     path('finances/', finances, name='finances'),
     path('reports/', reports, name='reports'),
     # ----------------------------------------------------------------------------

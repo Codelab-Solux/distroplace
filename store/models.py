@@ -7,6 +7,29 @@ from utils import *
 # Create your models here.
 
 
+supplier_types = (
+    ('person', "Individu"),
+    ('company', "Compagnie"),
+)
+
+class Supplier(models.Model):
+    name = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255)
+    domain = models.CharField(max_length=255)
+    type = models.CharField(max_length=50, choices=supplier_types)
+
+    def __str__(self):
+        return f'{self.name} - {self.type}'
+
+    def get_hashid(self):
+        return h_encode(self.id)
+
+    def get_absolute_url(self):
+        return reverse('delivery_info', kwargs={'pk': self.pk})
+
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
     is_featured = models.BooleanField(default=False)
@@ -38,6 +61,7 @@ class Product(models.Model):
     name = models.CharField(max_length=256)
     brand = models.CharField(max_length=256, default='Générique')
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    supplier = models.ForeignKey(Supplier, null=True, blank=True, on_delete=models.SET_NULL)
     subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
     unit = models.CharField(max_length=50, choices=unit_types)
     quantity = models.IntegerField(default='0', blank=True, null=True)
@@ -48,8 +72,7 @@ class Product(models.Model):
     is_promoted = models.BooleanField(default=False)
     production_date = models.DateField(null=True, blank=True)
     expiration_date = models.DateField(null=True, blank=True)
-    likes = models.ManyToManyField(
-        CustomUser, related_name='product_likes', blank=True)
+    likes = models.ManyToManyField(CustomUser, blank=True)
     is_featured = models.BooleanField(default=False)
     is_new = models.BooleanField(default=True)
     image = models.ImageField(

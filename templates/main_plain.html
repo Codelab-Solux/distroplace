@@ -28,16 +28,12 @@
     <script src="{% static 'cart.js' %}" defer="true"></script>
     <script src="{% static 'main.js' %}" defer="true"></script>
     <link href="{% static 'styles.css' %}" rel="stylesheet" />
-
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap"> -->
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Helvetica:wght@400;700&display=swap"
     />
-    <link
-      rel="shortcut icon"
-      href="{% static 'imgs/logo.png' %}"
-      type="image/x-icon"
-    />
+    <link rel="shortcut icon" href="{% static 'imgs/logo.png' %}" type="image/x-icon">
 
     <style>
       body {
@@ -55,11 +51,9 @@
   <body
     hx-boost="true"
     hx-headers='{"X-CSRFToken" : "{{ csrf_token }}"}'
-    class="flex flex-col bg-white"
+    class="flex flex-col bg-gray-100"
   >
     {% csrf_token %}
-    <!-- Navbar -->
-    {% include 'navbar.html' %}
     <!--  -->
     {% if messages %}
     <div class="messages">
@@ -72,13 +66,10 @@
     {% endif %}
 
     <!--  -->
-    <div id="base" class="min-h-screen lg:mt-20">
+    <div id="base" class="min-h-screen flex flex-col justify-center items-center">
       {% block content %} {% endblock %}
     </div>
     <!--  -->
-    {% include 'modal.html' %}
-    <!--  -->
-    {% include 'footer.html' %}
     <script>
       var current_date = new Date().getFullYear();
       document.getElementById("date").innerHTML = current_date;
