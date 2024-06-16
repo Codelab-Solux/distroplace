@@ -7,7 +7,6 @@ from django.db.models import Q
 
 
 def home(req):
-    promos = Product.objects.filter(is_promoted=True)
     latest_posts = Blogpost.objects.all().order_by('-timestamp')[:3]
     appliances = Product.objects.filter(is_featured=True, category__id=1)
     fruits_veggies_spices = Product.objects.filter(
@@ -19,9 +18,17 @@ def home(req):
     cloths = Product.objects.filter(is_featured=True, category__id=10)
     categories = Category.objects.filter(is_featured=True)
     subcategories = SubCategory.objects.all()
-    promo_1 = Promotion.objects.first()
-    promo_2 = Promotion.objects.get(id=2)
-    promo_3 = Promotion.objects.last()
+    active_promos = Promotion.objects.filter(is_active=True)[:3]
+    # Ensure there are at least three promotions in the database
+    if len(active_promos) >= 3:
+        promo_1 = active_promos[0]  # First promotion in the queryset
+        promo_2 = active_promos[1]  # Second promotion in the queryset
+        promo_3 = active_promos[2]  # Third promotion in the queryset
+    else:
+        # Handle case where there are fewer than 3 promotions in the database
+        promo_1 = None
+        promo_2 = None
+        promo_3 = None
     context = {
         "home_page": "active",
         'title': 'Store',

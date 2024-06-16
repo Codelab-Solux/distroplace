@@ -1,6 +1,7 @@
 {% extends 'main.html' %} {% load static %} {% block content %}
 <div class="flex flex-col justify-between">
   <section class="p-8 w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-4">
+    {% if active_promos %}
     <div class="relative w-full max-w-3xl h-[600px] rounded-lg overflow-hidden">
       <img
         src="{% static 'imgs/hero_1.webp' %}"
@@ -26,6 +27,7 @@
         </a>
       </article>
     </div>
+    {% endif %}
 
     <div class="w-full lg:max-w-[442px] grid gap-4 text-sm">
       <div class="relative w-full rounded-lg overflow-hidden">
@@ -170,7 +172,7 @@
       </div>
     </div>
   </section>
-  <!-- cloths -->
+  <!-- clothing -->
   <section class="bg-white p-8 w-full flex flex-col gap-2">
     <div class="p-8 w-full max-w-7xl mx-auto">
       <div class="flex justify-between items-center">
