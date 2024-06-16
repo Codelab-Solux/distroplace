@@ -24,7 +24,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # ENV SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET=$SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
 
 # Create the directory for the database
-RUN mkdir -p /data/db
+# RUN mkdir -p /data/db
 
 # Copy the rest of the application code
 COPY . /app/
