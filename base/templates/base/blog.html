@@ -13,10 +13,15 @@
       >
       Retourner
     </div>
-    <span
-      class="flex items-center gap-4 py-2 px-4 rounded-full bg-yellow-200 text-black"
-      ><i class="fa-solid fa-blog"></i> Blog</span
+    {% if user.is_staff %}
+    <a
+      href="{% url 'add_blogpost' %}"
+      class="bg-teal-200 hover:bg-teal-300 rounded-full py-1 px-4 text-sm flex items-center gap-4 group"
     >
+      Ajouter un article
+      <i class="fa-solid fa-plus ml-2"></i>
+    </a>
+    {% endif %}
   </div>
 
   <!--------------------------------------- blogposts --------------------------------------->
@@ -30,7 +35,7 @@
 </div>
 
 <script>
-    document
+  document
     .getElementById("back-button")
     .addEventListener("click", function (event) {
       event.preventDefault(); // Prevent the default anchor behavior

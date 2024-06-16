@@ -1,7 +1,12 @@
-from django.shortcuts import render, get_object_or_404
-from base.models import *
-from store.models import *
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.db.models import Q
+from django.contrib import messages
+from store.models import *
+from .forms import *
+from .models import *
 
 # Create your views here.
 
@@ -77,6 +82,27 @@ def blogpost(req, pk):
     return render(req, 'base/blogpost.html', context)
 
 
+@login_required(login_url='login')
+def add_blogpost(req):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
+    form = BlogForm()
+    if req.method == 'POST':
+        form = BlogForm(req.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(req, 'Nouveau produit ajouté')
+            return redirect('blog')
+
+    else:
+        return render(req, 'base/blog_form.html', context={
+            'title': 'Products', 'form': form, 'form_title': 'Nouvel article'})
+
+
+# --------------------------newsletter--------------------------
 def mailing_list(req):
     emails = NewsletterEmails.objects.all().order_by('-email')
     context = {

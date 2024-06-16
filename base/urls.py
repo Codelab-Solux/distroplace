@@ -10,6 +10,7 @@ urlpatterns = [
     path('promotions/<hashid:pk>/', promo_details, name='promo_details'),
     # ----------------------- blogposts ------------------------------
     path('blogposts/', blog, name='blog'),
+    path('blogposts/add/', add_blogpost, name='add_blogpost'),
     path('blogposts/<hashid:pk>/', blogpost, name='blogpost'),
     # path('blogposts/list/', blogposts_list, name='blogposts_list'),
     # path('blogposts/grid/', blogposts_grid, name='blogposts_grid'),

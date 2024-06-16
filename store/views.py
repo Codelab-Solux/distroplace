@@ -95,6 +95,7 @@ def cart_resume(req):
     cart_items = cart.get_cart_items()
     total_price = cart.get_total_price()
     context = {
+        'cart': cart,
         'cart_count': cart_count,
         'cart_items': cart_items,
         'total_price': total_price,

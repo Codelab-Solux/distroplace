@@ -48,6 +48,7 @@ class ProductForm(forms.ModelForm):
             'promo_price': "Prix de promo",
             'is_expirable': "Périssable",
             'is_promoted': "En Promo",
+            'is_new': "Nouvel arrivage",
             'production_date': "Date de production",
             'expiration_date': "Date de péremption",
         }

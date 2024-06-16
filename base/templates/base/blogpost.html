@@ -39,7 +39,7 @@
       {% if not curr_obj.image %}
       <img
         class="h-80 w-full rounded-t-md object-cover"
-        src="{% static 'imgs/guac.webp' %}"
+        src="{% static 'imgs/banner_1.webp' %}"
         alt="blogpost image"
       />
       {% else %}
@@ -55,7 +55,7 @@
         <div class="flex justify-between items-center text-xs text-gray-500">
           <span class="likes_count">{{ curr_obj.likes.all.count }} likes</span>
           <a
-            hx-get="{% url 'blogpost' curr_obj.id %}"
+            
             class="px-3 py-1 bg-gray-100 hover:bg-teal-100 hover:text-black rounded-full flex items-center gap-1 cursor-pointer"
           >
             <i
@@ -152,7 +152,7 @@
     >
       {% for obj in blogposts %}
       <!--  -->
-      {% include 'widgets/blog_card_alt.html' %}
+      {% include 'base/components/blog_card_alt.html' %}
       <!--  -->
       {% endfor %}
     </div>

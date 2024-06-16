@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
@@ -46,7 +45,7 @@ def dash_products(req):
 def new_arrivals(req):
     categories = Category.objects.all()
     subcategories = SubCategory.objects.all()
-    products = Product.objects.filter(is_new=True)
+    products = Product.objects.filter(is_new=True).order_by('-name')
     objects = paginate_objects(req, products)
     context = {
         "dash_products": "dash_active",
@@ -82,10 +81,11 @@ def add_product(req):
         form = ProductForm(req.POST)
         if form.is_valid():
             form.save()
-        messages.success = 'Nouveau produit ajouté'
+            messages.success(req, 'Nouveau produit ajouté')
+            return redirect('new_arrivals')
         
     else:
-        return render(req, 'dashboard/partials/product_form.html', context={
+        return render(req, 'dashboard/product_form.html', context={
             'title': 'Products', 'form': form, 'form_title': 'Nouveau Produit'})
 
 

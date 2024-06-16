@@ -7,13 +7,13 @@
   <img
     src="{{ obj.image.url }}"
     alt="{{ obj.name }}"
-    class="w-full h-40 object-cover hover:scale"
+    class="w-full h-20 object-cover hover:scale"
   />
   {% else %}
   <img
     src="{% static 'imgs/banner_1.webp' %}"
     alt="image"
-    class="w-full h-40 object-cover hover:scale"
+    class="w-full h-20 object-cover hover:scale"
   />
   {% endif %}
   <a href="{% url 'blogpost' obj.id %}" class="absolute bottom-3 right-3 px-4 py-1 bg-teal-700 hover:bg-teal-900 rounded-full text-white text-xs">Lire <span class="ml-2">&rarr;</span></a>
