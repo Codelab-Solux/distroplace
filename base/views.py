@@ -26,6 +26,7 @@ def home(req):
         promo_3 = active_promos[2]  # Third promotion in the queryset
     else:
         # Handle case where there are fewer than 3 promotions in the database
+        active_promos = None
         promo_1 = None
         promo_2 = None
         promo_3 = None
@@ -39,7 +40,7 @@ def home(req):
         'categories': categories,
         'subcategories': subcategories,
         'latest_posts': latest_posts,
-        'promos': promos,
+        'active_promos': active_promos,
         'promo_1': promo_1,
         'promo_2': promo_2,
         'promo_3': promo_3,

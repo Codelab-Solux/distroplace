@@ -1,7 +1,7 @@
 {% extends 'main.html' %} {% load static %} {% block content %}
 <div class="flex flex-col justify-between">
+  {% if active_promos %}
   <section class="p-8 w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-4">
-    {% if active_promos %}
     <div class="relative w-full max-w-3xl h-[600px] rounded-lg overflow-hidden">
       <img
         src="{% static 'imgs/hero_1.webp' %}"
@@ -27,14 +27,13 @@
         </a>
       </article>
     </div>
-    {% endif %}
-
+    <!--  -->
     <div class="w-full lg:max-w-[442px] grid gap-4 text-sm">
       <div class="relative w-full rounded-lg overflow-hidden">
-        {% if promo_1.image %}
+        {% if promo_2.image %}
         <img
-          src="{{ promo_1.image.url }}"
-          alt="{{ promo_1.name }}"
+          src="{{ promo_2.image.url }}"
+          alt="{{ promo_2.name }}"
           class="w-full object-contain rounded-lg border"
         />
         {% else %}
@@ -47,12 +46,12 @@
         <article
           class="p-6 lg:p-10 absolute top-0 right-0 w-full h-full flex flex-col justify-center gap-1 z-5"
         >
-          <span>{{ promo_1.catch_phrase}}</span>
-          <h2 class="text-black font-bold text-2xl">{{ promo_1.title }}</h2>
+          <span>{{ promo_2.catch_phrase}}</span>
+          <h2 class="text-black font-bold text-2xl">{{ promo_2.title }}</h2>
           <small>
             A partir de
             <span class="text-red-500 font-bold text-xl ml-2"
-              >{{ promo_1.price }} Cfa</span
+              >{{ promo_2.price }} Cfa</span
             >
           </small>
           <a
@@ -98,7 +97,9 @@
         </article>
       </div>
     </div>
+    
   </section>
+  {% endif %}
 
   <!-- edibles -->
   <section class="bg-yellow-100 p-8 w-full flex flex-col gap-2">
