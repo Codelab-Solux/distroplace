@@ -28,9 +28,31 @@ DEBUG = True
 
 # settings.py
 
-ALLOWED_HOSTS = ['distroplace.com', 'www.distroplace.com',
-                 'localhost', '127.0.0.1']
+# settings.py
 
+ALLOWED_HOSTS = [
+    'distroplace.com',
+    'www.distroplace.com',
+    'localhost',
+    '127.0.0.1'
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://distroplace.com",
+    "http://localhost:8000",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://distroplace.com",
+    "https://www.distroplace.com",
+]
+
+
+# settings.py
+
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 HASHIDS_SALT = 'VERITASCHRISTOETECCLESIAE'
 
@@ -62,12 +84,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
-
-
-CORS_ALLOWED_ORIGINS = [
-    "https://distroplace.com",  # Replace with your domain
-    "http://localhost:8000",  # Example for allowing localhost during development
 ]
 
 
