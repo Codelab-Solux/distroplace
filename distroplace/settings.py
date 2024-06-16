@@ -26,7 +26,11 @@ SECRET_KEY = 'django-insecure-@u0f6%r&_-_#znj87l$xc3yl6bzuf%dfosqnctm9)vkrz0z&)j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+# settings.py
+
+ALLOWED_HOSTS = ['distroplace.com', 'www.distroplace.com',
+                 'localhost', '127.0.0.1']
+
 
 HASHIDS_SALT = 'VERITASCHRISTOETECCLESIAE'
 
@@ -96,8 +100,8 @@ WSGI_APPLICATION = 'distroplace.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'NAME': '/data/db/distroplace.sqlite3', #production db
+        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'NAME': '/data/db/distroplace.sqlite3', #production db
     }
 }
 
