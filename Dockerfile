@@ -17,15 +17,6 @@ RUN apt-get update \
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# # Use ARG to define build-time environment variable
-# ARG SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
-
-# # Set environment variable from build argument
-# ENV SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET=$SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
-
-# Create the directory for the database
-# RUN mkdir -p /data/db
-
 # Copy the rest of the application code
 COPY . /app/
 
