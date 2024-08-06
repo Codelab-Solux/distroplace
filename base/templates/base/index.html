@@ -1,8 +1,11 @@
 {% extends 'main.html' %} {% load static %} {% block content %}
 <div class="flex flex-col justify-between">
-  {% if active_promos %}
-  <section class="p-8 w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-4">
-    <div class="relative w-full max-w-3xl h-[600px] rounded-lg overflow-hidden">
+  <section
+    class="px-4 lg:px-8 max-w-7xl mx-auto flex flex-col lg:flex-row gap-4"
+  >
+    <div
+      class="relative w-full lg:max-w-3xl h-[700px] rounded-lg overflow-hidden"
+    >
       <img
         src="{% static 'imgs/hero_1.webp' %}"
         alt="image"
@@ -11,16 +14,14 @@
       <article
         class="p-4 lg:p-8 absolute top-0 right-0 w-full h-full flex flex-col justify-center gap-4 z-5"
       >
-        <span>{{ promo_1.catch_phrase}}</span>
-        <h2 class="text-black font-bold text-4xl">{{ promo_1.title }}</h2>
+        <span>100% bio, sans additives</span>
+        <h2 class="text-black font-bold text-4xl">Des produits frais</h2>
         <p>
           A partir de
-          <span class="text-red-500 font-bold text-2xl ml-2"
-            >{{ promo_1.price }} Cfa</span
-          >
+          <span class="text-red-500 font-bold text-2xl ml-2">2500 Cfa</span>
         </p>
         <a
-          href="{% url 'promo_details' promo_1.id %}"
+          href="{% url 'products' %}"
           class="w-fit bg-teal-700 hover:bg-teal-900 rounded-full py-2 px-4 text-white flex items-center gap-4"
         >
           Voir les produits <span> &rarr; </span>
@@ -30,32 +31,22 @@
     <!--  -->
     <div class="w-full lg:max-w-[442px] grid gap-4 text-sm">
       <div class="relative w-full rounded-lg overflow-hidden">
-        {% if promo_2.image %}
-        <img
-          src="{{ promo_2.image.url }}"
-          alt="{{ promo_2.name }}"
-          class="w-full object-contain rounded-lg border"
-        />
-        {% else %}
         <img
           src="{% static 'imgs/hero_2.webp' %}"
           alt="image"
-          class="w-full object-contain rounded-lg border"
+          class="h-full w-full object-cover rounded-lg border"
         />
-        {% endif %}
         <article
           class="p-6 lg:p-10 absolute top-0 right-0 w-full h-full flex flex-col justify-center gap-1 z-5"
         >
-          <span>{{ promo_2.catch_phrase}}</span>
-          <h2 class="text-black font-bold text-2xl">{{ promo_2.title }}</h2>
+          <span>100% bio sans additives </span>
+          <h2 class="text-black font-bold text-2xl">Des légumes fraîches</h2>
           <small>
             A partir de
-            <span class="text-red-500 font-bold text-xl ml-2"
-              >{{ promo_2.price }} Cfa</span
-            >
+            <span class="text-red-500 font-bold text-xl ml-2">200 Cfa</span>
           </small>
           <a
-            href="{% url 'promo_details' promo_2.id %}"
+            href="{% url 'products' %}"
             class="w-fit bg-teal-700 hover:bg-teal-900 rounded-full py-2 px-4 text-white flex items-center gap-4"
           >
             Voir les produits <span> &rarr; </span>
@@ -64,32 +55,22 @@
       </div>
       <!--  -->
       <div class="relative w-full rounded-lg overflow-hidden">
-        {% if promo_3.image %}
-        <img
-          src="{{ promo_3.image.url }}"
-          alt="{{ promo_3.name }}"
-          class="w-full object-cover rounded-lg"
-        />
-        {% else %}
         <img
           src="{% static 'imgs/hero_3.webp' %}"
           alt="image"
-          class="w-full object-cover rounded-lg"
+          class="h-full w-full object-cover rounded-lg"
         />
-        {% endif %}
         <article
-          class="p-4 lg:p-8 absolute top-0 right-0 w-full h-full flex flex-col justify-center gap-1 z-5"
+          class="p-6 lg:p-10 absolute top-0 right-0 w-full h-full flex flex-col justify-center gap-1 z-5"
         >
-          <span>{{ promo_3.catch_phrase}}</span>
-          <h2 class="text-black font-bold text-2xl">{{ promo_3.title }}</h2>
+          <span>100% bio sans angrais </span>
+          <h2 class="text-black font-bold text-2xl">Des produits pour tous</h2>
           <small>
             A partir de
-            <span class="text-red-500 font-bold text-xl ml-2"
-              >{{ promo_3.price }} Cfa</span
-            >
+            <span class="text-red-500 font-bold text-xl ml-2">250 Cfa</span>
           </small>
           <a
-            href="{% url 'promo_details' promo_3.id %}"
+            href="{% url 'products' %}"
             class="w-fit bg-teal-700 hover:bg-teal-900 rounded-full py-2 px-4 text-white flex items-center gap-4"
           >
             Voir les produits <span> &rarr; </span>
@@ -97,10 +78,7 @@
         </article>
       </div>
     </div>
-    
   </section>
-  {% endif %}
-
   <!-- edibles -->
   <section class="bg-yellow-100 p-8 w-full flex flex-col gap-2">
     <div class="p-8 w-full max-w-7xl mx-auto">
@@ -108,19 +86,19 @@
         <h3 class="font-bold text-black text-lg">Fruits & Légumes</h3>
         <div class="flex justify-between gap-1 text-xs tabbar h-fit w-60">
           <a
-          href="{% url 'products' %}?query=fruits"
+            href="{% url 'products' %}?query=fruits"
             class="px-2 py-1 bg-white hover:bg-yellow-300 text-center text-xs rounded-full w-full"
           >
             Fruits
           </a>
           <a
-          href="{% url 'products' %}?query=légumes"
+            href="{% url 'products' %}?query=légumes"
             class="px-2 py-1 bg-white hover:bg-yellow-300 text-center text-xs rounded-full w-full"
           >
             Legumes
           </a>
           <a
-          href="{% url 'products' %}"
+            href="{% url 'products' %}"
             class="px-2 py-1 bg-white hover:bg-yellow-300 text-center text-xs rounded-full w-full"
           >
             Voir +
@@ -144,19 +122,19 @@
         <h3 class="font-bold text-black text-lg">Appareils Electro Menager</h3>
         <div class="flex justify-between gap-1 text-xs tabbar h-fit w-60">
           <a
-          href="{% url 'products' %}?query=réfrigirateurs"
+            href="{% url 'products' %}?query=réfrigirateurs"
             class="px-2 py-1 bg-teal-200 hover:bg-teal-300 text-center text-xs rounded-full w-full"
           >
             Réfrigirateurs
           </a>
           <a
-          href="{% url 'products' %}?query=mixeurs"
+            href="{% url 'products' %}?query=mixeurs"
             class="px-2 py-1 bg-teal-200 hover:bg-teal-300 text-center text-xs rounded-full w-full"
           >
             Mixeurs
           </a>
           <a
-          href="{% url 'products' %}?query=electroménager"
+            href="{% url 'products' %}?query=electroménager"
             class="px-2 py-1 bg-teal-200 hover:bg-teal-300 text-center text-xs rounded-full w-full"
           >
             Voir +
@@ -180,20 +158,20 @@
         <h3 class="font-bold text-black text-lg">Vêtements</h3>
         <div class="flex justify-between gap-1 text-xs tabbar h-fit w-60">
           <a
-          href="{% url 'products' %}?query=chemises"
+            href="{% url 'products' %}?query=chemises"
             class="px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-center text-xs rounded-full w-full"
           >
             Chemises
           </a>
           <a
-          href="{% url 'products' %}?query=pantalons"
+            href="{% url 'products' %}?query=pantalons"
             class="px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-center text-xs rounded-full w-full"
           >
             Pantalons
           </a>
 
           <a
-          href="{% url 'products' %}?query=vêtements"
+            href="{% url 'products' %}?query=vêtements"
             class="px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-center text-xs rounded-full w-full"
           >
             Voir +

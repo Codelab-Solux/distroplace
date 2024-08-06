@@ -76,6 +76,18 @@ def signupView(req):
 
 
 @login_required(login_url='login')
+def user_profile(req, pk):
+    user = req.user
+    curr_obj = CustomUser.objects.get(id=pk)
+
+    context = {
+        "profile_page":"active",
+        "curr_obj": curr_obj,
+    }
+    return render(req, 'accounts/user_profile.html', context)
+
+
+@login_required(login_url='login')
 def my_profile(req):
     curr_obj = req.user
     # 
@@ -104,20 +116,15 @@ def my_profile(req):
 
 
 @login_required(login_url='login')
-def user_profile(req, pk):
+def user_favorites(req):
     user = req.user
-    curr_obj = CustomUser.objects.get(id=pk)
-    # 
-    cart = Cart(req)
-    cart_count = len(cart)
-    cart_items = cart.get_cart_items()
-    total_price = cart.get_total_price()
-
+    products = Product.objects.filter(likes=user)
+    print(products)
 
     context = {
         "profile_page":"active",
-        "curr_obj": curr_obj,
-        "curr_obj": curr_obj,
-        "curr_obj": curr_obj,
+        "products": products,
     }
-    return render(req, 'accounts/user_profile.html', context)
+    return render(req, 'accounts/partials/user_favorites.html', context)
+
+

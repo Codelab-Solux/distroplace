@@ -1,0 +1,56 @@
+<form
+  class="w-full mx-auto flex justify-between items-center text-sm"
+  hx-post="{{ request.path }}"
+  action=""
+  enctype="multipart/form-data"
+>
+  {% csrf_token %}
+  <div class="flex flex-col">
+    <input
+      id="image_picker"
+      class="p-2 mx-auto w-fit text-sm mx-auto"
+      type="file"
+      name="images"
+      multiple
+      required
+    />
+  </div>
+
+  <div class="flex flex-row-reverse gap-2 items-end text-xs">
+    <button
+      class="px-4 py-2 bg-teal-700 hover:bg-teal-900 text-white rounded-full cursor-pointer"
+      type="submit"
+    >
+      Enregistrer
+    </button>
+    <button
+      onclick="close_modal()"
+      type="button"
+      class="modal_closer bg-gray-100 px-4 py-2 hover:bg-red-600 rounded-full hover:text-white"
+    >
+      Annuler
+    </button>
+  </div>
+</form>
+
+<script>
+  // let file_input = document.getElementById("image_picker");
+  // let name_output = document.getElementById("image_name");
+  // let file_names_array = [];
+
+  // // Fires on file upload
+  // file_input.addEventListener("change", function (event) {
+  //   // Clear the file name array
+  //   file_names_array = [];
+  //   for (let i = 0; i < file_input.files.length; i++) {
+  //     // Get the current file name
+  //     let fileName = file_input.files[i].name;
+  //     // Push file
+  //     file_names_array.push(fileName);
+  //   }
+  //   // Print file name array
+  //   console.log(file_names_array);
+  //   alert(file_names_array);
+  //   name_output.innerHTML = file_names_array.join(" ,");
+  // });
+</script>

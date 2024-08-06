@@ -1,0 +1,46 @@
+{% load static %}
+
+<div class="flex flex-col justify-between gap-6">
+  <div class="bg-white w-full h-full rounded-3xl overflow-hidden">
+    {% if not curr_obj.thumbnail %}
+    <img
+      src="{% static 'imgs/logo-g.png' %}"
+      alt="image"
+      class="w-full h-80 object-contain"
+    />
+    {% else %}
+    <img
+      src="{{curr_obj.thumbnail.url}}"
+      alt="{{curr_obj.name}}"
+      class="w-full h-80 object-contain"
+    />
+    {% endif %}
+  </div>
+
+  <div class="p-4 bg-gray-100 border rounded-2xl w-full flex flex-col gap-2">
+    <h2 class="text-4xl font-bold text-black">{{curr_obj.name}}</h2>
+    <h4>{{curr_obj.quantity}} en stock</h4>
+    <p class="text-yellow-500">
+      <i class="fa-solid fa-copyright mr-2"></i>
+      Marque : {{ curr_obj.brand }}
+    </p>
+    {% if not curr_obj.is_promoted %}
+    <p class="text-teal-700 text-lg font-bold">
+      <i class="fa-solid fa-tag text-teal-700 mr-2"></i>
+      {{curr_obj.price}} CFA
+    </p>
+    {% else %}
+    <div class="flex gap-4">
+      <p class="text-gray-400">
+        <i class="fa-solid fa-tag mr-2"></i>
+        <span class="line-through">{{ curr_obj.price }} CFA</span>
+      </p>
+    <p class="text-teal-700 text-lg font-bold">
+      <i class="fa-solid fa-tags text-teal-700 mr-2"></i>
+        {{curr_obj.promo_price}} CFA
+      </p>
+    </div>
+    {% endif %}
+    <p><b>Description : </b> {{curr_obj.description }}</p>
+  </div>
+</div>

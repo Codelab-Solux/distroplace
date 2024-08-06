@@ -1,5 +1,5 @@
 {% extends 'main.html' %} {% load static %} {% block content %}
-<div class="p-8 w-full max-w-7xl mx-auto flex flex-col justify-between gap-6">
+<div class="px-4 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between gap-6">
   <div class="flex justify-between">
     <div
       class="bg-teal-900 py-2 px-4 rounded-full flex items-center text-white gap-4"
@@ -49,21 +49,27 @@
           <i class="fa-solid fa-phone text-gray-800 mr-3"></i> N° de telephone :
           <span class="text-black"> {{curr_obj.phone}} </span>
         </p>
-  
-        <div class="w-full bg-teal-900 text-white p-4 rounded-xl flex flex-col gap-2">
+
+        <div
+          class="w-full bg-teal-900 text-white p-4 rounded-xl flex flex-col gap-2"
+        >
           <p>
-            <i class="fa-solid fa-map-location-dot text-teal-200 text-gray-800 mr-3"></i>Quartier de
-            livraison :
+            <i
+              class="fa-solid fa-map-location-dot text-teal-200 text-gray-800 mr-3"
+            ></i
+            >Quartier de livraison :
             <span class="font-bold"> {{shipping_info.district}} </span>
           </p>
           <p>
-            <i class="fa-solid fa-location-dot text-teal-200 text-gray-800 mr-3"></i>Address
-            de livraison :
+            <i
+              class="fa-solid fa-location-dot text-teal-200 text-gray-800 mr-3"
+            ></i
+            >Address de livraison :
             <span class="font-bold"> {{shipping_info.address}} </span>
           </p>
           <p>
-            <i class="fa-solid fa-phone text-teal-200 text-gray-800 mr-3"></i>Numero de
-            livraison :
+            <i class="fa-solid fa-phone text-teal-200 text-gray-800 mr-3"></i
+            >Numero de livraison :
             <span class="font-bold"> {{shipping_info.phone}} </span>
           </p>
         </div>
@@ -79,12 +85,19 @@
   <section class="flex flex-col gap-4">
     <!--------------------------------------- menu tabs buttons --------------------------------------->
     <div
-      class="flex justify-between gap-2 text-xs tabbar h-fit w-full max-w-80 lg:max-w-[500px] p-2 bg-teal-900 rounded-full"
+      class="flex justify-between gap-2 text-xs tabbar h-fit w-full max-w-80 lg:max-w-[600px] p-2 bg-teal-900 rounded-full"
     >
       <button
         class="tabBtn px-4 py-2 bg-white hover:bg-teal-900 hover:text-white rounded-full w-full"
-        onclick="openTab(event, 'cart')"
+        onclick="openTab(event, 'favs')"
         id="defaultTab"
+      >
+        <i class="fa-solid fa-heart"></i>
+        <span class="ml-2">Favoris</span>
+      </button>
+      <button
+        class="tabBtn px-4 py-2 bg-white hover:bg-teal-900 hover:text-white rounded-full w-full"
+        onclick="openTab(event, 'cart')"
       >
         <i class="fa-solid fa-shopping-cart"></i>
         <span class="ml-2">Panier</span>
@@ -105,12 +118,32 @@
       </button>
     </div>
 
+    <div id="favs" class="tabcontent w-full flex flex-col gap-2">
+      <div
+        hx-get="{% url 'user_favorites' %}"
+        hx-trigger="load, db_changed from:body"
+        hx-target="this"
+      >
+        <p
+          class="h-full w-full flex justify-center items-center text-teal-500 p-4"
+        >
+          <i class="m-auto fas fa-spinner fa-spin text-3xl animate-spin"></i>
+        </p>
+      </div>
+    </div>
+
     <div id="cart" class="tabcontent w-full flex flex-col gap-2">
       <div
         hx-get="{% url 'cart_resume' %}"
         hx-trigger="load, db_changed from:body"
         hx-target="this"
-      ></div>
+      >
+        <p
+          class="h-full w-full flex justify-center items-center text-teal-500 p-4"
+        >
+          <i class="m-auto fas fa-spinner fa-spin text-3xl animate-spin"></i>
+        </p>
+      </div>
     </div>
 
     <div id="orders" class="tabcontent w-full flex flex-col gap-2">
@@ -118,7 +151,13 @@
         hx-get="{% url 'orders_resume' %}"
         hx-trigger="load, db_changed from:body"
         hx-target="this"
-      ></div>
+      >
+        <p
+          class="h-full w-full flex justify-center items-center text-teal-500 p-4"
+        >
+          <i class="m-auto fas fa-spinner fa-spin text-3xl animate-spin"></i>
+        </p>
+      </div>
     </div>
 
     <div id="deliveries" class="tabcontent w-full flex flex-col gap-2">
@@ -126,7 +165,13 @@
         hx-get="{% url 'deliveries_resume' %}"
         hx-trigger="load, db_changed from:body"
         hx-target="this"
-      ></div>
+      >
+        <p
+          class="h-full w-full flex justify-center items-center text-teal-500 p-4"
+        >
+          <i class="m-auto fas fa-spinner fa-spin text-3xl animate-spin"></i>
+        </p>
+      </div>
     </div>
   </section>
 </div>

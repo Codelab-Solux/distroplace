@@ -49,7 +49,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         max_length=255, unique=True, blank=True, null=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=100, unique=True, blank=True, null=True)
+    phone = models.CharField(
+        max_length=100, unique=True, blank=True, null=True)
     role = models.ForeignKey(
         Role, on_delete=models.CASCADE, blank=True, null=True,)
 
@@ -71,7 +72,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return f' {self.email.split("@")[0]}'
-    
+
     def get_full_name(self):
         return f' {self.last_name} {self.first_name}'
 
@@ -86,8 +87,9 @@ class Profile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     sex = models.CharField(
         max_length=10, choices=gender_list, blank=True, null=True)
+    saved_cart = models.CharField(max_length=255, blank=True, null=True)
     image = models.ImageField(
-        upload_to='uploads/users/profiles', default='../static/imgs/anon.png', blank=True, null=True)
+        upload_to='media/users/profiles', default='../static/imgs/anon.png', blank=True, null=True)
 
     def __str__(self):
         return f'{self.user.last_name} {self.user.first_name} - Profile'

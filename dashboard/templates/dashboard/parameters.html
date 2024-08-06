@@ -12,7 +12,7 @@
       <i class="fa-solid fa-gears ml-2"></i>
     </h3>
 
-        <!--------------------------------------- menu tabs buttons --------------------------------------->
+    <!--------------------------------------- menu tabs buttons --------------------------------------->
     <div
       class="flex justify-between gap-2 text-xs tabbar h-fit w-full lg:max-w-[500px] p-2 bg-teal-900 rounded-full"
     >
@@ -42,20 +42,16 @@
   </div>
 
   <section class="flex flex-col gap-4">
-
-
     <div id="cats" class="tabcontent w-full flex flex-col gap-2">
-      <div
-        class="w-full flex justify-between items-center mb-4"
-      >
+      <div class="w-full flex justify-between items-center mb-4">
         <button
           onclick="hide_dialogs()"
           hx-target="#basic_dialog"
           hx-get="{% url 'create_category' %}"
           class="px-4 py-2 flex items-center text-sm text-black bg-yellow-100 hover:bg-yellow-300 rounded-full w-fit text-center cursor-pointer"
         >
-        Nouvelle catégorie
-        <i class="text-sm fa-solid fa-plus ml-2"></i>
+          Nouvelle catégorie
+          <i class="text-sm fa-solid fa-plus ml-2"></i>
         </button>
       </div>
       <div
@@ -63,20 +59,25 @@
         hx-get="{% url 'categories_list' %}"
         hx-trigger="load, db_changed from:body"
         hx-target="this"
-      ></div>
-    </div>
-    <div id="subcats" class="tabcontent w-full flex flex-col gap-2">
-      <div
-        class="w-full flex justify-between items-center mb-4"
       >
+        <p
+          class="h-full w-full flex justify-center items-center text-teal-500 p-4"
+        >
+          <i class="m-auto fas fa-spinner fa-spin text-3xl animate-spin"></i>
+        </p>
+      </div>
+    </div>
+    <!--  -->
+    <div id="subcats" class="tabcontent w-full flex flex-col gap-2">
+      <div class="w-full flex justify-between items-center mb-4">
         <button
           onclick="hide_dialogs()"
           hx-target="#basic_dialog"
           hx-get="{% url 'create_subcategory' %}"
           class="px-4 py-2 flex items-center text-sm text-black bg-yellow-100 hover:bg-yellow-300 rounded-full w-fit text-center cursor-pointer"
         >
-        Nouvelle sous-catégorie
-        <i class="text-sm fa-solid fa-plus ml-2"></i>
+          Nouvelle sous-catégorie
+          <i class="text-sm fa-solid fa-plus ml-2"></i>
         </button>
       </div>
       <div
@@ -84,20 +85,25 @@
         hx-get="{% url 'subcategories_list' %}"
         hx-trigger="load, db_changed from:body"
         hx-target="this"
-      ></div>
-    </div>
-    <div id="deliveries" class="tabcontent w-full flex flex-col gap-2">
-      <div
-        class="w-full flex justify-between items-center mb-4"
       >
+        <p
+          class="h-full w-full flex justify-center items-center text-teal-500 p-4"
+        >
+          <i class="m-auto fas fa-spinner fa-spin text-3xl animate-spin"></i>
+        </p>
+      </div>
+    </div>
+    <!--  -->
+    <div id="deliveries" class="tabcontent w-full flex flex-col gap-2">
+      <div class="w-full flex justify-between items-center mb-4">
         <button
           onclick="hide_dialogs()"
           hx-target="#basic_dialog"
           hx-get="{% url 'create_delivery_type' %}"
           class="px-4 py-2 flex items-center text-sm text-black bg-yellow-100 hover:bg-yellow-300 rounded-full w-fit text-center cursor-pointer"
         >
-        Nouveau type de lvraison
-        <i class="text-sm fa-solid fa-plus ml-2"></i>
+          Nouveau type de lvraison
+          <i class="text-sm fa-solid fa-plus ml-2"></i>
         </button>
       </div>
       <div
@@ -105,7 +111,13 @@
         hx-get="{% url 'delivery_types_list' %}"
         hx-trigger="load, db_changed from:body"
         hx-target="this"
-      ></div>
+      >
+        <p
+          class="h-full w-full flex justify-center items-center text-teal-500 p-4"
+        >
+          <i class="m-auto fas fa-spinner fa-spin text-3xl animate-spin"></i>
+        </p>
+      </div>
     </div>
   </section>
 </div>

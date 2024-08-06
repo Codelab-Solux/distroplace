@@ -12,7 +12,12 @@ urlpatterns = [
     path('products/list/', products_list, name='products_list'),
     path('products/grid/', products_grid, name='products_grid'),
     path('products/filter/', filter_products, name='filter_products'),
+    path('products/image/add/<hashid:pk>/',
+         add_product_image, name='add_product_image'),
+    path('products/image/list/<hashid:pk>/',
+         product_images, name='product_images'),
     path('products/<hashid:pk>/', dash_product, name='dash_product'),
+    path('products/<hashid:pk>/overview/', product_overview, name='product_overview'),
     path('products/<hashid:pk>/edit/', edit_product, name='edit_product'),
     # ----------------------------------------------------------------------------
     path('orders/', dash_orders, name='dash_orders'),
@@ -57,6 +62,7 @@ urlpatterns = [
     path('categories/add/', create_category, name='create_category'),
     path('categories/<hashid:pk>/edit/', edit_category, name='edit_category'),
     # --------------------------
+    path('subcategories/load/', load_subcategories, name='load_subcategories'),
     path('subcategories/list/', subcategories_list, name='subcategories_list'),
     path('subcategories/add/', create_subcategory, name='create_subcategory'),
     path('subcategories/<hashid:pk>/edit/',

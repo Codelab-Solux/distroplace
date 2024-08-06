@@ -7,13 +7,13 @@
     class="bg-yellow-100 rounded-full py-2 px-4 flex items-center gap-4 group"
     >Parcourir le catalogue
     <span
-      class="bg-yellow-400 rounded-full py-2 px-3 group-hover:bg-teal-900 group-hover:text-white"
+      class="bg-yellow-300 rounded-full py-2 px-3 group-hover:bg-teal-900 group-hover:text-white"
       >&rarr;</span
     ></a
   >
 </div>
 {% else %}
-<div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 ">
+<div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
   {% for obj in products %}
   <!--  -->
   {% include 'dashboard/components/product_grid_card.html' %}

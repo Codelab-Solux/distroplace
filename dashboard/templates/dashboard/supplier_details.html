@@ -1,4 +1,4 @@
-{% load static %}
+{% extends 'main_alt.html' %} {% load static %} {% block content %}
 <div class="w-full max-w-7xl mx-auto flex flex-col justify-between gap-6">
   <div class="flex justify-between">
     <div
@@ -85,7 +85,7 @@
 
     <div id="products" class="tabcontent w-full flex flex-col gap-2">
       <div
-        class="bg-teal-200 mb-4 p-4 rounded-lg text-xs lg:rounded-full lg:text-base grid grid-cols-2 lg:flex justify-between items-center gap-4"
+        class="bg-yellow-200 mb-4 p-4 rounded-lg text-xs lg:rounded-full lg:text-base grid grid-cols-2 lg:flex justify-between items-center gap-4"
       >
         <span>En stock : <b>{{ available_products|length }}</b></span>
         <span>En rupture : <b>{{ returned|length }}</b></span>
@@ -115,13 +115,15 @@
           class="bg-yellow-100 rounded-full py-2 px-4 flex items-center gap-4 group"
           >Parcourir le catalogue
           <span
-            class="bg-yellow-400 rounded-full py-2 px-3 group-hover:bg-teal-900 group-hover:text-white"
+            class="bg-yellow-300 rounded-full py-2 px-3 group-hover:bg-teal-900 group-hover:text-white"
             >&rarr;</span
           ></a
         >
       </div>
       {% else %}
-      <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <div
+        class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+      >
         {% for obj in available_products %}
         <!--  -->
         {% include 'dashboard/components/product_grid_card.html' %}
@@ -204,3 +206,4 @@
     }
   }
 </script>
+{% endblock %}

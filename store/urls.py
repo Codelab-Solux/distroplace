@@ -9,6 +9,7 @@ urlpatterns = [
     # ----------------------- products ------------------------------
     path('products/', products, name='products'),
     path('products/<hashid:pk>/', product_details, name='product_details'),
+    path('products/<hashid:pk>/like/', like_product, name='like_product'),
     # ----------------------- cart ------------------------------
     path('cart/', cart, name='cart'),
     path('cart/add_item/', add_to_cart, name='add_to_cart'),

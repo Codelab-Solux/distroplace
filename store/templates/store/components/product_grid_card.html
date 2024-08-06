@@ -3,21 +3,21 @@
 <div
   class="relative w-full h-[360px] bg-white flex flex-col justify-between gap- rounded-xl border hover:shadow-lg hover:border-teal-900 cursor-pointer group transition duration-200 ease-in overflow-hidden"
 >
-  <!-- <a class="w-full min-h-60" href="{% url 'product_details' obj.id %}"> -->
-    {% if obj.image %}
-    <img
-      src="{{ obj.image.url }}"
-      alt="{{ obj.name }}"
-      class="w-full min-h-60 object-cover"
-    />
-    {% else %}
-    <img
-      src="{% static 'imgs/logo-g.png' %}"
-      alt="image"
-      class="w-full min-h-60 object-cover"
-    />
-    {% endif %}
-  <!-- </a> -->
+  <a class="w-full min-h-60" href="{% url 'product_details' obj.id %}">
+  {% if not obj.thumbnail %}
+  <img
+    src="{% static 'imgs/logo-g.png' %}"
+    alt="image"
+    class="w-full min-h-60 object-cover"
+  />
+  {% else %}
+  <img
+    src="{{ obj.thumbnail.url }}"
+    alt="{{ obj.name }}"
+    class="w-full min-h-60 object-cover"
+  />
+  {% endif %}
+  </a>
 
   {% if obj.is_new %}
   <span
@@ -25,18 +25,16 @@
   >
     <i class="fa-solid fa-medal"></i>
   </span>
-  {% endif %}
-
-  {% if obj.is_promoted %}
+  {% endif %} {% if obj.is_promoted %}
   <span
-    class="absolute top-3 right-3 bg-white rounded-md px-2 py-1 text-yellow-400 text-lg"
+    class="absolute top-3 right-3 bg-white rounded-md px-2 py-1 text-yellow-300 text-lg"
   >
     <i class="fa-solid fa-tags"></i>
   </span>
   {% endif %}
 
-  <article class="p-2 h-full flex flex-col gap-2 bg-gray-100 text-sm">
-    <h3 class="font-bold text-black text-lg">{{obj.name}}</h3>
+  <article class="p-2 h-full flex flex-col gap-2 bg-gray-100 text-xs">
+    <h3 class="font-bold text-black text-sm lg:text-lg">{{obj.name}}</h3>
     {% if obj.is_promoted %}
     <div class="flex gap-4">
       <p class="text-gray-400">
@@ -44,7 +42,7 @@
         <span class="line-through">{{ obj.price }} CFA</span>
       </p>
       <p>
-        <i class="fa-solid fa-tags text-yellow-400 mr-2"></i>
+        <i class="fa-solid fa-tags text-yellow-300 mr-2"></i>
         {{obj.promo_price}} CFA
       </p>
     </div>
@@ -60,40 +58,16 @@
         onclick="add_to_cart('{{ obj.id }}')"
         class="bg-teal-700 hover:bg-teal-900 text-white px-4 py-2 rounded-full transition duration-200 ease-in"
       >
-        Ajouter au panier <i class="fa-solid fa-cart-plus ml-2"></i>
+      <span class="hidden md:inline">Ajouter au panier</span>
+        <i class="fa-solid fa-cart-plus ml-2"></i>
       </button>
 
       <a
         href="{% url 'product_details' obj.id %}"
-        class="bg-white hover:bg-yellow-100 border border-teal-900 px-3 py-2 rounded-full"
-        >Voir</a
+        class="bg-white hover:bg-gray-300 px-3 py-2 rounded-full  transition duration-200 ease-in"
+        >&rarr;</a
       >
     </div>
   </article>
 </div>
-<!-- Hidden CSRF token input -->
-<input type="hidden" id="csrf_token" value="{{ csrf_token }}" />
 
-<script>
-  function add_to_cart(obj_id) {
-    // Retrieve the CSRF token from the hidden input
-    const csrfToken = document.getElementById("csrf_token").value;
-
-    $.ajax({
-      type: "POST",
-      url: "{% url 'add_to_cart' %}",
-      data: {
-        product_id: obj_id,
-        csrfmiddlewaretoken: csrfToken,
-        action: "post",
-      },
-      success: function (json) {
-        console.log(json.cart_count); // Ensure the key matches the JSON response key
-        document.getElementById("cart_counter").textContent = json.cart_count;
-      },
-      error: function (xhr, errmsg, err) {
-        console.error(errmsg); // Log error message to console
-      },
-    });
-  }
-</script>

@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from datetime import date, timedelta
+from django.utils import timezone
 from accounts.models import CustomUser
 from utils import *
 
@@ -18,6 +19,8 @@ class Supplier(models.Model):
     address = models.CharField(max_length=255)
     email = models.EmailField(max_length=255)
     domain = models.CharField(max_length=255)
+    is_new = models.BooleanField(default=True)
+    timestamp = models.DateTimeField(auto_now_add=True,  blank=True, null=True)
     type = models.CharField(max_length=50, choices=supplier_types)
 
     def __str__(self):
@@ -28,6 +31,11 @@ class Supplier(models.Model):
 
     def get_absolute_url(self):
         return reverse('delivery_info', kwargs={'pk': self.pk})
+
+    def save(self, *args, **kwargs):
+        if self.is_new and self.timestamp and timezone.now() > self.timestamp + timedelta(weeks=2):
+            self.is_new = False
+        super(Product, self).save(*args, **kwargs)
 
 
 class Category(models.Model):
@@ -75,7 +83,8 @@ class Product(models.Model):
     likes = models.ManyToManyField(CustomUser, blank=True)
     is_featured = models.BooleanField(default=False)
     is_new = models.BooleanField(default=True)
-    image = models.ImageField(
+    timestamp = models.DateTimeField(auto_now_add=True,  blank=True, null=True)
+    thumbnail = models.ImageField(
         upload_to='store/products/', blank=True, null=True)
 
     def __str__(self):
@@ -86,6 +95,22 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('product', kwargs={'pk': self.pk})
+
+    def save(self, *args, **kwargs):
+        if self.is_new and self.timestamp and timezone.now() > self.timestamp + timedelta(weeks=2):
+            self.is_new = False
+        super(Product, self).save(*args, **kwargs)
+
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='store/products/images/')
+
+    def __str__(self):
+        return f'Image for {self.product.name}'
+
+    def get_hashid(self):
+        return h_encode(self.id)
 
 
 class ShippingInfo(models.Model):

@@ -50,7 +50,7 @@
       <span class="hidden xl:inline"> Promotions </span>
     </a>
     <a
-      class="px-1 xl:px-3 py-2 text-center xl:text-left rounded-full hover:bg-white hover:text-black transition ease-in duration-200 w-full {{clients}}"
+      class="px-1 xl:px-3 py-2 text-center xl:text-left rounded-full hover:bg-white hover:text-black transition ease-in duration-200 w-full {{clients_page}}"
       href="{% url 'clients' %}"
     >
       <i class="fa-solid fa-users xl:mr-2 text-sm"></i>
@@ -58,14 +58,14 @@
     </a>
     {% if user.role.sec_level > 3 %}
     <a
-      class="px-1 xl:px-3 py-2 text-center xl:text-left rounded-full hover:bg-white hover:text-black transition ease-in duration-200 w-full {{staff}}"
+      class="px-1 xl:px-3 py-2 text-center xl:text-left rounded-full hover:bg-white hover:text-black transition ease-in duration-200 w-full {{staff_page}}"
       href="{% url 'staff' %}"
     >
       <i class="fa-solid fa-user-tie xl:mr-2 text-sm"></i>
       <span class="hidden xl:inline"> Personnel </span>
     </a>
     <a
-      class="px-1 xl:px-3 py-2 text-center xl:text-left rounded-full hover:bg-white hover:text-black transition ease-in duration-200 w-full {{suppliers}}"
+      class="px-1 xl:px-3 py-2 text-center xl:text-left rounded-full hover:bg-white hover:text-black transition ease-in duration-200 w-full {{suppliers_page}}"
       href="{% url 'suppliers' %}"
     >
       <i class="fa-solid fa-boxes-packing xl:mr-2 text-sm"></i>

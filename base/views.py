@@ -195,4 +195,4 @@ def not_found(req, exception):
         "title": 'Page 404',
 
     }
-    return render(req, 'base/extras/not_found.html', context)
+    return render(req, 'not_found.html', context)

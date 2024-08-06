@@ -31,13 +31,19 @@ class SubCategoryForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': "mb-1 px-3 py-2 rounded-full border focus:border-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"}),
         }
 
+class ProductImageForm(forms.ModelForm):
+    class Meta:
+        model = ProductImage
+        fields = ('image',)
 
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ('__all__')
+            
         labels = {
             'name': 'Article',
+            'thumbnail': 'Image de couverture',
             'brand': 'Marque',
             'category': 'Catégorie',
             'subcategory': "Sous Catégorie",
@@ -67,6 +73,21 @@ class ProductForm(forms.ModelForm):
             'expiration_date': DateInput(attrs={'class': "mb-1 px-3 py-2 rounded-full border focus:border-none focus:outline-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"}),
 
         }
+
+        def __init__(self, *args, **kwargs):
+            super(ProductForm, self).__init__(*args, **kwargs)
+            self.fields['subcategory'].queryset = SubCategory.objects.none()
+
+            if 'category' in self.data:
+                try:
+                    category_id = int(self.data.get('category'))
+                    self.fields['subcategory'].queryset = SubCategory.objects.filter(
+                        category_id=category_id).order_by('name')
+                except (ValueError, TypeError):
+                    pass  # invalid input from the client; ignore and fallback to empty SubCategory queryset
+            elif self.instance.pk:
+                self.fields['subcategory'].queryset = self.instance.category.subcategory_set.order_by('name')
+
 
 
 class ShippingInfoForm(forms.ModelForm):

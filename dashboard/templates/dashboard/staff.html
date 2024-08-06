@@ -4,21 +4,20 @@
     <h3 class="bg-teal-900 rounded-full text-white py-2 px-4">
       <a
         id="back-button"
-        class="inline-block px-2 py-1 text-white bg-teal-900 hover:bg-yellow-400 hover:text-black rounded-full transition-all duration-300"
+        class="inline-block px-2 py-1 text-white bg-teal-900 hover:bg-yellow-300 hover:text-black rounded-full transition-all duration-300"
         href="#"
         >&larr;</a
       >
       Liste des clients
       <i class="fa-solid fa-users ml-2"></i>
     </h3>
-    
   </div>
 
   <form
     id="filter"
     hx-post="{% url 'filter_products' %}"
     hx-target=".promo_list"
-    class="p-2 w-full bg-yellow-100 rounded-full flex justify-between items-center gap-1 text-sm xl:text-sm"
+    class="p-2 w-full bg-gray-200 border rounded-full flex justify-between items-center gap-1 text-sm xl:text-sm"
   >
     {% csrf_token %}
     <section class="w-full flex justify-between items-center gap-1 text-xs">
@@ -30,7 +29,7 @@
         placeholder="Nom"
         name="last_name"
         type="text"
-        class="px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-yellow-400 w-full cursor-pointer"
+        class="px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-teal-300 w-full cursor-pointer"
       />
       <!-- price field -->
       <input
@@ -40,31 +39,18 @@
         placeholder="Prenoms"
         name="first_name"
         type="text"
-        class="px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-yellow-400 w-full cursor-pointer"
+        class="px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-teal-300 w-full cursor-pointer"
       />
-
-      <!-- orders counts -->
-      <select
-        name="items"
-        class="hidden md:inline px-3 py-2 rounded-full focus:bg-yellow-50 outilne-none w-fit"
-      >
-        <option value="" selected disabled>Nombre de commandes</option>
-        <option value="10">1 - 10</option>
-        <option value="30">11 - 30</option>
-        <option value="50">31 - 50</option>
-        <option value="100">51 - 100</option>
-        <option value="101">plus de 100</option>
-      </select>
     </section>
 
     <button
-      class="px-3 py-2 bg-teal-700 hover:bg-teal-900 text-white hover:text-yellow-400 rounded-full transition duration-200 ease-in"
+      class="px-3 py-2 bg-teal-700 hover:bg-teal-900 text-white hover:text-yellow-300 rounded-full transition duration-200 ease-in"
       type="submit"
     >
       <i class="fa-solid fa-filter"></i>
     </button>
     <button
-      class="px-3 py-2 bg-yellow-50 hover:bg-yellow-400 hover:text-black rounded-full transition duration-200 ease-in"
+      class="px-3 py-2 bg-gray-100 hover:bg-gray-400 hover:text-black rounded-full transition duration-200 ease-in"
       hx-on:click="clearForm('filter')"
       type="submit"
     >
@@ -79,7 +65,11 @@
     hx-get="{% url 'staff_grid' %}"
     hx-trigger="load, db_changed from:body"
     hx-target="this"
-  ></div>
+  >
+    <p class="h-full w-full flex justify-center items-center text-teal-500 p-4">
+      <i class="m-auto fas fa-spinner fa-spin text-3xl animate-spin"></i>
+    </p>
+  </div>
 </div>
 
 <script>

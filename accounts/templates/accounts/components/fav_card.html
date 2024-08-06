@@ -1,0 +1,69 @@
+{% load static %}
+
+<div
+  class="relative w-full h-full bg-white flex flex-col justify-between rounded-xl border hover:shadow-lg group transition duration-200 ease-in overflow-hidden"
+>
+  <a class="w-full min-h-40" href="{% url 'product_details' obj.id %}">
+  {% if obj.thumbnail %}
+  <img
+    src="{{ obj.thumbnail.url }}"
+    alt="{{ obj.name }}"
+    class="w-full h-40 object-cover"
+  />
+  {% else %}
+  <img
+    src="{% static 'imgs/logo-g.png' %}"
+    alt="image"
+    class="w-full h-40 object-cover"
+  />
+  {% endif %}
+  </a>
+
+  {% if obj.is_new %}
+  <span
+    class="absolute top-3 left-3 bg-white rounded-md px-2 py-1 text-teal-400 text-sm"
+  >
+    <i class="fa-solid fa-medal"></i>
+  </span>
+  {% endif %}
+  <a
+    hx-boost="false"
+    href="{% url 'product_details' obj.id %}"
+    class="absolute top-3 right-3 bg-white hover:bg-gray-300 px-3 py-2 rounded-full text-xs transition duration-200 ease-in"
+    >&rarr;</a
+  >
+  <button
+    onclick="add_to_cart('{{ obj.id }}')"
+    class="absolute bottom-3 right-3 bg-teal-700 hover:bg-teal-900 text-xs text-white px-3 py-2 rounded-full transition duration-200 ease-in"
+  >
+    <i class="fa-solid fa-cart-plus"></i>
+  </button>
+
+  <article class="p-2 h-full flex flex-col gap-2 bg-gray-100 text-sm">
+    <h3 class="font-bold text-black text-sm">{{obj.name}}</h3>
+    {% if obj.is_promoted %}
+    <p>
+      <i class="fa-solid fa-tags text-yellow-300"></i>
+      {{obj.promo_price}} CFA
+    </p>
+    {% else %}
+    <p>
+      <i class="fa-solid fa-tag text-teal-700"></i>
+      {{obj.price}} CFA
+    </p>
+    {% endif %}
+  </article>
+</div>
+
+<script>
+  function toggleDropdown(e, obj_id) {
+    activeMenu = document.getElementById(`actionMenu${obj_id}`);
+    e.name === `sentry`
+      ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
+      : ((e.name = `sentry`), activeMenu.classList.add("hidden"));
+  }
+
+  window.addEventListener("mouseup", function (event) {
+    activeMenu.classList.add("hidden");
+  });
+</script>

@@ -26,7 +26,7 @@
   <p>{{obj.phone}}</p>
 
   <div
-    class="w-fit flex gap-3 justify-end items-end text-end relative text-gray-700"
+    class="w-fit mx-auto flex gap-3 justify-between items-center text-end relative text-gray-700"
   >
     <button
       onclick="toggleAccordion('c_{{obj.id}}')"
@@ -34,6 +34,7 @@
     >
       <i id="c_{{obj.id}}_caret" class="fa-solid fa-caret-down"></i>
     </button>
+
     <button
       type="button"
       class="hover:text-black bg-white hover:text-teal-700 px-3 py-1 rounded-full"
@@ -55,12 +56,11 @@
     >
       <!--  -->
       <a
-        hx-get="{% url 'supplier_details' obj.id %}"
-        hx-target="#dashbase"
-        hx-swap="outerHTML"
-        class="px-4 py-2 flex items-center hover:text-black hover:bg-gray-200 rounded-full w-full text-center cursor-pointer"
-        ><i class="text-sm fa-solid fa-eye mr-2"></i>
-        Voir
+        hx-boost="false"
+        href="{% url 'supplier_details' obj.id %}"
+        class="px-4 py-2 flex items-center hover:text-black hover:bg-teal-200 rounded-full w-full text-center cursor-pointer"
+        ><i class="text-sm fa-solid fa-expand mr-2"></i>
+        Détails
       </a>
 
       <button
@@ -76,7 +76,7 @@
       <button
         onclick="hide_dialogs()"
         hx-target="#basic_dialog"
-        hx-delete="{% url 'delete_store_object' obj.id 'Category' %}"
+        hx-delete="{% url 'delete_store_object' obj.id 'Supplier' %}"
         hx-confirm="Voulez vous vraiment suprimmer ceci?"
         class="px-4 py-2 flex items-center hover:text-black hover:bg-red-200 rounded-full w-full text-center cursor-pointer"
       >

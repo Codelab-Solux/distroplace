@@ -21,11 +21,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='customuser',
             name='phone',
-            field=models.CharField(blank=True, max_length=100, null=True, unique=True),
+            field=models.CharField(
+                blank=True, max_length=100, null=True, unique=True),
         ),
         migrations.AlterField(
             model_name='profile',
             name='image',
-            field=models.ImageField(blank=True, default='../static/imgs/anon.png', null=True, upload_to='uploads/users/profiles'),
+            field=models.ImageField(
+                blank=True, default='../static/imgs/anon.png', null=True, upload_to='media/users/profiles'),
         ),
     ]

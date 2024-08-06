@@ -9,18 +9,18 @@
   <p>{{obj.timestamp.time}}</p>
   <p>{{obj.amount}} CFA</p>
 
+  <!--  -->
   {% include 'store/components/order_status.html' %}
   <!--  -->
 
-  <div class="w-fit text-end relative text-gray-700">
+  <div class="w-fit mx-auto relative text-gray-700">
     <button
       type="button"
       class="bg-white hover:text-teal-700 px-3 py-1 rounded-full"
-      name="orderSentry"
-      id="orderSentry"
+      name="sentry"
       aria-expanded="false"
       aria-haspopup="true"
-      onclick="toggleHostActionDropdown(this,'{{obj.id}}')"
+      onclick="toggleDropdown(this,'{{obj.id}}')"
     >
       <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
     </button>
@@ -57,11 +57,11 @@
 </div>
 
 <script>
-  function toggleHostActionDropdown(e, obj_id) {
+  function toggleDropdown(e, obj_id) {
     activeMenu = document.getElementById(`actionMenu${obj_id}`);
-    e.name === `orderSentry`
+    e.name === `sentry`
       ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
-      : ((e.name = `orderSentry`), activeMenu.classList.add("hidden"));
+      : ((e.name = `sentry`), activeMenu.classList.add("hidden"));
   }
 
   window.addEventListener("mouseup", function (event) {

@@ -48,21 +48,40 @@ def products(req):
 
 
 def product_details(req, pk):
+    user = req.user
     curr_obj = Product.objects.get(id=pk)
-    rel_orders = Product.objects.filter(
-        category=curr_obj.category).exclude(id=pk)[:4]
+    prod_images = ProductImage.objects.filter(product=curr_obj)
+    rel_products = Product.objects.filter(
+        category=curr_obj.category).exclude(id=pk).order_by('-timestamp')[:4]
+    is_favorite = curr_obj.likes.filter(id=user.id).exists()
     context = {
         "products_page": "active",
         'title': 'Products',
         'curr_obj': curr_obj,
-        'rel_orders': rel_orders,
+        'prod_images': prod_images,
+        'rel_products': rel_products,
+        'is_favorite': is_favorite,
     }
     return render(req, 'store/prod_details.html', context)
 
 
+@login_required(login_url='login')
+def like_product(req, pk):
+    user = req.user
+    curr_obj = get_object_or_404(Product, id=pk)
+
+    if curr_obj.likes.filter(id=user.id).exists():
+        curr_obj.likes.remove(user)
+        is_favorite = False
+    else:
+        curr_obj.likes.add(user)
+        is_favorite = True
+    print(is_favorite)
+    return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
+
 # --------------------------Cart--------------------------
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def cart(req):
     cart = Cart(req)
     cart_count = len(cart)
@@ -75,7 +94,7 @@ def cart(req):
     }
     return render(req, 'store/cart.html', context)
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def cart_partial(req):
     cart = Cart(req)
     cart_count = len(cart)
@@ -88,7 +107,7 @@ def cart_partial(req):
     }
     return render(req, 'store/partials/cart_items.html', context)
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def cart_resume(req):
     cart = Cart(req)
     cart_count = len(cart)
@@ -102,7 +121,7 @@ def cart_resume(req):
     }
     return render(req, 'store/partials/cart_resume.html', context)
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def add_to_cart(req):
     cart = Cart(req)
     if req.POST.get('action') == 'post':
@@ -114,7 +133,7 @@ def add_to_cart(req):
         res = JsonResponse({'cart_count': cart_count})
         return res
     
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def remove_from_cart(req):
     cart = Cart(req)
     if req.POST.get('action') == 'post':
@@ -128,7 +147,7 @@ def remove_from_cart(req):
         res = JsonResponse({'cart_count': cart_count})
         return res
     
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def clear_from_cart(req):
     cart = Cart(req)
     if req.POST.get('action') == 'post':
@@ -142,7 +161,7 @@ def clear_from_cart(req):
         res = JsonResponse({'cart_count': cart_count})
         return res
     
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def clear_cart(req):
     cart = Cart(req)
     if req.POST.get('action') == 'post':
@@ -391,7 +410,12 @@ def new_delivery(req, pk):
 
     new_delivery.save()
 
-    return redirect('order_details', pk=new_delivery.id)
+    # Get the referrer URL
+    referrer_url = req.META.get('HTTP_REFERER', '/')
+
+    # Redirect to the referrer URL or a default URL if referrer is not available
+    return redirect(referrer_url)
+
 
 def postpone_delivery(req, pk):
     user = req.user

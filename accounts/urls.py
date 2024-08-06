@@ -9,7 +9,8 @@ urlpatterns = [
     path('login/', loginView, name='login'),
     path('login/google/', google_login, name='google_login'),
     path('logout/', logoutUser, name='logout'),
-    path('users/<hashid:pk>/', user_profile, name='user_profile'),
     path('users/my_profile/', my_profile, name='my_profile'),
+    path('users/user_favorites/', user_favorites, name='user_favorites'),
+    path('users/<hashid:pk>/', user_profile, name='user_profile'),
     path('debug/', debug_view, name='debug_view'),  # Temporary debug view
 ]

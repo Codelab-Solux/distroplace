@@ -14,25 +14,20 @@
       </h3>
     </div>
 
-    
-      <a
-        href="{% url 'add_product' %}"
-        class="bg-teal-200 hover:bg-teal-300 rounded-full text-sm py-2 px-4 flex items-center gap-4 group"
-        >
-        Ajouter un produit
-        <i class="fa-solid fa-plus ml-2"></i>
-      </a
-      >
-
+    <a
+      href="{% url 'add_product' %}"
+      class="bg-teal-200 hover:bg-teal-300 rounded-full text-sm py-2 px-4 flex items-center gap-4 group transition-all duration-300"
+    >
+      Ajouter un produit
+      <i class="fa-solid fa-plus ml-2"></i>
+    </a>
   </div>
-
-
 
   <form
     id="filter"
     hx-post="{% url 'new_arrivals' %}"
     hx-target=".objects_list"
-    class="p-2 w-full bg-yellow-100 rounded-full flex justify-between items-center gap-1 text-sm xl:text-sm"
+    class="p-2 w-full bg-gray-200 border rounded-full flex justify-between items-center gap-1 text-sm xl:text-sm"
   >
     {% csrf_token %}
     <section class="w-full flex justify-between items-center gap-1 text-xs">
@@ -41,26 +36,26 @@
         placeholder="Nom"
         name="name"
         type="text"
-        class="px-3 py-2 rounded-full focus:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-yellow-300 w-full cursor-pointer"
+        class="px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-teal-300 w-full cursor-pointer"
       />
       <!-- price field -->
       <input
         placeholder="Prix"
         name="price"
         type="text"
-        class="px-3 py-2 rounded-full focus:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-yellow-300 w-full cursor-pointer"
+        class="px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-teal-300 w-full cursor-pointer"
       />
       <!-- quantity field -->
       <input
         placeholder="Quantité"
         name="quantity"
         type="text"
-        class="px-3 py-2 rounded-full focus:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-yellow-300 w-full cursor-pointer"
+        class="px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-teal-300 w-full cursor-pointer"
       />
       <!-- categories and subcategories -->
       <select
         name="category"
-        class="hidden sm:flex px-3 py-2 rounded-full focus:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-yellow-300 w-full cursor-pointer"
+        class="hidden sm:flex px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-teal-300 w-full cursor-pointer"
       >
         <option value="" selected="true" disabled="disabled">Catégories</option>
         {% for obj in categories %}
@@ -69,7 +64,7 @@
       </select>
       <select
         name="subcategory"
-        class="hidden sm:flex px-3 py-2 rounded-full focus:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-yellow-300 w-full cursor-pointer"
+        class="hidden sm:flex px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-teal-300 w-full cursor-pointer"
       >
         <option value="" selected="true" disabled="disabled">
           Sous Catégories
@@ -106,7 +101,7 @@
       <i class="fa-solid fa-filter"></i>
     </button>
     <button
-      class="px-3 py-2 bg-yellow-50 hover:bg-yellow-300 hover:text-black rounded-full transition duration-200 ease-in"
+      class="px-3 py-2 bg-gray-100 hover:bg-gray-400 hover:text-black rounded-full transition duration-200 ease-in"
       hx-on:click="clearForm('filter')"
       type="submit"
     >

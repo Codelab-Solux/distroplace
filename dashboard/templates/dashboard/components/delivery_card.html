@@ -3,7 +3,7 @@
 <div
   class="py-2 px-4 w-full bg-white hover:bg-gray-100 {% if obj.status == 'cancelled' %} text-gray-400 {% else %}  text-gray-600 {% endif %} text-xs xl:text-sm flex justify-between items-center lg:grid lg:grid-cols-8 rounded-full border hover:shadow-lg transition duration-200 ease-in"
 >
-  <h3 class="font-bold text-black">Livraison N°{{obj.id}}</h3>
+  <h3 class="font-bold text-black">Lvs N°-{{obj.id}}</h3>
   <p>
 
     {{obj.d_day}}
@@ -28,7 +28,7 @@
   {% include 'store/components/delivery_status.html' %}
   <!--  -->
 
-  <div class="w-fit text-end relative text-gray-700">
+  <div class="w-fit mx-auto text-end relative text-gray-700">
     <button
       type="button"
       class="hover:text-black bg-white hover:text-teal-700 px-3 py-1 rounded-full"

@@ -1,13 +1,13 @@
 {% extends 'main.html' %} {% load static %} {% block content %}
 
-<div class="p-8 w-full max-w-7xl mx-auto flex flex-col justify-between gap-6">
+<div class="px-4 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between gap-6">
   <div class="flex justify-between">
     <div
       class="bg-teal-900 py-2 px-4 rounded-full flex items-center text-white gap-4"
     >
       <a
         id="back-button"
-        class="inline-block px-2 py-1 font-bold hover:bg-yellow-400 hover:text-black rounded-full transition-all duration-300"
+        class="inline-block px-2 py-1 font-bold hover:bg-yellow-300 hover:text-black rounded-full transition-all duration-300"
         href="#"
         >&larr;</a
       >
@@ -43,10 +43,10 @@
             class="text-gray-600 border text-sm hover:bg-white hover:text-black transition-all duration-300"
           >
             <td class="px-3 py-1">
-              {% if obj.product.image %}
+              {% if obj.product.thumbnail %}
               <img
                 class="h-10 text-gray-200"
-                src="{{obj.product.image.url}}"
+                src="{{obj.product.thumbnail.url}}"
                 alt="item image"
               />
               {% else %}
@@ -84,17 +84,17 @@
         <form
           method="POST"
           action="{% url 'new_delivery' curr_obj.id %}"
-          class="grid gap-2"
+          class="h-fit grid gap-2"
         >
           <h3>Chosissez le type de livraison</h3>
           <select
             required
             name="delivery_type"
-            class="mb-1 px-3 py-2 text-black rounded-full border focus:border-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"
+            class="mb-1 px-3 py-2 grid gap-2 text-black rounded-full border focus:border-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"
           >
-            <option value="" selected disabled>Type de livraison <span class="font-bold text-red-700">*</span></option>
+            <option value="" selected disabled>Type de livraison *</option>
             {% for obj in delivery_types %}
-            <option class="py-1 px-2" value="{{obj.id}}">
+            <option value="{{obj.id}}">
               {{obj.title}} ({{obj.price}} FCFA)
             </option>
             {% endfor %}
@@ -102,7 +102,7 @@
           <input
             type="text"
             name="delivery_phone"
-            placeholder="Telephone"
+            placeholder="Téléphone"
             class="mb-1 px-3 py-2 text-black rounded-full border focus:border-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"
           />
           <button

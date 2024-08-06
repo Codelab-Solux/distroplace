@@ -1,80 +1,118 @@
 {% load static %}
 
 <div
-  class="relative w-full h-full bg-white flex flex-col justify-between gap- rounded-xl border hover:shadow-lg hover:border-teal-900 cursor-pointer group transition duration-200 ease-in overflow-hidden"
+  class="relative w-full h-full bg-white flex flex-col justify-between rounded-xl border hover:shadow-lg group transition duration-200 ease-in overflow-hidden"
 >
   <!-- <a class="w-full min-h-40" href="{% url 'product_details' obj.id %}"> -->
-    {% if obj.image %}
-    <img
-      src="{{ obj.image.url }}"
-      alt="{{ obj.name }}"
-      class="w-full h-40 object-cover"
-    />
-    {% else %}
-    <img
-      src="{% static 'imgs/logo-g.png' %}"
-      alt="image"
-      class="w-full h-40 object-cover"
-    />
-    {% endif %}
+  {% if obj.thumbnail %}
+  <img
+    src="{{ obj.thumbnail.url }}"
+    alt="{{ obj.name }}"
+    class="w-full h-40 object-cover"
+  />
+  {% else %}
+  <img
+    src="{% static 'imgs/logo-g.png' %}"
+    alt="image"
+    class="w-full h-40 object-cover"
+  />
+  {% endif %}
   <!-- </a> -->
 
   {% if obj.is_new %}
   <span
-    class="absolute top-3 left-3 bg-white rounded-md px-2 py-1 text-teal-400 text-lg"
+    class="absolute top-3 left-3 bg-white rounded-md px-2 py-1 text-teal-400 text-sm"
   >
     <i class="fa-solid fa-medal"></i>
   </span>
   {% endif %}
 
-  {% if obj.is_promoted %}
-  <span
-    class="absolute top-3 right-3 bg-white rounded-md px-2 py-1 text-yellow-400 text-lg"
-  >
-    <i class="fa-solid fa-tags"></i>
-  </span>
-  {% endif %}
+  <div class="absolute top-3 right-3 text-gray-700">
+    <button
+      type="button"
+      class="hover:text-black bg-white hover:text-teal-400 px-2 py-1 hover:text-teal-400 text-sm"
+      name="sentry"
+      aria-expanded="false"
+      aria-haspopup="true"
+      onclick="toggleMenu(this,'menu_c_{{obj.id}}')"
+    >
+      <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
+    </button>
+
+    <div
+      class="hidden bg-gray-50 w-40 shadow-md lg:w-[180px] p-2 absolute right-0 top-0 origin-top-left bg-white z-10 rounded-xl flex flex-col items-center gap-2 text-xs overflow-hidden"
+      role="status menu"
+      aria-orientation="vertical"
+      aria-labelledby="status-menu-button"
+      tabindex="-1"
+      id="menu_c_{{obj.id}}"
+    >
+      <!--  -->
+      <a
+        hx-target="#basic_dialog"
+        hx-get="{% url 'product_overview' obj.id %}"
+        class="px-3 py-1 flex items-center hover:text-black hover:bg-gray-200 rounded-full w-full text-center cursor-pointer"
+        ><i class="fa-solid fa-window-restore text-sm mr-2"></i>
+        Aperçu
+      </a>
+
+      <a
+        hx-boost="false"
+        href="{% url 'dash_product' obj.id %}"
+        class="px-3 py-1 flex items-center hover:text-black hover:bg-teal-200 rounded-full w-full text-center cursor-pointer"
+        ><i class="text-sm fa-solid fa-expand mr-2"></i>
+        Détails
+      </a>
+
+      <a
+        hx-boost="false"
+        href="{% url 'edit_product' obj.id %}"
+        class="px-3 py-1 flex items-center hover:text-black hover:bg-yellow-200 rounded-full w-full text-center cursor-pointer"
+      >
+        <i class="text-sm fa-solid fa-pen-to-square mr-2"></i>
+        Modifier
+      </a>
+
+      <button
+        onclick="hide_dialogs()"
+        hx-target="#basic_dialog"
+        hx-delete="{% url 'delete_store_object' obj.id 'Product' %}"
+        hx-confirm="Voulez vous vraiment suprimmer ceci?"
+        class="px-3 py-1 flex items-center hover:text-black hover:bg-red-200 rounded-full w-full text-center cursor-pointer"
+      >
+        <i class="text-sm fa-solid fa-trash mr-2"></i>
+        Supprimer
+      </button>
+
+      <!--  -->
+    </div>
+  </div>
 
   <article class="p-2 h-full flex flex-col gap-2 bg-gray-100 text-sm">
-    <h3 class="font-bold text-black text-lg">{{obj.name}}</h3>
+    <h3 class="font-bold text-black text-sm">{{obj.name}}</h3>
     {% if obj.is_promoted %}
-
-      <p>
-        <i class="fa-solid fa-tags text-yellow-400 mr-2"></i>
-        {{obj.promo_price}} CFA
-      </p>
+    <p>
+      <i class="fa-solid fa-tags text-yellow-300 mr-2"></i>
+      {{obj.promo_price}} CFA
+    </p>
     {% else %}
     <p>
       <i class="fa-solid fa-tag text-teal-900 mr-2"></i>
       {{obj.price}} CFA
     </p>
     {% endif %}
-
   </article>
 </div>
-<!-- Hidden CSRF token input -->
-<input type="hidden" id="csrf_token" value="{{ csrf_token }}" />
 
 <script>
-  function add_to_cart(obj_id) {
-    // Retrieve the CSRF token from the hidden input
-    const csrfToken = document.getElementById("csrf_token").value;
-
-    $.ajax({
-      type: "POST",
-      url: "{% url 'add_to_cart' %}",
-      data: {
-        product_id: obj_id,
-        csrfmiddlewaretoken: csrfToken,
-        action: "post",
-      },
-      success: function (json) {
-        console.log(json.cart_count); // Ensure the key matches the JSON response key
-        document.getElementById("cart_counter").textContent = json.cart_count;
-      },
-      error: function (xhr, errmsg, err) {
-        console.error(errmsg); // Log error message to console
-      },
-    });
+  function toggleDropdown(e, obj_id) {
+    activeMenu = document.getElementById(`actionMenu${obj_id}`);
+    e.name === `sentry`
+      ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
+      : ((e.name = `sentry`), activeMenu.classList.add("hidden"));
   }
+
+  window.addEventListener("mouseup", function (event) {
+    activeMenu.classList.add("hidden");
+  });
 </script>

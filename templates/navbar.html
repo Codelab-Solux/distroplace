@@ -1,39 +1,40 @@
 {% load static %}
 <nav class="text-gray-700 py-4 lg:fixed w-full bg-white z-20">
   <div
-    class="px-8 max-w-7xl mx-auto flex flex-col gap-4 lg:flex-row lg:items-center justify-between"
+    class="px-4 lg:px-8 max-w-7xl mx-auto flex flex-col gap-4 lg:flex-row lg:items-center justify-between"
   >
     <div class="flex items-center justify-between">
       <a href="{% url 'home' %}">
         <img class="h-8" src="{% static 'imgs/logo-full.png' %}" alt="Logo" />
       </a>
-      <span class="text-3xl cursor-pointer lg:hidden">
-        <ion-icon name="menu" onclick="toggleMenu(this)"></ion-icon>
+      <span class="text-xl text-teal-700 cursor-pointer lg:hidden">
+        <i name="nav" onclick="toggleNav(this)" class="fa-solid fa-bars"></i>
       </span>
     </div>
 
     {% if products_page %}
     <form
-      class="flex justify-between items-center gap-4 w-full max-w-[500px] rounded-full bg-gray-50 border hover:border-teal-700 py-1 px-4 text-sm"
+      class="hidden lg:flex justify-between items-center gap-4 w-full max-w-[500px] rounded-full bg-gray-100 border hover:border-teal-700 py-1 px-4 text-sm"
     >
       <input
         name="query"
         type="text"
-        class="w-full py-2 bg-gray-50 outline-none"
+        class="w-full p-2 bg-gray-100 outline-none"
         placeholder="Rechercher un produit..."
       />
       <button
         type="submit"
-        class="px-4 py-1 rounded-full text-sm text-gray-200 bg-teal-700 hover:bg-teal-900"
+        class="px-3 py-2 rounded-full text-sm text-gray-200 bg-teal-700 hover:bg-teal-900"
       >
         <i class="fa-solid fa-search"></i>
       </button>
     </form>
     {% endif %}
 
-    <div
-      class="flex flex-col items-end gap-4 lg:flex-row lg:gap-4 lg:items-center"
-    >
+    <div class="hidden lg:flex lg:mt-0 items-center text-sm" id="navlinks">
+      <ul
+        class="flex flex-col lg:flex-row gap-4 justify-between items-center menu-list"
+      >
       <a
         href="{% url 'products' %}"
         class="font-bold text-gray-500 hover:text-teal-900 transition duration-200 ease-in"
@@ -79,7 +80,6 @@
           id="dropdownMenu"
         >
           <a
-
             href="{% url 'my_profile' %}"
             class="block px-4 py-2 text-gray-700 hover:bg-teal-900 hover:text-white"
             ><i class="fa-solid fa-user xl:mr-2"></i>Profil</a
@@ -129,20 +129,21 @@
       <a
         hx-boost="false"
         href="{% url 'login' %}"
-        class="border px-3 py-2 rounded-full border hover:border-yellow-400 hover:bg-yellow-200 transition duration-200 ease-in"
+        class="border px-3 py-2 rounded-full border hover:border-yellow-300 hover:bg-yellow-200 transition duration-200 ease-in"
       >
         <i class="fa-solid fa-arrow-right-to-bracket"></i>
       </a>
       {% endif %}
+      </ul>
     </div>
   </div>
 </nav>
 
 <script>
-  function toggleMenu(e) {
-    e.name === "menu"
-      ? ((e.name = "close"), navlinks.classList.remove("hidden"))
-      : ((e.name = "menu"), navlinks.classList.add("hidden"));
+  function toggleNav(e) {
+    e.name === "nav"
+    ? ((e.name = "close"), navlinks.classList.remove("hidden"))
+      : ((e.name = "nav"), navlinks.classList.add("hidden"));
   }
 
   function toggleDropdown(e) {

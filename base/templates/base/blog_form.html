@@ -10,40 +10,39 @@
       >
       Retourner
     </h3>
-
   </div>
 
-    <form
+  <form
     class="w-full max-w-3xl mx-auto p-4 bg-teal-100 rounded-3xl flex flex-col gap-3 text-sm"
-      method="POST"
-      action="{% url 'add_blogpost' %}"
-      enctype="multipart/form-data"
+    method="POST"
+    action="{% url 'add_blogpost' %}"
+    enctype="multipart/form-data"
+  >
+    {% csrf_token %}
+    <h2
+      class="px-4 py-2 bg-teal-900 rounded-full mb-4 text-center text-xl text-white"
     >
-      {% csrf_token %}
-      <h2
-        class="px-4 py-2 bg-teal-900 rounded-full mb-4 text-center text-xl text-white"
+      {{ form_title }}
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+      {% for field in form %}
+      <div>
+        <h3 class="mb-1">{{field.label}}</h3>
+        {{field}}
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="flex flex-row-reverse gap-2 items-end text-sm">
+      <button
+        class="px-4 py-2 bg-teal-700 text-white hover:bg-teal-900 rounded-full"
+        type="submit"
       >
-        {{ form_title }}
-      </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
-        {% for field in form %}
-        <div>
-          <h3 class="mb-1">{{field.label}}</h3>
-          {{field}}
-        </div>
-        {% endfor %}
-      </div>
-
-      <div class="flex flex-row-reverse gap-2 items-end text-sm">
-        <button
-          class="px-4 py-2 bg-teal-700 text-white hover:bg-teal-900 rounded-full"
-          type="submit"
-        >
-          {% if not curr_obj %} Ajouter {% else %} Enregistrer {% endif %}
-        </button>
-      </div>
-    </form>
+        {% if not curr_obj %} Ajouter {% else %} Enregistrer {% endif %}
+      </button>
+    </div>
+  </form>
 </div>
 
 {% if not curr_obj %}
