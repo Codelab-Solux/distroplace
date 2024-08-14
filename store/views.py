@@ -1,6 +1,7 @@
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404, redirect, render
+from django.apps import apps
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
+from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib import messages
 from django.db.models import Q
@@ -65,8 +66,25 @@ def product_details(req, pk):
     return render(req, 'store/prod_details.html', context)
 
 
+def product_info(req, pk):
+    curr_obj = get_object_or_404(Product, id=pk)
+    comments = ProductComment.objects.filter(
+        product=curr_obj).order_by('-timestamp')
+    is_liked = False
+    if curr_obj.likes.filter(id=req.user.id).exists():
+        is_liked = True
+
+    context = {
+        'curr_obj': curr_obj,
+        'comments': comments,
+        'is_liked': is_liked,
+    }
+
+    return render(req, 'store/partials/product_info.html', context)
+
+
 @login_required(login_url='login')
-def like_product(req, pk):
+def make_favorite(req, pk):
     user = req.user
     curr_obj = get_object_or_404(Product, id=pk)
 
@@ -78,6 +96,52 @@ def like_product(req, pk):
         is_favorite = True
     print(is_favorite)
     return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
+
+
+@login_required(login_url='login')
+def like_product(req, pk):
+    user = req.user
+    curr_obj = get_object_or_404(Product, id=pk)
+
+    if curr_obj.likes.filter(id=user.id).exists():
+        curr_obj.likes.remove(user)
+        is_liked = False
+    else:
+        curr_obj.likes.add(user)
+        is_liked = True
+    print(is_liked)
+    return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
+
+# ----------------------------------------
+
+def create_prod_comment(req, pk):
+    user = req.user
+    curr_obj = get_object_or_404(Product, id=pk)
+    if req.method == 'POST':
+        comment = req.POST['comment']
+        new_comment = ProductComment(
+            product=curr_obj, user=user, comment=comment)
+        new_comment.save()
+
+    return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
+
+
+@login_required(login_url='login')
+def edit_prod_comment(req, pk):
+    user = req.user
+    curr_obj = get_object_or_404(ProductComment, id=pk)
+
+    if not user.is_staff:
+        return redirect(req.META.get('HTTP_REFERER', '/'))
+
+    form = ProductCommentForm(instance=curr_obj)
+    if req.method == 'POST':
+        form = ProductCommentForm(req.POST,  instance=curr_obj)
+        if (form.is_valid):
+            form.save()
+        return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
+    else:
+        return render(req, 'basic_form.html', context={'form': form, 'form_title': 'Modifier ce commentaire', "curr_obj": curr_obj})
 
 # --------------------------Cart--------------------------
 
@@ -225,7 +289,7 @@ def orders(req):
     status_query = req.GET.get('status')
 
     if not user.is_staff:
-        base_query = Order.objects.filter(user=user).order_by('-timestamp')
+        base_query = Order.objects.filter(client=user).order_by('-timestamp')
     else:
         base_query = Order.objects.all().order_by('-timestamp')
 
@@ -461,3 +525,36 @@ def deliveries_resume(req):
         "cancelled": cancelled,
     }
     return render(req, 'store/partials/deliveries_resume.html', context)
+
+# ------------------------------------------------- Delete and 404 routes -------------------------------------------------
+
+
+@require_http_methods(['DELETE'])
+@login_required(login_url='login')
+def delete_store_object(req, pk, model_name):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
+    try:
+        # Get the model class from the model name
+        ModelClass = apps.get_model('base', model_name)
+    except LookupError:
+        return HttpResponse(status=404)  # Model not found
+
+    # Fetch the object to be deleted
+    obj = get_object_or_404(ModelClass, pk=pk)
+
+    # Check user's permission and show snackabr
+    if req.user.role.sec_level < 2:
+        # Send a custom HTMX trigger
+        response = HttpResponse(status=403, headers={
+                                'HX-Trigger': 'access-denied'})
+        return response
+
+    # Delete the object
+    obj.delete()
+
+    # Return a success response
+    return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})

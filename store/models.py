@@ -1,9 +1,13 @@
+from django.db.models import Sum, Avg
 from django.db import models
 from django.urls import reverse
 from datetime import date, timedelta
 from django.utils import timezone
 from accounts.models import CustomUser
 from utils import *
+
+# from gdstorage.storage import GoogleDriveStorage
+# gd_storage = GoogleDriveStorage()
 
 # Create your models here.
 
@@ -42,7 +46,7 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
     is_featured = models.BooleanField(default=False)
     image = models.ImageField(
-        upload_to='store/categories/', blank=True, null=True)
+        upload_to='store/categories/', default='../static/imgs/logo-g.png', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -52,7 +56,7 @@ class SubCategory(models.Model):
     name = models.CharField(max_length=100)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     image = models.ImageField(
-        upload_to='store/subcategories/', blank=True, null=True)
+        upload_to='store/subcategories/', default='../static/imgs/logo-g.png', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -80,7 +84,9 @@ class Product(models.Model):
     is_promoted = models.BooleanField(default=False)
     production_date = models.DateField(null=True, blank=True)
     expiration_date = models.DateField(null=True, blank=True)
-    likes = models.ManyToManyField(CustomUser, blank=True)
+    likes = models.ManyToManyField(CustomUser, related_name='user_likes', blank=True)
+    favorites = models.ManyToManyField(
+        CustomUser, related_name='user_favorites', blank=True)
     is_featured = models.BooleanField(default=False)
     is_new = models.BooleanField(default=True)
     timestamp = models.DateTimeField(auto_now_add=True,  blank=True, null=True)
@@ -101,10 +107,15 @@ class Product(models.Model):
             self.is_new = False
         super(Product, self).save(*args, **kwargs)
 
+    def rating(self):
+        prod_ratings = ProductRating.objects.filter(product = self)
+        avg_rating = prod_ratings.aggregate(average=Avg('stars'))['average'] or 0
+        return avg_rating
+
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='store/products/images/')
+    image = models.ImageField(upload_to='store/products/images/', default='../static/imgs/logo-g.png')
 
     def __str__(self):
         return f'Image for {self.product.name}'
@@ -112,6 +123,40 @@ class ProductImage(models.Model):
     def get_hashid(self):
         return h_encode(self.id)
 
+
+class ProductRating(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    stars = models.IntegerField(default=1)
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.product.title} - comment'
+
+    def get_hashid(self):
+        return h_encode(self.id)
+
+    def get_absolute_url(self):
+        return reverse('product_rating', kwargs={'pk': self.pk})
+
+
+class ProductComment(models.Model):
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(
+        Product, on_delete=models.SET_NULL, null=True)
+    comment = models.TextField(default='')
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.product.title} - comment'
+
+    def get_hashid(self):
+        return h_encode(self.id)
+
+    def get_absolute_url(self):
+        return reverse('product_comment', kwargs={'pk': self.pk})
+    
 
 class ShippingInfo(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
@@ -177,7 +222,7 @@ class OrderItem(models.Model):
 delivery_statuses = (
     ('pending', "En attente"),
     ('dispatched', "Expédiée"),
-    ('finished', "Terminée"),
+    ('completed', "Terminée"),
     ('cancelled', "Annulée"),
 )
 

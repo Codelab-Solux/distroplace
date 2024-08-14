@@ -1,3 +1,6 @@
+from decouple import config
+from firebase_admin import credentials
+import firebase_admin
 import pprint
 import os
 from pathlib import Path
@@ -13,8 +16,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@u0f6%r&_-_#znj87l$xc3yl6bzuf%dfosqnctm9)vkrz0z&)j'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = False
+# DEBUG = True
+DEBUG = False
 
 
 ALLOWED_HOSTS = [
@@ -42,6 +45,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 HASHIDS_SALT = 'VERITASCHRISTOETECCLESIAE'
 
+SITE_ID = 1
 # Application definition
 
 INSTALLED_APPS = [
@@ -52,13 +56,23 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # ---------third party apps-----------
+    'decouple',
     'corsheaders',
+    # 'gdstorage',
+    # allauth stuff-------
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
     # ---------project apps-----------
     'base.apps.BaseConfig',
     'store.apps.StoreConfig',
     'accounts.apps.AccountsConfig',
     'dashboard.apps.DashboardConfig',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -70,6 +84,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 
@@ -144,30 +159,61 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-print("STATIC_URL:", pprint.pformat(STATIC_URL))
-
-# STATIC_URL = '/static/'
-# STATIC_ROOT = BASE_DIR / 'staticfiles'
-# STATICFILES_DIRS = [BASE_DIR / 'static',]
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = BASE_DIR / 'media/'
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# if DEBUG:
+#     # Local storage settings
+#     MEDIA_URL = '/media/'
+#     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# else:
+#     # Google Cloud Storage settings
+#     DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+#     GS_BUCKET_NAME = 'your-gcs-bucket-name'
+#     GS_CREDENTIALS = 'path/to/your/credentials.json'
+#     MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# very important for overiding the default user model!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": ["profile", "email"],
+        "AUTH_PARAMS": {"access_type": "online"}
+    },
+    "facebook": {
+        "SCOPE": ["profile", "email"],
+        "AUTH_PARAMS": {"access_type": "online"}
+    }
+}
+
+# email setings -----------------------------------------------------
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.example.com'
+EMAIL_HOST_USER = 'codelabsolux@gmail.com'
+EMAIL_HOST_PASSWORD = 'Ex@ct00tc@xE'
+
+# Optionally, you can set a default from email address
+DEFAULT_FROM_EMAIL = 'noreply@distroplace.com'
+
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
-AUTH_USER_MODEL = "accounts.CustomUser"  # !!! very important !!!
+# very important for overiding the default user model!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+AUTH_USER_MODEL = "accounts.CustomUser"
 
 
 # App logs !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -189,3 +235,29 @@ LOGGING = {
         },
     },
 }
+
+
+# firebase settings for OTP
+FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, 'firebase-admin.json')
+cred = credentials.Certificate(FIREBASE_ADMIN_CREDENTIAL)
+firebase_admin.initialize_app(cred)
+
+
+FIREBASE_API_KEY = config('FIREBASE_API_KEY')
+FIREBASE_AUTH_DOMAIN = config('FIREBASE_AUTH_DOMAIN')
+FIREBASE_PROJECT_ID = config('FIREBASE_PROJECT_ID')
+FIREBASE_STORAGE_BUCKET = config('FIREBASE_STORAGE_BUCKET')
+FIREBASE_MESSAGING_SENDER_ID = config('FIREBASE_MESSAGING_SENDER_ID')
+FIREBASE_APP_ID = config('FIREBASE_APP_ID')
+FIREBASE_MEASUREMENT_ID = config('FIREBASE_MEASUREMENT_ID')
+
+FIREBASE_TYPE = config('FIREBASE_TYPE')
+FIREBASE_PRIVATE_KEY_ID = config('FIREBASE_PRIVATE_KEY_ID')
+FIREBASE_PRIVATE_KEY = config('FIREBASE_PRIVATE_KEY').replace('\\n', '\n')
+FIREBASE_CLIENT_EMAIL = config('FIREBASE_CLIENT_EMAIL')
+FIREBASE_CLIENT_ID = config('FIREBASE_CLIENT_ID')
+FIREBASE_AUTH_URI = config('FIREBASE_AUTH_URI')
+FIREBASE_TOKEN_URI = config('FIREBASE_TOKEN_URI')
+FIREBASE_AUTH_PROVIDER_CERT_URL = config('FIREBASE_AUTH_PROVIDER_CERT_URL')
+FIREBASE_CLIENT_CERT_URL = config('FIREBASE_CLIENT_CERT_URL')
+FIREBASE_UNIVERSE_DOMAIN = config('FIREBASE_UNIVERSE_DOMAIN')

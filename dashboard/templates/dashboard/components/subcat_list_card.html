@@ -11,7 +11,7 @@
   />
   {% else %}
   <img
-    src="{% static 'imgs/logo-g.png' %}" 
+    src="{% static 'imgs/logo-g.png' %}"
     alt="image"
     class="w-7 h-7 object-cover rounded-full"
   />
@@ -59,7 +59,7 @@
         onclick="hide_dialogs()"
         hx-target="#basic_dialog"
         hx-delete="{% url 'delete_store_object' obj.id 'SubCategory' %}"
-        hx-confirm="Voulez vous vraiment suprimmer ceci?"
+        hx-confirm="Voulez vous vraiment supprimer ceci?"
         class="px-4 py-2 flex items-center hover:text-black hover:bg-red-200 rounded-full w-full text-center cursor-pointer"
       >
         <i class="text-sm fa-solid fa-trash mr-2"></i>
@@ -68,5 +68,4 @@
       <!--  -->
     </div>
   </div>
-
 </div>

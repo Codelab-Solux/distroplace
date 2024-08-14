@@ -11,7 +11,7 @@
       Tableau de board
       <i class="fa-solid fa-chart-pie ml-2"></i>
     </h3>
-    <a
+    <!-- <a
       href="{% url 'dash_deliveries' %}"
       class="bg-yellow-100 rounded-full py-2 px-4 text-xs flex items-center gap-4 group"
       >Rapports
@@ -19,81 +19,186 @@
         class="bg-yellow-300 rounded-full py-2 px-3 group-hover:bg-teal-900 group-hover:text-white"
         >&rarr;</span
       ></a
-    >
+    > -->
   </div>
 
-  <section
-    class="w-full p-4 bg-gray-300 shadow-sm text-xs rounded-3xl grid md:grid-cols-3 gap-4"
-  >
-    <div class="p-4 grid gap-2 bg-white rounded-2xl text-gray-700 text-sm">
-      <p class="bg-green-200 rounded-full px-4 py-2 flex items-center">
-        <i class="fa-solid fa-arrow-down text-teal-700 text-xl mr-3"></i>
-        Produits entrés :
-        <span class="text-lg font-bold ml-2 text-black"
-          >{{products|length}}</span
-        >
-      </p>
-      <p class="bg-red-200 rounded-full px-4 py-2 flex items-center">
-        <i class="fa-solid fa-arrow-up text-red-700 text-xl mr-3"></i>
-        Produits sorties :
-        <span class="text-lg font-bold ml-2 text-black">{{sold_products}}</span>
-      </p>
-      <p class="bg-gray-100 rounded-full px-4 py-2 flex items-center">
-        <i class="fa-solid fa-warehouse text-teal-700 text-xl mr-3"></i>
-        Produits en stock :
-        <span class="text-lg font-bold ml-2 text-black"
-          >{{products|length}}</span
-        >
-      </p>
+  <section class="flex flex-col md:grid grid-cols-2 gap-4 lg:grid-cols-3">
+    <div class="grid gap-3">
+      <a
+        hx-boost="false"
+        href="{% url 'home' %}"
+        class="p-6 w-full bg-teal-100 hover:bg-teal-200 flex items-center gap-2 rounded-xl border hover:shadow-lg hover:border-teal-500 transition ease-in duration-300"
+      >
+        <i class="fa-solid fa-home text-teal-700 text-3xl"></i>
+        <h3 class="font-bold text-black text-md">Page d'accueil</h3>
+      </a>
+      <a
+        href="{% url 'dashboard' %}"
+        class="p-6 w-full bg-teal-100 hover:bg-teal-200 flex items-center gap-2 rounded-xl border hover:shadow-lg hover:border-teal-500 transition ease-in duration-300"
+      >
+        <i class="fa-solid fa-chart-pie text-teal-700 text-3xl"></i>
+        <h3 class="font-bold text-black text-md">Tableau de bord</h3>
+      </a>
     </div>
-    <!--  -->
-    <div class="p-4 grid gap-2 bg-white rounded-2xl text-gray-700 text-sm">
-      <p class="bg-gray-100 rounded-full px-4 py-2 flex items-center">
+
+    <a
+      href="{% url 'dash_products' %}"
+      class="p-6 w-full bg-white text-sm flex flex-col gap-2 rounded-xl border hover:shadow-lg hover:border-teal-500 transition ease-in duration-300"
+    >
+      <div class="mb-2 flex items-center gap-2 w-full">
+        <i class="fa-solid fa-boxes-stacked text-teal-500 text-2xl"></i>
+        <h3 class="font-bold text-black text-md">Produits</h3>
+      </div>
+      <p
+        class="bg-gray-100 group-hover:bg-teal-100 rounded-xl px-4 py-2 flex items-center"
+      >
+        <i class="fa-solid fa-arrow-down text-teal-700 text-xl mr-3"></i>
+        Entrés :
+        <span class="text-lg font-bold ml-2 text-black">{{prod_input}}</span>
+      </p>
+      <p
+        class="bg-gray-100 group-hover:bg-teal-100 rounded-xl px-4 py-2 flex items-center"
+      >
+        <i class="fa-solid fa-arrow-up text-teal-700 text-xl mr-3"></i>
+        Sorties :
+        <span class="text-lg font-bold ml-2 text-black">{{prod_output}}</span>
+      </p>
+      <p
+        class="bg-gray-100 group-hover:bg-teal-100 rounded-xl px-4 py-2 flex items-center"
+      >
+        <i class="fa-solid fa-boxes-stacked text-teal-700 text-xl mr-3"></i>
+        En stock :
+        <span class="text-lg font-bold ml-2 text-black"
+          >{{products|length}}</span
+        >
+      </p>
+    </a>
+
+    <a
+      href="{% url 'dash_parameters' %}"
+      class="p-6 w-full bg-white text-sm flex flex-col gap-2 rounded-xl border hover:shadow-lg hover:border-teal-500 transition ease-in duration-300"
+    >
+      <div class="mb-2 flex items-center gap-2 w-full">
+        <i class="fa-solid fa-gears text-teal-500 text-2xl"></i>
+        <h3 class="font-bold text-black text-md">Parametres</h3>
+      </div>
+      <p
+        class="bg-gray-100 group-hover:bg-teal-100 rounded-xl px-4 py-2 flex items-center"
+      >
         <i class="fa-solid fa-shapes text-teal-700 text-xl mr-3"></i>
         Categories :
         <span class="text-lg font-bold ml-2 text-black"
           >{{categories|length}}</span
         >
       </p>
-      <p class="bg-gray-100 rounded-full px-4 py-2 flex items-center">
+      <p
+        class="bg-gray-100 group-hover:bg-teal-100 rounded-xl px-4 py-2 flex items-center"
+      >
         <i class="fa-solid fa-layer-group text-teal-700 text-xl mr-3"></i>
         Sous-categories :
         <span class="text-lg font-bold ml-2 text-black"
           >{{subcategories|length}}</span
         >
       </p>
-      <p class="bg-gray-100 rounded-full px-4 py-2 flex items-center">
+      <p
+        class="bg-gray-100 group-hover:bg-teal-100 rounded-xl px-4 py-2 flex items-center"
+      >
         <i class="fa-solid fa-tags text-teal-700 text-xl mr-3"></i>
         Promotions :
         <span class="text-lg font-bold ml-2 text-black"
-          >{{promotions|length}}</span
+          >{{delivery_types|length}}</span
         >
       </p>
-    </div>
-    <!--  -->
-    <div class="p-4 grid gap-2 bg-white rounded-2xl text-gray-700 text-sm">
-      <p class="bg-gray-100 rounded-full px-4 py-2 flex items-center">
-        <i class="fa-solid fa-dolly text-teal-700 text-xl mr-3"></i>
-        Commandes :
+    </a>
+
+    <div class="grid gap-3">
+      <a
+        href="{% url 'clients' %}"
+        class="p-6 w-full bg-teal-100 hover:bg-teal-200 flex items-center gap-2 rounded-xl border hover:shadow-lg hover:border-teal-500 transition ease-in duration-300"
+      >
+        <i class="fa-solid fa-boxes-packing text-teal-700 text-3xl"></i>
+        <h3 class="font-bold text-black text-md">Clients</h3>
+        :
         <span class="text-lg font-bold ml-2 text-black"
-          >{{subcategories|length}}</span
+          >{{clients|length}}</span
         >
+      </a>
+      <a
+        href="{% url 'suppliers' %}"
+        class="p-6 w-full bg-teal-100 hover:bg-teal-200 flex items-center gap-2 rounded-xl border hover:shadow-lg hover:border-teal-500 transition ease-in duration-300"
+      >
+        <i class="fa-solid fa-boxes-packing text-teal-700 text-3xl"></i>
+        <h3 class="font-bold text-black text-md">Fournisseurs</h3>
+        :
+        <span class="text-lg font-bold ml-2 text-black"
+          >{{suppliers|length}}</span
+        >
+      </a>
+    </div>
+
+    <a
+      href="{% url 'dash_orders' %}"
+      class="p-6 w-full bg-white text-sm flex flex-col gap-2 rounded-xl border hover:shadow-lg hover:border-teal-500 transition ease-in duration-300"
+    >
+      <div class="mb-2 flex items-center gap-2 w-full">
+        <i class="fa-solid fa-dolly text-teal-500 text-2xl"></i>
+        <h3 class="font-bold text-black text-md">Commandes</h3>
+      </div>
+      <p
+        class="bg-gray-100 group-hover:bg-teal-100 rounded-xl px-4 py-2 flex items-center"
+      >
+        <i class="fa-solid fa-spinner text-teal-700 text-xl mr-3"></i>
+        En attente :
+        <span class="text-lg font-bold ml-2 text-black">{{pending_ord}}</span>
       </p>
-      <p class="bg-gray-100 rounded-full px-4 py-2 flex items-center">
+      <p
+        class="bg-gray-100 group-hover:bg-teal-100 rounded-xl px-4 py-2 flex items-center"
+      >
+        <i class="fa-solid fa-check text-teal-700 text-xl mr-3"></i>
+        Traité :
+        <span class="text-lg font-bold ml-2 text-black">{{processed_ord}}</span>
+      </p>
+      <p
+        class="bg-gray-100 group-hover:bg-teal-100 rounded-xl px-4 py-2 flex items-center"
+      >
         <i class="fa-solid fa-truck text-teal-700 text-xl mr-3"></i>
-        Livraisons :
+        Livré :
+        <span class="text-lg font-bold ml-2 text-black">{{delivered_ord}}</span>
+      </p>
+    </a>
+
+    <a
+      href="{% url 'dash_deliveries' %}"
+      class="p-6 w-full bg-white text-sm flex flex-col gap-2 rounded-xl border hover:shadow-lg hover:border-teal-500 transition ease-in duration-300"
+    >
+      <div class="mb-2 flex items-center gap-2 w-full">
+        <i class="fa-solid fa-truck text-teal-500 text-2xl"></i>
+        <h3 class="font-bold text-black text-md">Livraisons</h3>
+      </div>
+      <p
+        class="bg-gray-100 group-hover:bg-teal-100 rounded-xl px-4 py-2 flex items-center"
+      >
+        <i class="fa-solid fa-spinner text-teal-700 text-xl mr-3"></i>
+        En attente :
+        <span class="text-lg font-bold ml-2 text-black">{{pending_dlv}}</span>
+      </p>
+      <p
+        class="bg-gray-100 group-hover:bg-teal-100 rounded-xl px-4 py-2 flex items-center"
+      >
+        <i class="fa-solid fa-route text-teal-700 text-xl mr-3"></i>
+        En route :
         <span class="text-lg font-bold ml-2 text-black"
-          >{{categories|length}}</span
+          >{{dispatched_dlv}}</span
         >
       </p>
-      <p class="bg-gray-100 rounded-full px-4 py-2 flex items-center">
-        <i class="fa-solid fa-right-left text-teal-700 text-xl mr-3"></i>
-        Retours :
-        <span class="text-lg font-bold ml-2 text-black"
-          >{{promotions|length}}</span
-        >
+      <p
+        class="bg-gray-100 group-hover:bg-teal-100 rounded-xl px-4 py-2 flex items-center"
+      >
+        <i class="fa-solid fa-check text-teal-700 text-xl mr-3"></i>
+        Completé :
+        <span class="text-lg font-bold ml-2 text-black">{{completed_dlv}}</span>
       </p>
-    </div>
+    </a>
   </section>
 </div>
 

@@ -1,89 +1,88 @@
 {% extends 'main_plain.html' %} {% block content %}
-<section
-  class="bg-white p-4 lg:p-6 w-full max-w-5xl rounded-3xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8"
+<!--  -->
+{% load socialaccount %}
+
+<div
+  class="bg-teal-100 h-screen w-full flex flex-col justify-center items-center"
 >
-  <i
-    class="fa-solid fa-arrow-right-to-bracket text-teal-700 text-9xl mx-auto"
-  ></i>
-
-  <div
-    class="bg-gray-100 rounded-2xl p-6 flex-col h-fit w-full max-w-md shadow-md"
+  <section
+    class="bg-white p-4 lg:p-6 w-full max-w-5xl rounded-3xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8"
   >
-    <h1 class="mb-4 text-black text-3xl font-bold">Connexion</h1>
-        <div class="flex gap-4">
-      <a
-        href="{% url 'google_login' %}"
-        class="px-4 py-1 w-full flex justify-center items-center rounded-full text-sm text-gray-700 bg-gray-50 hover:shadow-md transition duration-300 ease-in group"
-      >
-        <i
-          class="fa-brands fa-google text-xl group-hover:text-red-500 transition duration-300 ease-in"
-        ></i>
-        <span class="ml-2">Google </span>
-      </a>
-      <a
-        href="{% url 'google_login' %}"
-        class="px-4 py-1 w-full flex justify-center items-center rounded-full text-sm text-gray-700 bg-gray-50 hover:shadow-md transition duration-300 ease-in group"
-      >
-        <i
-          class="fa-brands fa-facebook text-xl group-hover:text-blue-500 transition duration-300 ease-in"
-        ></i>
-        <span class="ml-2"> Facebook </span>
-      </a>
+    <i
+      class="fa-solid fa-arrow-right-to-bracket text-teal-700 text-9xl mx-auto"
+    ></i>
+    <div
+      class="bg-gray-100 border rounded-2xl p-6 flex-col h-fit w-full max-w-md shadow-md"
+    >
+      <h1 class="mb-4 text-black text-3xl font-bold">Connexion</h1>
+      <div class="flex gap-4">
+        <a
+          href="{% provider_login_url 'google' %}" 
+          class="px-4 py-1 w-full flex justify-center items-center rounded-full text-sm text-gray-700 bg-white hover:shadow-md transition duration-300 ease-in group"
+        >
+          <i
+            class="fa-brands fa-google text-xl group-hover:text-red-500 transition duration-300 ease-in"
+          ></i>
+          <span class="ml-2">Google</span>
+        </a>
+        <!-- <a
+          href="{% url 'google_login' %}"
+          class="px-4 py-1 w-full flex justify-center items-center rounded-full text-sm text-gray-700 bg-white hover:shadow-md transition duration-300 ease-in group"
+        >
+          <i
+            class="fa-brands fa-facebook text-xl group-hover:text-blue-500 transition duration-300 ease-in"
+          ></i>
+          <span class="ml-2">Facebook</span>
+        </a> -->
+      </div>
+      <div class="flex items-center my-2">
+        <div class="flex-grow h-px bg-gray-400"></div>
+        <span class="flex-shrink text-md text-black px-4 font-light">ou</span>
+        <div class="flex-grow h-px bg-gray-400"></div>
+      </div>
+
+      <form method="POST" class="w-full text-sm">
+        {% csrf_token %}
+        <div class="flex flex-col mb-2">
+          <label for="email_or_phone">Email ou Téléphone</label>
+          <input
+            type="text"
+            name="email_or_phone"
+            class="px-4 py-2 rounded-full border border-gray-200 focus:border-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"
+            placeholder="Email or Phone"
+            required
+          />
+        </div>
+        <div class="flex flex-col mb-4">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            class="px-4 py-2 rounded-full border border-gray-200 focus:border-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"
+            placeholder="Password"
+            required
+          />
+        </div>
+        <div class="mt-2 flex justify-between items-center gap-2">
+          <input
+            type="submit"
+            value="Login"
+            class="px-8 py-2 bg-teal-700 hover:bg-teal-900 text-sm text-white rounded-full cursor-pointer"
+          />
+          <p class="text-xs">
+            Vous n'avez pas de compte?
+            <a href="{% url 'signup' %}" class="text-teal-500 hover:underline"
+              >Sign up</a
+            >
+          </p>
+        </div>
+      </form>
     </div>
-    <div class="flex items-center my-2">
-      <!-- The left line -->
-      <div class="flex-grow h-px bg-gray-400"></div>
+  </section>
+</div>
 
-      <!-- Your text here -->
-      <span class="flex-shrink text-md text-black px-4 font-light">ou</span>
+<!-- Firebase App (the core Firebase SDK) -->
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
 
-      <!-- The right line -->
-      <div class="flex-grow h-px bg-gray-400"></div>
-    </div>
-    <form method="POST" class="w-full text-sm">
-      {% csrf_token %}
-      <div class="flex flex-col mb-2">
-        <label for="username">Email</label>
-        <input
-          type="email"
-          name="username"
-          class="px-4 py-2 rounded-full border border-gray-200 focus:border-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"
-          placeholder="Email"
-          required
-        />
-      </div>
-      <div class="flex flex-col mb-4">
-        <label for="password">Mots de passe</label>
-        <input
-          type="password"
-          name="password"
-          class="px-4 py-2 rounded-full border border-gray-200 focus:border-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"
-          placeholder="Mots de passe"
-          required
-        />
-      </div>
-      <!-- redirects to intended page -->
-      {% if request.GET.next %}
-      <input type="hidden" name="next" value="{{request.GET.next}}" />
-      {% endif %}
-      <div class="flex justify-between items-center gap-2">
-        <input
-          type="submit"
-          value="Se connecter"
-          class="mt-2 px-8 py-2 bg-teal-700 hover:bg-teal-900 text-sm text-white rounded-full cursor-pointer"
-        />
-        <p class="mt-2">
-          Vous n'avez pas de compte?
-          <a href="{% url 'signup' %}" class="text-yellow-500 hover:underline"
-            >Cliquez ici</a
-          >
-        </p>
-      </div>
-    </form>
-
-    <!-- <a href="{% url 'signup' %}" class="text-red-600 hover:underline"
-      >Mots de pass oublié?</a
-    > -->
-  </div>
-</section>
 {% endblock %}

@@ -4,11 +4,86 @@
   <span>Aucune livraison trouvéeeee</span>
 </div>
 {% else %}
-<div class="flex flex-col gap-2">
-  {% for obj in deliveries %}
-  <!--  -->
-  {% include 'dashboard/components/delivery_card.html' %}
-  <!--  -->
-  {% endfor %}
-</div>
+<table class="w-full text-left db-table">
+  <thead class="bg-teal-900 border border-teal-900 bg-teal-900 text-white">
+    <tr>
+      <th class="px-3 py-4 text-sm">Ref.</th>
+      <th class="px-3 py-4 text-sm">Date</th>
+      <th class="px-3 py-4 text-sm">Client</th>
+      <th class="px-3 py-4 text-sm">Téléphone</th>
+      <th class="px-3 py-4 text-sm">Articles</th>
+      <th class="px-3 py-4 text-sm">Total</th>
+      <th class="px-3 py-4 text-sm">Status</th>
+      <th class="px-3 py-4 text-sm">Action</th>
+    </tr>
+  </thead>
+
+  <tbody class="border">
+    {% for obj in deliveries %}
+    <tr
+      class="text-gray-600 border text-sm hover:bg-white hover:text-black transition-all duration-300"
+    >
+      <td class="px-3 py-1">Lvs N°-{{obj.id}}</td>
+      <td class="px-3 py-1">{{obj.d_day}}</td>
+      <td class="px-3 py-1">{{obj.client.get_full_name}}</td>
+      <td class="px-3 py-1">{{obj.phone}}</td>
+      <td class="px-3 py-1">{{obj.items}}</td>
+      <td class="px-3 py-1">{{obj.amount_due}} CFA</td>
+      <td class="px-3 py-1">
+        {% include 'store/components/delivery_status.html' %}
+      </td>
+      <td class="px-3 py-1">
+        <div class="w-fit mx-auto text-end relative text-gray-700">
+          <button
+            type="button"
+            class="hover:text-black bg-white hover:text-teal-700 px-3 py-1 rounded-full"
+            name="sentry"
+            id="sentry"
+            aria-expanded="false"
+            aria-haspopup="true"
+            onclick="toggleMenu(this,'lvr_{{obj.id}}')"
+          >
+            <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
+          </button>
+
+          <div
+            class="hidden bg-gray-50 w-40 shadow-md lg:w-[180px] p-2 absolute right-0 top-12 origin-top-left bg-white z-10 rounded-xl flex flex-col items-center gap-2 text-xs lg:text-sm overflow-hidden"
+            role="status menu"
+            aria-orientation="vertical"
+            aria-labelledby="status-menu-button"
+            tabindex="-1"
+            id="lvr_{{obj.id}}"
+          >
+            <a
+              hx-boost="false"
+              href="{% url 'dash_delivery' obj.id %}"
+              class="px-4 py-2 flex items-center hover:text-black hover:bg-gray-200 rounded-full w-full text-center cursor-pointer"
+              ><i class="text-sm fa-solid fa-eye mr-2"></i>
+              Voir
+            </a>
+            <!--  -->
+            {% if obj.status == 'pending' %}
+            <a
+              hx-post="{% url 'manage_delivery' obj.id 'dispatch'  %}"
+              class="px-4 py-2 flex items-center hover:text-black hover:bg-yellow-200 rounded-full w-full text-center cursor-pointer"
+            >
+              <i class="text-sm fa-solid fa-truck-fast mr-2"></i>
+              Expédier
+            </a>
+            {% elif obj.status == 'dispatched' %}
+            <a
+              hx-post="{% url 'manage_delivery' obj.id 'finish'  %}"
+              class="px-4 py-2 flex items-center hover:text-black hover:bg-green-200 rounded-full w-full text-center cursor-pointer"
+            >
+              <i class="text-sm fa-solid fa-check mr-2"></i>
+              Terminer
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endif %}

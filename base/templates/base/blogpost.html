@@ -23,17 +23,41 @@
   <section class="grid lg:flex lg:flex-row items-start gapy-4">
     <!--------------------- current blogpost -------------------------->
 
-    <div
-      class="relative bg-white border rounded-xl flex flex-col w-full overflow-hidden"
-    >
+    <div class="mb-8 relative bg-white border rounded-xl flex flex-col w-full">
       {% if user.is_staff %}
-      <button
-        hx-target="#content_dialog"
-        class="absolute top-4 right-4 px-3 py-2 bg-white z-10 rounded-full transition duration-300 ease-in-out"
-        hx-get="{% url 'blogpost' curr_obj.id %}"
-      >
-        <i class="fa-solid fa-pen-to-square text-black text-sm"></i>
-      </button>
+      <div class="absolute right-4 top-4 text-xs w-fit text-gray-700">
+        <button
+          type="button"
+          class="bg-white hover:text-teal-600 px-3 py-1 rounded-full transition ease-in duration-200"
+          name="sentry"
+          onclick="toggleMenu(this,'blg_{{curr_obj.id}}')"
+        >
+          <i class="fa-sharp fa-solid fa-ellipsis"></i>
+        </button>
+
+        <div
+          class="hidden z-30 bg-gray-50 w-40 shadow-md lg:w-[180px] p-2 absolute right-4 top-8 origin-top-left bg-white z-10 rounded-lg flex flex-col items-center gap-2 text-xs overflow-hidden"
+          id="blg_{{curr_obj.id}}"
+        >
+          <a
+            onclick="hide_dialogs()"
+            hx-target="#basic_dialog"
+            hx-get="{% url 'edit_blogpost' curr_obj.id %}"
+            class="px-4 py-2 flex items-center hover:text-black hover:bg-green-200 rounded-full w-full text-center cursor-pointer"
+            ><i class="fa-solid fa-pen-to-square mr-2"></i>
+            Modifier
+          </a>
+
+          <button
+            hx-confirm="Voulez vous vraiment supprimer ceci?"
+            hx-delete="{% url 'delete_base_object' curr_obj.id 'Blogpost' %}"
+            class="px-4 py-2 flex items-center hover:text-black hover:bg-red-200 rounded-full w-full text-center cursor-pointer"
+          >
+            <i class="fa-solid fa-trash mr-2"></i>
+            Supprimer
+          </button>
+        </div>
+      </div>
       {% endif %}
       <!--  -->
       {% if not curr_obj.image %}
@@ -51,97 +75,30 @@
       {% endif %}
 
       <div class="p-4 lg:p-6 flex flex-col gap-4">
-        <!--  -->
-        <div class="flex justify-between items-center text-xs text-gray-500">
-          <span class="likes_count">{{ curr_obj.likes.all.count }} likes</span>
-          <a
-            class="px-3 py-1 bg-gray-100 hover:bg-teal-100 hover:text-black rounded-full flex items-center gap-1 cursor-pointer"
-          >
-            <i
-              id="likeIcon"
-              class="fa-solid fa-thumbs-up {% if user in obj.likes.all %} text-teal-700 {% endif %}"
-            ></i>
-            <span>Liker</span>
-          </a>
-
-          <button
-            onclick="toggleCommentBox()"
-            class="px-2 py-1 bg-gray-100 hover:bg-yellow-200 hover:text-black rounded-full flex items-center gap-1 cursor-pointer"
-          >
-            <i class="fa-solid fa-comments"></i>
-            <span> Commenter </span>
-          </button>
-          <span>{{obj_comments.all|length}} commentaires</span>
-        </div>
-
-        <hr />
-
-        <section class="comment_box my-2 hidden flex flex-col gap-2">
-          <form
-            hx-post="{% url 'blogpost' curr_obj.id %}"
-            class="flex flex-col w-full gap-2"
-          >
-            {% csrf_token %}
-            <textarea
-              required
-              name="comment"
-              id="comment"
-              cols="30"
-              rows="2"
-              class="mb-2 px-4 py-2 rounded-lg border focus:border-none focus:outline-none focus:ring-1 focus:ring-yellow-300 w-full"
-            ></textarea>
-            <div class="flex flex-row-reverse gap-2 items-end text-xs">
-              <button
-                class="px-4 py-2 text-white bg-teal-700 hover:bg-teal-900 rounded-full cursor-pointer"
-                type="submit"
-              >
-                Poster
-              </button>
-              <button
-                class="bg-gray-100 px-4 py-2 rounded-full hover:bg-red-700 hover:text-white"
-                onclick="document.getElementById('comment').value = '',toggleCommentBox('') "
-              >
-                Annuler
-              </button>
-            </div>
-          </form>
-          <!-- comments -->
-          <div>
-            {% for obj in comments %}
-            <!--  -->
-            <div class="flex flex-col text-xs border-dashed border-t-2 py-1">
-              <div class="flex gap-1 items-center">
-                {% if not commentator.image %}
-                <img
-                  class="h-7 w-7 bg-white rounded-full object-cover"
-                  src="{% static 'imgs/anon.png' %}"
-                  alt="image"
-                />
-                {% else %}
-                <img
-                  class="h-7 w-7 bg-white rounded-full object-cover"
-                  src="{{commentator.image.url}}"
-                  alt="image"
-                />
-                {% endif %}
-                <span class="font-bold text-black">@{{obj.user.username}}</span>
-              </div>
-              <p class="ml-8">{{obj.comment}}</p>
-            </div>
-            <!--  -->
-            {% endfor %}
-          </div>
-        </section>
-
-        <article class="flex flex-col gap-1 pt-2">
+        <article class="flex flex-col gap-2 pt-2">
           <h4 class="text-black text-3xl font-bold">{{curr_obj.title}}</h4>
-          <p class="py-2 text-lg">{{curr_obj.subtitle}}</p>
+          <p class="text-lg">{{curr_obj.subtitle}}</p>
+          <small class="text-xs italic">{{curr_obj.timestamp}}</small>
           <p
-            class="text-sm text-gray-700 overflow-wrap:break-word word-break:break-all"
+            class="text-md text-gray-800 overflow-wrap:break-word word-break:break-all"
           >
             {{curr_obj.content|safe}}
           </p>
         </article>
+
+        <hr />
+        <div
+          class="grid gap-2"
+          hx-get="{% url 'blogpost_info' curr_obj.id %}"
+          hx-trigger="load, db_changed from:body"
+          hx-target="this"
+        >
+          <p
+            class="h-full w-full flex justify-center items-center text-teal-500 p-4"
+          >
+            <i class="m-auto fas fa-spinner fa-spin text-3xl animate-spin"></i>
+          </p>
+        </div>
       </div>
     </div>
 
@@ -157,18 +114,5 @@
     </div>
   </section>
 </div>
-
-<script>
-  function toggleCommentBox() {
-    var box = document.querySelector(`.comment_box`);
-    if (box.classList.contains("hidden")) {
-      box.classList.remove("hidden");
-      box.classList.add("block");
-    } else {
-      box.classList.remove("block");
-      box.classList.add("hidden");
-    }
-  }
-</script>
 
 {% endblock %}

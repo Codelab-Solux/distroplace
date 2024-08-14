@@ -25,8 +25,7 @@
       src="https://kit.fontawesome.com/f601cf3e61.js"
       crossorigin="anonymous"
     ></script>
-    <script src="{% static 'cart.js' %}" defer="true"></script>
-    <script src="{% static 'main.js' %}" defer="true"></script>
+    <script src="{% static 'firebase.js' %}" defer="true"></script>
     <link href="{% static 'styles.css' %}" rel="stylesheet" />
     <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap"> -->
     <link
@@ -51,7 +50,7 @@
   <body
     hx-boost="true"
     hx-headers='{"X-CSRFToken" : "{{ csrf_token }}"}'
-    class="flex flex-col bg-gray-100"
+    class="flex flex-col"
   >
     {% csrf_token %}
     <!--  -->

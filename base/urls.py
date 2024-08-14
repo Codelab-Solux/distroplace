@@ -12,12 +12,11 @@ urlpatterns = [
     path('blogposts/', blog, name='blog'),
     path('blogposts/add/', add_blogpost, name='add_blogpost'),
     path('blogposts/<hashid:pk>/', blogpost, name='blogpost'),
-    # path('blogposts/list/', blogposts_list, name='blogposts_list'),
-    # path('blogposts/grid/', blogposts_grid, name='blogposts_grid'),
-    # path('blogposts/filter/', filter_blogposts, name='filter_blogposts'),
-    # path('blogposts/<hashid:pk>/like', like_blogpost, name='like_blogpost'),
-    # path('blogposts/<hashid:pk>/dislike', dislike_blogpost, name='dislike_blogpost'),
-    # path('blogposts/<hashid:pk>/comment', comment_blogpost, name='comment_blogpost'),
+    path('blogposts/<hashid:pk>/info/', blogpost_info, name='blogpost_info'),
+    path('blogposts/<hashid:pk>/edit/', edit_blogpost, name='edit_blogpost'),
+    path('blogposts/<hashid:pk>/like/', like_blogpost, name='like_blogpost'),
+    path('blogposts/<hashid:pk>/create/comment/', create_blog_comment, name='create_blog_comment'),
+    path('blogposts/<hashid:pk>/edit/comment/', edit_blog_comment, name='edit_blog_comment'),
     # ----------------------- newsletter ------------------------------
     path('mailing_list/', mailing_list, name='mailing_list'),                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
     # ----------------------- extras ------------------------------
@@ -28,4 +27,7 @@ urlpatterns = [
     path('feedbacks/', feedbacks, name='feedbacks'),
     path('about/', about, name='about'),
     path('contact/', contact, name='contact'),
+    # --------------------------
+    path('base/objects/<hashid:pk>/<str:model_name>/delete/',
+         delete_base_object, name='delete_base_object'),
 ]

@@ -95,19 +95,19 @@
   {% include 'paginator.html' %}
   <!--  -->
   {% endif %}
+</div>
 
   <script>
-    function clearForm() {
-      document.getElementById("filter").reset();
-    }
-
-    document
-      .getElementById("back-button")
-      .addEventListener("click", function (event) {
-        event.preventDefault(); // Prevent the default anchor behavior
-        window.history.go(-1); // Go back two pages
-      });
+  function clearForm(div_id) {
+    var form = document.getElementById(div_id);
+    form.reset();
+  }
+  document
+    .getElementById("back-button")
+    .addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent the default anchor behavior
+      window.history.go(-1); // Go back two pages
+    });
   </script>
 
   {% endblock %}
-</div>

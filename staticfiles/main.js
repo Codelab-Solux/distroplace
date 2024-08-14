@@ -1,20 +1,37 @@
-document.getElementById("back-button").addEventListener("click", function (event) {
-    console.log('going back')
-    event.preventDefault();
-    window.history.go(-1);
+//  go back button ----------------------------------------------------------------------------------------------------
+document
+  .getElementById("back-button")
+  .addEventListener("click", function (event) {
+    event.preventDefault(); // Prevent the default anchor behavior
+    window.history.go(-1); // Go back two pages
   });
 
-//  form resetter ----------------------------------------------------------------------------------------------------
+// logout confirmation --------------------------------------------------------
+document
+  .getElementById("logout-link")
+  .addEventListener("click", function (event) {
+    event.preventDefault();
+    if (confirm("Voulez vous vraiment vous deconnecter?")) {
+      window.location.href = this.href;
+    }
+  });
+
+//  form handlers ----------------------------------------------------------------------------------------------------
 function clearForm(div_id) {
   var form = document.getElementById(div_id);
   form.reset();
 }
 
-//  previous page navigator ----------------------------------------------------------------------------------------------------
-backBtn = document.getElementById("back-button");
-backBtn.addEventListener("click", function (event) {
-  event.preventDefault(); // Prevent the default anchor behavior
-  window.history.go(-1); // Go back two pages
+//  selectfield dashes remover ------------
+$(document).ready(function () {
+  // Add a placeholder option to the select element
+  elements = document.getElementsByClassName("input_selector");
+  elements.forEach((e) => {
+    e.children().first().remove();
+    $(".input_selector").prepend(
+      '<option value="" disabled selected></option>'
+    );
+  });
 });
 
 //  tabs controller ----------------------------------------------------------------------------------------------------
@@ -31,9 +48,17 @@ function openTab(event, tabName) {
   }
   document.getElementById(tabName).style.display = "block";
   event.currentTarget.className += " active";
-  var minitabs = document.getElementsByClassName("minitabcontent");
-  if (minitabs.length != 0) {
-    minitabs = tabcontent.children;
+}
+
+//  commentbox controller ----------------------------------------------------------------------------------------------------
+function toggleCommentBox() {
+  var box = document.querySelector(`.comment_box`);
+  if (box.classList.contains("hidden")) {
+    box.classList.remove("hidden");
+    box.classList.add("block");
+  } else {
+    box.classList.remove("block");
+    box.classList.add("hidden");
   }
 }
 
@@ -66,40 +91,69 @@ function toggleAccordion(div_id) {
   }
 }
 
-//  dropdown controller ----------------------------------------------------------------------------------------------------
-function toggleMenu(e, obj_id) {
-  activeMenu = document.getElementById(obj_id);
-  e.name === `menu_list`
-    ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
-    : ((e.name = `menu_list`), activeMenu.classList.add("hidden"));
+// nav mechanism ----------------------------------------------------------------------------------------------------
+function toggleNav(e) {
+  e.name === "nav"
+    ? ((e.name = "close"), navlinks.classList.remove("hidden"))
+    : ((e.name = "nav"), navlinks.classList.add("hidden"));
 }
 
-//  pop up dismisser ----------------------------------------------------------------------------------------------------
+//  dropdown controllers ----------------------------------------------------------------------------------------------------
+function toggleDropdown(e) {
+  e.name === "dropdownBtn"
+    ? ((e.name = "close"), dropdownMenu.classList.remove("hidden"))
+    : ((e.name = "dropdownBtn"), dropdownMenu.classList.add("hidden"));
+}
+
+function toggleMenu(e, obj_id) {
+  activeMenu = document.getElementById(obj_id);
+  e.name === `sentry`
+    ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
+    : ((e.name = `sentry`), activeMenu.classList.add("hidden"));
+}
+
 window.addEventListener("mouseup", function (event) {
-  activeMenu.classList.add("hidden");
+  if (
+    !activeMenu.contains(event.target) &&
+    !document.getElementById("sentry").contains(event.target)
+  ) {
+    activeMenu.classList.add("hidden");
+    document.getElementById("sentry").name = "sentry";
+  }
+
+  if (
+    !dropdownMenu.contains(event.target) &&
+    !document.getElementById("dropdownBtn").contains(event.target)
+  ) {
+    dropdownMenu.classList.add("hidden");
+    document.getElementById("dropdownBtn").name = "dropdownBtn";
+  }
+
+  if (
+    !navlinks.contains(event.target) &&
+    !document.querySelector('[name="nav"]').contains(event.target)
+  ) {
+    navlinks.classList.add("hidden");
+    document.querySelector('[name="nav"]').name = "nav";
+  }
 });
 
-//  selectfield dashes remover ----------------------------------------------------------------------------------------------------
-$(document).ready(function () {
-  // Add a placeholder option to the select element
-  elements = document.getElementsByClassName("input_selector");
-  elements.forEach((e) => {
-    e.children().first().remove();
-    $(".input_selector").prepend(
-      '<option value="" disabled selected></option>'
-    );
-  });
-});
-
-// ----------------------------pdf generator and exporter-------------------------------
-
-function generatePDF(div_id) {
-  var doc = new jsPDF();
-  html2canvas(document.getElementById(div_id)).then((canvas) => {
-    const imgData = canvas.toDataURL("image/png");
-    doc.addImage(imgData, "PNG", 0, 0);
-    doc.save(`${div_id}.pdf`);
-  });
+// PDF exporter --------------------------------------------------------
+function exportPDF(div_id) {
+  var element = document.getElementById(div_id);
+  var opt = {
+    margin: 0.5,
+    filename: `${div_id}.pdf`,
+    image: { type: "jpeg", quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: {
+      unit: "in",
+      // format: [80 / 25.4, 297 / 25.4],
+      // orientation: "portrait",
+      orientation: "landscape",
+    },
+  };
+  html2pdf().from(element).set(opt).save();
 }
 
 // ----------------------------appointments exporter-------------------------------

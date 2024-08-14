@@ -97,17 +97,17 @@
         id="form"
         action="{% url 'checkout' %}"
         method="POST"
-        class="bg-teal-900 text-white text-sm p-4 rounded-xl flex flex-col gap-1"
+        class="bg-teal-900 text-sm p-4 rounded-xl flex flex-col gap-1"
       >
         {% csrf_token %}
-        <h2 class="my-1 font-bold text-gray-white text-lg">
+        <h2 class="my-1 font-bold text-teal-200 text-lg">
           Infos de livraison
         </h2>
 
         <div class="grid gap-1">
           {% for field in form %}
           <div>
-            <h3 class="mb-1">{{field.label}}</h3>
+            <h3 class="mb-1 text-white">{{field.label}}</h3>
             {{field}}
           </div>
           {% endfor %}

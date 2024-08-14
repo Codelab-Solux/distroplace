@@ -36,8 +36,6 @@ class Blogpost(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(
         CustomUser, related_name='blogpost_likes', blank=True,)
-    dislikes = models.ManyToManyField(
-        CustomUser, related_name='blogpost_dislikes', blank=True,)
 
     def __str__(self):
         return self.title
@@ -55,6 +53,7 @@ class BlogComment(models.Model):
     blogpost = models.ForeignKey(
         Blogpost, on_delete=models.SET_NULL, null=True)
     comment = models.TextField(default='')
+    timestamp = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.blogpost.title} - comment'

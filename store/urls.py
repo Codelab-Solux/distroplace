@@ -10,6 +10,10 @@ urlpatterns = [
     path('products/', products, name='products'),
     path('products/<hashid:pk>/', product_details, name='product_details'),
     path('products/<hashid:pk>/like/', like_product, name='like_product'),
+    path('products/<hashid:pk>/make_favorite/', make_favorite, name='make_favorite'),
+    path('products/<hashid:pk>/info/', product_info, name='product_info'),
+    path('products/<hashid:pk>/create/comment/', create_prod_comment, name='create_prod_comment'),
+    path('products/<hashid:pk>/edit/comment/', edit_prod_comment, name='edit_prod_comment'),
     # ----------------------- cart ------------------------------
     path('cart/', cart, name='cart'),
     path('cart/add_item/', add_to_cart, name='add_to_cart'),
@@ -31,4 +35,7 @@ urlpatterns = [
     path('deliveries/<hashid:pk>/', delivery_details, name='delivery_details'),
     path('deliveries/<hashid:pk>/postpone/',
          postpone_delivery, name='postpone_delivery'),
+    # --------------------------
+    path('store/objects/<hashid:pk>/<str:model_name>/delete/',
+         delete_store_object, name='delete_store_object'),
 ]

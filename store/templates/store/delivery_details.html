@@ -94,27 +94,5 @@
       event.preventDefault(); // Prevent the default anchor behavior
       window.history.go(-1); // Go back two pages
     });
-
-  function add_to_cart(obj_id) {
-    // Retrieve the CSRF token from the hidden input
-    const csrfToken = document.getElementById("csrf_token").value;
-
-    $.ajax({
-      type: "POST",
-      url: "{% url 'add_to_cart' %}",
-      data: {
-        product_id: obj_id,
-        csrfmiddlewaretoken: csrfToken,
-        action: "post",
-      },
-      success: function (json) {
-        console.log(json.cart_count); // Ensure the key matches the JSON response key
-        document.getElementById("cart_counter").textContent = json.cart_count;
-      },
-      error: function (xhr, errmsg, err) {
-        console.error(errmsg); // Log error message to console
-      },
-    });
-  }
 </script>
 {% endblock %}

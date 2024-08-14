@@ -1,0 +1,110 @@
+{% load static %}
+<div class="mb-2 flex justify-between items-center text-xs text-gray-500">
+  <span class="likes_count">{{ curr_obj.likes.all.count }} likes</span>
+  <a
+    hx-post="{% url 'like_blogpost' curr_obj.id %}"
+    class="px-3 py-1 bg-gray-100 {% if not is_liked %} bg-gray-100 {% else %} bg-yellow-200 text-black {% endif %} hover:bg-yellow-200 hover:text-black rounded-full flex items-center gap-1 cursor-pointer"
+  >
+    <i class="fa-solid fa-thumbs-up"></i>
+    <span>Liker</span>
+  </a>
+
+  <button
+    onclick="toggleCommentBox()"
+    class="px-2 py-1 bg-gray-100 hover:bg-teal-200 hover:text-black rounded-full flex items-center gap-1 cursor-pointer"
+  >
+    <i class="fa-solid fa-comments"></i>
+    <span> Commenter </span>
+  </button>
+  <span>{{comments|length}} commentaires</span>
+</div>
+
+<section class="comment_box my-2 hidden flex flex-col gap-2">
+  <form
+    hx-post="{% url 'create_blog_comment' curr_obj.id %}"
+    class="flex flex-col w-full gap-2"
+  >
+    {% csrf_token %}
+    <textarea
+      required
+      name="comment"
+      id="comment"
+      cols="30"
+      rows="2"
+      class="mb-2 px-4 py-2 rounded-lg border focus:border-none focus:outline-none focus:ring-1 focus:ring-teal-300 w-full"
+    ></textarea>
+    <div class="flex flex-row-reverse gap-2 items-end text-xs">
+      <button
+        class="px-4 py-2 text-white bg-teal-700 hover:bg-teal-900 rounded-full cursor-pointer"
+        type="submit"
+      >
+        Poster
+      </button>
+      <button
+        class="bg-gray-100 px-4 py-2 rounded-full hover:bg-red-700 hover:text-white"
+        onclick="document.getElementById('comment').value = '',toggleCommentBox('') "
+      >
+        Annuler
+      </button>
+    </div>
+  </form>
+</section>
+
+<section class="p-3 bg-teal-50 rounded-xl grid gap-2">
+  {% if not comments %}
+  <div class="p-3 flex flex-col justify-center items-center gap-2">
+    <i class="fa-sharp fa-solid fa-comments"></i>
+    <small>Aucun commentaire sur cet article</small>
+  </div>
+  {% else %} {% for obj in comments %}
+  <div
+    class="flex flex-col bg-white text-xs border-teal-400 border-b hover:bg-teal-100 rounded-lg py-2 px-4 transition ease-in duration-300"
+  >
+    <div class="flex gap-2 justify-between items-center">
+      <div class="flex items-center gap-1">
+        <img
+          class="h-7 w-7 bg-white rounded-full object-cover"
+          src="{{user.profile.image.url}}"
+          alt="image"
+        />
+        <span class="font-bold text-teal-700">@{{obj.user.username}}</span>
+      </div>
+
+      <div class="relative text-xs w-fit text-gray-700">
+        <button
+          type="button"
+          class="hover:bg-white hover:text-teal-600 px-3 py-1 rounded-full transition ease-in duration-200"
+          name="sentry"
+          onclick="toggleMenu(this,'cmt_{{obj.id}}')"
+        >
+          <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
+        </button>
+
+        <div
+          class="hidden z-30 bg-gray-50 w-40 shadow-md lg:w-[180px] p-2 absolute right-4 top-4 origin-top-left bg-white z-10 rounded-lg flex flex-col items-center gap-2 text-xs overflow-hidden"
+          id="cmt_{{obj.id}}"
+        >
+          <a
+            onclick="hide_dialogs()"
+            hx-target="#basic_dialog"
+            hx-get="{% url 'edit_blog_comment' obj.id %}"
+            class="px-4 py-2 flex items-center hover:text-black hover:bg-green-200 rounded-full w-full text-center cursor-pointer"
+            ><i class="fa-solid fa-pen-to-square mr-2"></i>
+            Modifier
+          </a>
+
+          <button
+            hx-confirm="Voulez vous vraiment supprimer ceci?"
+            hx-delete="{% url 'delete_base_object' obj.id 'BlogComment' %}"
+            class="px-4 py-2 flex items-center hover:text-black hover:bg-red-200 rounded-full w-full text-center cursor-pointer"
+          >
+            <i class="fa-solid fa-trash mr-2"></i>
+            Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+    <p class="italic">{{obj.comment}}</p>
+  </div>
+  {% endfor %} {% endif %}
+</section>

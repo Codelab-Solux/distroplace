@@ -1,14 +1,113 @@
-{% if not products %}
+{% load static %} {% if not products %}
 <div class="flex flex-col items-center gap-2 my-20 mx-auto">
   <i class="fa-solid fa-box-open text-teal-900 text-9xl"></i>
   <span>Aucun produit trouvé</span>
 </div>
 {% else %}
-<div class="flex flex-col gap-2">
-  {% for obj in products %}
-  <!--  -->
-  {% include 'dashboard/components/product_list_card.html' %}
-  <!--  -->
-  {% endfor %}
-</div>
+<table class="w-full text-left db-table">
+  <thead class="bg-teal-900 border border-teal-900 bg-teal-900 text-white">
+    <tr>
+      <th class="px-3 py-4 text-sm">Ref.</th>
+      <th class="px-3 py-4 text-sm">Image</th>
+      <th class="px-3 py-4 text-sm">Article</th>
+      <th class="px-3 py-4 text-sm">Marque</th>
+      <th class="px-3 py-4 text-sm">Prix</th>
+      <th class="px-3 py-4 text-sm">Quantité</th>
+      <th class="px-3 py-4 text-sm">Action</th>
+    </tr>
+  </thead>
+
+  <tbody class="border">
+    {% for obj in products %}
+    <tr
+      class="text-gray-600 border text-sm hover:bg-white hover:text-black transition-all duration-300"
+    >
+      <td class="px-3 py-1">Prd N°-{{obj.id}}</td>
+      <td class="px-3 py-1">
+        {% if not obj.thumbnail %}
+        <img
+          src="{% static 'imgs/logo-g.png' %}"
+          alt="image"
+          class="w-8 h-8 object-contain rounded-full"
+        />
+        {% else %}
+        <img
+          src="{{ obj.thumbnail.url }}"
+          alt="{{ obj.name }}"
+          class="w-8 h-8 object-contain rounded-full"
+        />
+        {% endif %}
+      </td>
+      <td class="px-3 py-1">{{obj.name}}</td>
+      <td class="px-3 py-1">{{obj.brand}}</td>
+      {% if not obj.is_promoted %}
+      <td class="px-3 py-1">{{obj.price}} CFA</td>
+      {% else %}
+      <td class="px-3 py-1 text-teal-500"><i class="fa-solid fa-tags mr-2"></i>{{obj.promo_price}} CFA</td>
+      {% endif %}
+      <td class="px-3 py-1">{{obj.quantity}}</td>
+
+      <td class="px-3 py-1">
+        <div class="w-fit mx-auto text-end relative text-gray-700">
+          <button
+            type="button"
+            class="hover:text-black bg-white hover:text-teal-700 px-3 py-1 rounded-full"
+            name="sentry"
+            id="sentry"
+            aria-expanded="false"
+            aria-haspopup="true"
+            onclick="toggleMenu(this,'prd_{{obj.id}}')"
+          >
+            <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
+          </button>
+
+          <div
+            class="hidden bg-gray-50 w-40 shadow-md lg:w-[180px] p-2 absolute right-0 top-12 origin-top-left bg-white z-10 rounded-xl flex flex-col items-center gap-2 text-xs lg:text-sm overflow-hidden"
+            role="status menu"
+            aria-orientation="vertical"
+            aria-labelledby="status-menu-button"
+            tabindex="-1"
+            id="prd_{{obj.id}}"
+          >
+            <a
+              hx-target="#basic_dialog"
+              hx-get="{% url 'product_overview' obj.id %}"
+              class="px-4 py-2 flex items-center hover:text-black hover:bg-gray-200 rounded-full w-full text-center cursor-pointer"
+              ><i class="fa-solid fa-window-restore text-sm mr-2"></i>
+              Aperçu
+            </a>
+
+            <a
+              hx-boost="false"
+              href="{% url 'dash_product' obj.id %}"
+              class="px-4 py-2 flex items-center hover:text-black hover:bg-teal-200 rounded-full w-full text-center cursor-pointer"
+              ><i class="text-sm fa-solid fa-expand mr-2"></i>
+              Détails
+            </a>
+            <a
+              hx-boost="false"
+              href="{% url 'edit_product' obj.id %}"
+              class="px-4 py-2 flex items-center hover:text-black hover:bg-yellow-200 rounded-full w-full text-center cursor-pointer"
+            >
+              <i class="text-sm fa-solid fa-pen-to-square mr-2"></i>
+              Modifier
+            </a>
+
+            <button
+              onclick="hide_dialogs()"
+              hx-target="#basic_dialog"
+              hx-delete="{% url 'delete_store_object' obj.id 'Product' %}"
+              hx-confirm="Voulez vous vraiment supprimer ceci?"
+              class="px-4 py-2 flex items-center hover:text-black hover:bg-red-200 rounded-full w-full text-center cursor-pointer"
+            >
+              <i class="text-sm fa-solid fa-trash mr-2"></i>
+              Supprimer
+            </button>
+          </div>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endif %}

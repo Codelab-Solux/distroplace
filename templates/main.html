@@ -71,52 +71,167 @@
     {% endif %}
 
     <!--  -->
-    <div id="base" class="min-h-screen lg:mt-20">
+    <div id="base" class="min-h-screen lg:mt-[6%]">
       {% block content %} {% endblock %}
     </div>
     <!--  -->
     {% include 'modal.html' %}
     <!--  -->
     {% include 'footer.html' %}
-    <script>
-      var current_date = new Date().getFullYear();
-      document.getElementById("date").innerHTML = current_date;
+    <!-- Hidden CSRF token input -->
+    <input type="hidden" id="csrf_token" value="{{ csrf_token }}" />
 
+    <script>
       htmx.onLoad(function (content) {
         scripts.init(content);
       });
+
+      var current_date = new Date().getFullYear();
+      document.getElementById("date").innerHTML = current_date;
+
+      // add to cart button ----------------------------------------------------------------------------------------------------
+      function add_to_cart(obj_id) {
+        // Retrieve the CSRF token from the hidden input
+        const csrfToken = document.getElementById("csrf_token").value;
+
+        $.ajax({
+          type: "POST",
+          url: "{% url 'add_to_cart' %}",
+          data: {
+            product_id: obj_id,
+            csrfmiddlewaretoken: csrfToken,
+            action: "post",
+          },
+          success: function (json) {
+            console.log(json.cart_count); // Ensure the key matches the JSON response key
+            document.getElementById("cart_counter").textContent =
+              json.cart_count;
+          },
+          error: function (xhr, errmsg, err) {
+            console.error(errmsg); // Log error message to console
+          },
+        });
+      }
+
+      // go back button ----------------------------------------------------------------------------------------------------
+      function initializeBackButton() {
+        const backButton = document.getElementById("back-button");
+        if (backButton) {
+          backButton.addEventListener("click", function (event) {
+            alert("go!!!");
+            event.preventDefault(); // Prevent the default anchor behavior
+            window.history.go(-1); // Go back two pages
+          });
+        }
+      }
+      // Initialize on page load
+      document.addEventListener("DOMContentLoaded", initializeBackButton);
+      // Initialize on HTMX content load
+      document.body.addEventListener("htmx:afterSettle", initializeBackButton);
+
+      //  tabs controller ----------------------------------------------------------------------------------------------------
+      document.getElementById("defaultTab").click();
+      function openTab(event, tabName) {
+        var i, tabcontent, tabBtn;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.display = "none";
+        }
+        tabBtn = document.getElementsByClassName("tabBtn");
+        for (i = 0; i < tabBtn.length; i++) {
+          tabBtn[i].className = tabBtn[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        event.currentTarget.className += " active";
+      }
+
+      //  commentbox controller ----------------------------------------------------------------------------------------------------
+      function toggleCommentBox() {
+        var box = document.querySelector(`.comment_box`);
+        if (box.classList.contains("hidden")) {
+          box.classList.remove("hidden");
+          box.classList.add("block");
+        } else {
+          box.classList.remove("block");
+          box.classList.add("hidden");
+        }
+      }
+
+      //  accordions controller ----------------------------------------------------------------------------------------------------
+      function toggleAccordion(div_id) {
+        var active_accordion = document.getElementById(div_id);
+        var active_caret = document.getElementById(`${div_id}_caret`);
+
+        if (active_accordion.classList.contains("hidden")) {
+          for (let element of document.getElementsByClassName("accordion")) {
+            element.classList.remove("block");
+            element.classList.add("hidden");
+          }
+          for (let element of document.getElementsByClassName(
+            "fa-caret-down"
+          )) {
+            element.classList.remove("rotate-180");
+          }
+          active_accordion.classList.remove("hidden");
+          active_accordion.classList.add("block");
+          active_caret.classList.add("rotate-180");
+        } else {
+          for (let element of document.getElementsByClassName("accordion")) {
+            element.classList.remove("block");
+            element.classList.add("hidden");
+          }
+          active_caret.classList.remove("rotate-180");
+          active_accordion.classList.remove("block");
+          active_accordion.classList.add("hidden");
+        }
+      }
+
+      // nav mechanism ----------------------------------------------------------------------------------------------------
+      function toggleNav(e) {
+        e.name === "nav"
+          ? ((e.name = "close"), navlinks.classList.remove("hidden"))
+          : ((e.name = "nav"), navlinks.classList.add("hidden"));
+      }
+
+      //  dropdown controllers ----------------------------------------------------------------------------------------------------
+      function toggleDropdown(e) {
+        e.name === "dropdownBtn"
+          ? ((e.name = "close"), dropdownMenu.classList.remove("hidden"))
+          : ((e.name = "dropdownBtn"), dropdownMenu.classList.add("hidden"));
+      }
+
+      function toggleMenu(e, obj_id) {
+        activeMenu = document.getElementById(obj_id);
+        e.name === `sentry`
+          ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
+          : ((e.name = `sentry`), activeMenu.classList.add("hidden"));
+      }
+
+      window.addEventListener("mouseup", function (event) {
+        if (
+          !activeMenu.contains(event.target) &&
+          !document.getElementById("sentry").contains(event.target)
+        ) {
+          activeMenu.classList.add("hidden");
+          document.getElementById("sentry").name = "sentry";
+        }
+
+        if (
+          !dropdownMenu.contains(event.target) &&
+          !document.getElementById("dropdownBtn").contains(event.target)
+        ) {
+          dropdownMenu.classList.add("hidden");
+          document.getElementById("dropdownBtn").name = "dropdownBtn";
+        }
+
+        if (
+          !navlinks.contains(event.target) &&
+          !document.querySelector('[name="nav"]').contains(event.target)
+        ) {
+          navlinks.classList.add("hidden");
+          document.querySelector('[name="nav"]').name = "nav";
+        }
+      });
     </script>
-    <!-- Hidden CSRF token input -->
-<input type="hidden" id="csrf_token" value="{{ csrf_token }}" />
-
-<script>
-  function add_to_cart(obj_id) {
-    // Retrieve the CSRF token from the hidden input
-    const csrfToken = document.getElementById("csrf_token").value;
-
-    $.ajax({
-      type: "POST",
-      url: "{% url 'add_to_cart' %}",
-      data: {
-        product_id: obj_id,
-        csrfmiddlewaretoken: csrfToken,
-        action: "post",
-      },
-      success: function (json) {
-        console.log(json.cart_count); // Ensure the key matches the JSON response key
-        document.getElementById("cart_counter").textContent = json.cart_count;
-      },
-      error: function (xhr, errmsg, err) {
-        console.error(errmsg); // Log error message to console
-      },
-    });
-  }
-    document
-    .getElementById("back-button")
-    .addEventListener("click", function (event) {
-      event.preventDefault(); // Prevent the default anchor behavior
-      window.history.go(-2); // Go back two pages
-    });
-</script>
   </body>
 </html>

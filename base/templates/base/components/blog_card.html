@@ -1,25 +1,46 @@
 {% load static %}
 <div
-  class="flex flex-col gap-1 bg-white border hover:border-teal-900 rounded-lg overflow-hidden"
+  class="flex flex-col gap-1 bg-white border hover:border-teal-500 rounded-lg overflow-hidden"
 >
-<div class="relative">
-  {% if obj.image %}
-  <img
-    src="{{ obj.image.url }}"
-    alt="{{ obj.name }}"
-    class="w-full h-40 object-cover hover:scale"
-  />
-  {% else %}
-  <img
-    src="{% static 'imgs/banner_1.webp' %}"
-    alt="image"
-    class="w-full h-40 object-cover hover:scale"
-  />
-  {% endif %}
-  <a href="{% url 'blogpost' obj.id %}" class="absolute bottom-3 right-3 px-4 py-1 bg-teal-700 hover:bg-teal-900 rounded-full text-white text-xs">Lire <span class="ml-2">&rarr;</span></a>
-</div>
-  <article class="p-2">
-    <small>{{obj.timestamp.date}} 8 Comments</small>
+  <a href="{% url 'blogpost' obj.id %}">
+    {% if obj.image %}
+    <img
+      src="{{ obj.image.url }}"
+      alt="{{ obj.name }}"
+      class="w-full h-40 object-cover hover:scale"
+    />
+    {% else %}
+    <img
+      src="{% static 'imgs/banner_1.webp' %}"
+      alt="image"
+      class="w-full h-40 object-cover hover:scale"
+    />
+    {% endif %}
+  </a>
+
+  <article class="p-2 grid gap-2">
+    <div class="flex justify-between items-center">
+      <small
+        class="px-4 py-1 {% if user in obj.likes.all %} text-yellow-400 text-black {% else %} text-gray-400 {% endif %} rounded-full flex items-center gap-1 cursor-pointer"
+      >
+        <i class="fa-solid fa-thumbs-up"></i> {{ obj.likes.count }}
+      </small>
+
+      <small
+        class="px-4 py-1 text-gray-400 rounded-full flex items-center gap-1 cursor-pointer"
+      >
+        <i class="fa-solid fa-comments"></i>
+        {{obj.blogcomment_set.count}}</small
+      >
+    </div>
+    <div class="flex justify-between items-center">
+      <small>{{obj.timestamp.date}}</small>
+      <a
+        href="{% url 'blogpost' obj.id %}"
+        class="px-3 py-1 bg-teal-700 hover:bg-teal-900 rounded-full text-white text-xs"
+        >Lire<span class="ml-2">&rarr;</span></a
+      >
+    </div>
     <h3 class="text-teal-900 font-bold">{{obj.title}}</h3>
   </article>
 </div>

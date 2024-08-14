@@ -2,22 +2,79 @@
 <div class="flex flex-col items-center gap-2 my-20 mx-auto">
   <i class="fa-solid fa-dolly text-teal-900 text-9xl"></i>
   <span>Aucune commande trouvée</span>
-  <a
-    href="{% url 'products' %}"
-    class="bg-yellow-300 rounded-full py-2 px-4 flex items-center gap-4 group"
-    >Parcourir le catalogue de produits
-    <span
-      class="bg-yellow-300 rounded-full py-2 px-3 group-hover:bg-teal-900 group-hover:text-white"
-      >&rarr;</span
-    ></a
-  >
 </div>
 {% else %}
-<div class="flex flex-col gap-2">
-  {% for obj in orders %}
-  <!--  -->
-  {% include 'dashboard/components/order_card.html' %}
-  <!--  -->
-  {% endfor %}
-</div>
+<table class="w-full text-left db-table">
+  <thead class="bg-teal-900 border border-teal-900 bg-teal-900 text-white">
+    <tr>
+      <th class="px-3 py-4 text-sm">Ref.</th>
+      <th class="px-3 py-4 text-sm">Date</th>
+      <th class="px-3 py-4 text-sm">Heure</th>
+      <th class="px-3 py-4 text-sm">Client</th>
+      <th class="px-3 py-4 text-sm">Total</th>
+      <th class="px-3 py-4 text-sm">Status</th>
+      <th class="px-3 py-4 text-sm">Action</th>
+    </tr>
+  </thead>
+
+  <tbody class="border">
+    {% for obj in orders %}
+    <tr
+      class="text-gray-600 border text-sm hover:bg-white hover:text-black transition-all duration-300"
+    >
+      <td class="px-3 py-1">Cmd N°-{{obj.id}}</td>
+      <td class="px-3 py-1">{{obj.timestamp.date}}</td>
+      <td class="px-3 py-1">{{obj.timestamp.time}}</td>
+      <td class="px-3 py-1">{{obj.client.get_full_name}}</td>
+      <td class="px-3 py-1">{{obj.amount}} CFA</td>
+      <td class="px-3 py-1">
+        {% include 'store/components/order_status.html' %}
+      </td>
+      <td class="px-3 py-1">
+        <div class="w-fit mx-auto text-end relative text-gray-700">
+          <button
+            type="button"
+            class="hover:text-black bg-white hover:text-teal-700 px-3 py-1 rounded-full"
+            name="sentry"
+            id="sentry"
+            aria-expanded="false"
+            aria-haspopup="true"
+            onclick="toggleMenu(this,'lvr_{{obj.id}}')"
+          >
+            <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
+          </button>
+
+          <div
+            class="hidden bg-gray-50 w-40 shadow-md lg:w-[180px] p-2 absolute right-0 top-12 origin-top-left bg-white z-10 rounded-xl flex flex-col items-center gap-2 text-xs lg:text-sm overflow-hidden"
+            role="status menu"
+            aria-orientation="vertical"
+            aria-labelledby="status-menu-button"
+            tabindex="-1"
+            id="lvr_{{obj.id}}"
+          >
+      <a
+        hx-get="{% url 'dash_order' obj.id %}"
+        hx-target="#dashbase"
+        hx-swap="outerHTML"
+        class="px-4 py-2 flex items-center hover:text-black hover:bg-gray-200 rounded-full w-full text-center cursor-pointer"
+        ><i class="text-sm fa-solid fa-eye mr-2"></i>
+        Voir
+      </a>
+      <!--  -->
+      {% if obj.status == 'pending' %}
+      <a
+        hx-post="{% url 'manage_order' obj.id 'process'  %}"
+        class="px-4 py-2 flex items-center hover:text-black hover:bg-yellow-200 rounded-full w-full text-center cursor-pointer"
+      >
+        <i class="text-sm fa-solid fa-check mr-2"></i>
+        Traiter
+      </a>
+            {% endif %}
+          </div>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endif %}

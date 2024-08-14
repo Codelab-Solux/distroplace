@@ -1,47 +1,47 @@
 {% if curr_obj.status == 'pending' %}
-<div class="p-4 flex flex-col justify-center gap-2 bg-red-100 rounded-xl">
+<div class="p-4 flex flex-col justify-center gap-2 border-2 border-red-400 bg-red-100 rounded-xl">
   <p>Articles : {{ order_items|length }}</p>
   <p>Montant : {{ curr_obj.amount_due }} Cfa</p>
   <p>
     Status :
-    <span class="py-2 px-4 bg-red-300 rounded-full text-black">
-      <i class="text-sm fa-solid fa-spinner mr-2"></i> 
+    <span class="py-1 px-4 bg-red-300 rounded-full text-black">
+      <i class="text-xs fa-solid fa-spinner mr-2"></i> 
       {{ curr_obj.get_status_display }}</span
     >
   </p>
 </div>
 {% elif curr_obj.status == 'dispatched' %}
-<div class="p-4 flex flex-col justify-center gap-2 bg-yellow-100 rounded-xl">
+<div class="p-4 flex flex-col justify-center gap-2 border-2 border-yellow-400 bg-yellow-100 rounded-xl">
   <p>Articles : {{ order_items|length }}</p>
   <p>Grand Total : {{ curr_obj.amount_due }} Cfa</p>
   <p>
     Status :
-    <span class="py-2 px-4 bg-yellow-300 rounded-full text-black">
-      <i class="text-sm fa-solid fa-truck-fast mr-2"></i> 
+    <span class="py-1 px-4 bg-yellow-300 rounded-full text-black">
+      <i class="text-xs fa-solid fa-truck-fast mr-2"></i> 
       {{ curr_obj.get_status_display }}</span
     >
   </p>
 </div>
 {% elif curr_obj.status == 'finished' %}
-<div class="p-4 flex flex-col justify-center gap-2 bg-green-100 rounded-xl">
+<div class="p-4 flex flex-col justify-center gap-2 border-2 border-green-400 bg-green-100 rounded-xl">
   <p>Articles : {{ order_items|length }}</p>
   <p>Grand Total : {{ curr_obj.amount_due }} Cfa</p>
   <p>
     Status :
-    <span class="py-2 px-4 bg-green-300 rounded-full text-black">
-      <i class="text-sm fa-solid fa-check mr-2"></i>
+    <span class="py-1 px-4 bg-green-300 rounded-full text-black">
+      <i class="text-xs fa-solid fa-check mr-2"></i>
       {{ curr_obj.get_status_display }}</span
     >
   </p>
 </div>
 {% else %}
-<div class="p-4 flex flex-col justify-center gap-2 bg-gray-100 rounded-xl">
+<div class="p-4 flex flex-col justify-center gap-2 border-2 border-gray-400 bg-gray-100 rounded-xl">
   <p>Articles : {{ order_items|length }}</p>
   <p>Grand Total : {{ curr_obj.amount_due }} Cfa</p>
   <p>
     Status :
-    <span class="py-2 px-4 bg-gray-300 rounded-full text-black">
-      <i class="text-sm fa-solid fa-ban mr-2"></i>
+    <span class="py-1 px-4 bg-gray-300 rounded-full text-black">
+      <i class="text-xs fa-solid fa-ban mr-2"></i>
       {{ curr_obj.get_status_display }}</span
     >
   </p>

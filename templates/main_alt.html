@@ -24,7 +24,6 @@
       src="https://kit.fontawesome.com/f601cf3e61.js"
       crossorigin="anonymous"
     ></script>
-    <script src="{% static 'notifier.js' %}" defer="true"></script>
     <script src="{% static 'main.js' %}" defer="true"></script>
     <link href="{% static 'styles.css' %}" rel="stylesheet" />
     <link
@@ -67,63 +66,55 @@
 
   <!--  -->
   {{ request.user.id|json_script:"user_id" }}
+
   <script>
     htmx.onLoad(function (content) {
       scripts.init(content);
     });
 
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/static/workers.js")
-        .then(function (registration) {
-          console.log(
-            "Service Worker registered with scope:",
-            registration.scope
-          );
-        })
-        .catch(function (error) {
-          console.error("Service Worker registration failed:", error);
+    var current_date = new Date().getFullYear();
+    document.getElementById("date").innerHTML = current_date;
+
+    // add to cart button ----------------------------------------------------------------------------------------------------
+    function add_to_cart(obj_id) {
+      // Retrieve the CSRF token from the hidden input
+      const csrfToken = document.getElementById("csrf_token").value;
+
+      $.ajax({
+        type: "POST",
+        url: "{% url 'add_to_cart' %}",
+        data: {
+          product_id: obj_id,
+          csrfmiddlewaretoken: csrfToken,
+          action: "post",
+        },
+        success: function (json) {
+          console.log(json.cart_count); // Ensure the key matches the JSON response key
+          document.getElementById("cart_counter").textContent = json.cart_count;
+        },
+        error: function (xhr, errmsg, err) {
+          console.error(errmsg); // Log error message to console
+        },
+      });
+    }
+
+    // go back button ----------------------------------------------------------------------------------------------------
+    function initializeBackButton() {
+      const backButton = document.getElementById("back-button");
+      if (backButton) {
+        backButton.addEventListener("click", function (event) {
+          alert("go!!!");
+          event.preventDefault(); // Prevent the default anchor behavior
+          window.history.go(-1); // Go back two pages
         });
+      }
     }
+    // Initialize on page load
+    document.addEventListener("DOMContentLoaded", initializeBackButton);
+    // Initialize on HTMX content load
+    document.body.addEventListener("htmx:afterSettle", initializeBackButton);
 
-    document.addEventListener("DOMContentLoaded", function () {
-      Notification.requestPermission().then(function (permission) {
-        if (permission === "granted") {
-          console.log("Notification permission granted.");
-          // You can now send notifications
-        } else {
-          console.log("Unable to get permission to notify.");
-        }
-      });
-
-      const testBtn = document.getElementById("testBtn");
-
-      testBtn.addEventListener("click", function () {
-        if (Notification.permission === "granted") {
-          console.log("Notifyinnnnnnnnnnnnnnnnnnnnnnnnnnnnnnng.");
-          new Notification("Test Notification");
-        } else {
-          console.log("Permission for notifications not granted.");
-        }
-      });
-    });
-
-    //  form resetter ----------------------------------------------------------------------------------------------------
-
-    function clearForm(div_id) {
-      var form = document.getElementById(div_id);
-      form.reset();
-    }
-
-    //  go back one page ----------------------------------------------------------------------------------------------------
-    document
-      .getElementById("back-button")
-      .addEventListener("click", function (event) {
-        event.preventDefault(); // Prevent the default anchor behavior
-        window.history.go(-1); // Go back two pages
-      });
-
-    //  tabs control ----------------------------------------------------------------------------------------------------
+    //  tabs controller ----------------------------------------------------------------------------------------------------
     document.getElementById("defaultTab").click();
     function openTab(event, tabName) {
       var i, tabcontent, tabBtn;
@@ -137,13 +128,21 @@
       }
       document.getElementById(tabName).style.display = "block";
       event.currentTarget.className += " active";
-      var minitabs = document.getElementsByClassName("minitabcontent");
-      if (minitabs.length != 0) {
-        minitabs = tabcontent.children;
+    }
+
+    //  commentbox controller ----------------------------------------------------------------------------------------------------
+    function toggleCommentBox() {
+      var box = document.querySelector(`.comment_box`);
+      if (box.classList.contains("hidden")) {
+        box.classList.remove("hidden");
+        box.classList.add("block");
+      } else {
+        box.classList.remove("block");
+        box.classList.add("hidden");
       }
     }
 
-    //  accordions control ----------------------------------------------------------------------------------------------------
+    //  accordions controller ----------------------------------------------------------------------------------------------------
     function toggleAccordion(div_id) {
       var active_accordion = document.getElementById(div_id);
       var active_caret = document.getElementById(`${div_id}_caret`);
@@ -172,7 +171,20 @@
       }
     }
 
-    //  accordions control ----------------------------------------------------------------------------------------------------
+    // nav mechanism ----------------------------------------------------------------------------------------------------
+    function toggleNav(e) {
+      e.name === "nav"
+        ? ((e.name = "close"), navlinks.classList.remove("hidden"))
+        : ((e.name = "nav"), navlinks.classList.add("hidden"));
+    }
+
+    //  dropdown controllers ----------------------------------------------------------------------------------------------------
+    function toggleDropdown(e) {
+      e.name === "dropdownBtn"
+        ? ((e.name = "close"), dropdownMenu.classList.remove("hidden"))
+        : ((e.name = "dropdownBtn"), dropdownMenu.classList.add("hidden"));
+    }
+
     function toggleMenu(e, obj_id) {
       activeMenu = document.getElementById(obj_id);
       e.name === `sentry`
@@ -181,7 +193,29 @@
     }
 
     window.addEventListener("mouseup", function (event) {
-      activeMenu.classList.add("hidden");
+      if (
+        !activeMenu.contains(event.target) &&
+        !document.getElementById("sentry").contains(event.target)
+      ) {
+        activeMenu.classList.add("hidden");
+        document.getElementById("sentry").name = "sentry";
+      }
+
+      if (
+        !dropdownMenu.contains(event.target) &&
+        !document.getElementById("dropdownBtn").contains(event.target)
+      ) {
+        dropdownMenu.classList.add("hidden");
+        document.getElementById("dropdownBtn").name = "dropdownBtn";
+      }
+
+      if (
+        !navlinks.contains(event.target) &&
+        !document.querySelector('[name="nav"]').contains(event.target)
+      ) {
+        navlinks.classList.add("hidden");
+        document.querySelector('[name="nav"]').name = "nav";
+      }
     });
   </script>
 </html>

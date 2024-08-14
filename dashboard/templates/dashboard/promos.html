@@ -12,14 +12,13 @@
       <i class="fa-solid fa-tags ml-2"></i>
     </h3>
     <a
-      href="{% url 'add_product' %}"
-      class="bg-yellow-100 rounded-full py-2 px-4 text-xs flex items-center gap-4 group"
-      >Nouvelle promotion
-      <span
-        class="bg-yellow-300 rounded-full py-2 px-3 group-hover:bg-teal-900 group-hover:text-white"
-        >&rarr;</span
-      ></a
+      hx-target="#basic_dialog"
+      hx-get="{% url 'create_promotion' %}"
+      class="cursor-pointer bg-teal-200 hover:bg-teal-300 rounded-full py-2 px-4 text-xs flex items-center gap-4 group"
     >
+      Nouvelle promotion
+      <i class="fa-solid fa-plus ml-2"></i
+    ></a>
   </div>
 
   <form

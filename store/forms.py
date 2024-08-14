@@ -103,9 +103,9 @@ class ShippingInfoForm(forms.ModelForm):
         }
         widgets = {
 
-            'phone': forms.TextInput(attrs={'class': "mb-1 px-3 py-2 rounded-full border focus:border-none focus:outline-none focus:bg-yellow-100 focus:ring-1 focus:ring-teal-400 w-full"}),
-            'address': forms.TextInput(attrs={'class': "mb-1 px-3 py-2 rounded-full border focus:border-none focus:outline-none focus:bg-yellow-100 focus:ring-1 focus:ring-teal-400 w-full"}),
-            'district': forms.TextInput(attrs={'class': "mb-1 px-3 py-2 rounded-full border focus:border-none focus:outline-none focus:bg-yellow-100 focus:ring-1 focus:ring-teal-400 w-full"}),
+            'phone': forms.TextInput(attrs={'class': "mb-1 px-3 py-2 rounded-full border focus:border-none focus:outline-none focus:bg-teal-100 focus:ring-1 focus:ring-teal-400  w-full"}),
+            'address': forms.TextInput(attrs={'class': "mb-1 px-3 py-2 rounded-full border focus:border-none focus:outline-none focus:bg-teal-100 focus:ring-1 focus:ring-teal-400  w-full"}),
+            'district': forms.TextInput(attrs={'class': "mb-1 px-3 py-2 rounded-full border focus:border-none focus:outline-none focus:bg-teal-100 focus:ring-1 focus:ring-teal-400  w-full"}),
         }
 
 
@@ -143,4 +143,13 @@ class SupplierForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': "mb-2 px-3 py-2 rounded-full border focus:border-none focus:outline-none focus:bg-gray-50 focus:ring-1 focus:ring-teal-400 w-full"}),
             'type': forms.Select(attrs={'class': "input_selector mb-1 px-3 py-2 rounded-full border focus:border-none focus:outline-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"}),
             'domain': forms.TextInput(attrs={'class': "mb-2 px-3 py-2 rounded-full border focus:border-none focus:outline-none focus:bg-gray-50 focus:ring-1 focus:ring-teal-400 w-full"}),
+        }
+
+class ProductCommentForm(forms.ModelForm):
+    class Meta:
+        model = ProductComment
+        fields = ('comment',)
+        labels = {'comment': 'Commentaire', }
+        widgets = {
+            'comment': forms.Textarea(attrs={"rows": "10", 'class': "mb-2 px-4 py-2 rounded-xl border focus:border-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"}),
         }

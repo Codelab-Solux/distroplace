@@ -1,6 +1,7 @@
-from django.db.models.signals import post_migrate
+from django.db.models.signals import post_migrate, post_save, pre_delete, pre_save
 from django.dispatch import receiver
 from django.apps import apps
+from .models import *
 
 
 @receiver(post_migrate)
@@ -21,3 +22,14 @@ def create_default_roles(sender, **kwargs):
             Role.objects.create(
                 name='User', description='Regular User Role', sec_level=0)
         # Add more roles as needed
+
+
+@receiver(post_save, sender=CustomUser)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=CustomUser)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()

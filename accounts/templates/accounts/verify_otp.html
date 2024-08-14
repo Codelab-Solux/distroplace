@@ -1,0 +1,67 @@
+{% extends 'main_plain.html' %} {% block content %}
+<div
+  class="bg-teal-100 h-screen w-full flex flex-col justify-center items-center"
+>
+  <section
+    class="bg-white p-4 lg:p-6 w-full max-w-5xl rounded-3xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8"
+  >
+  <i class="fa-solid fa-key text-teal-700 text-9xl mx-auto"></i>
+  <div
+    class="bg-gray-100 rounded-2xl p-6 flex-col h-fit w-full max-w-md shadow-md"
+  >
+    <h1 class="mb-4 text-black text-3xl font-bold">Verifier l'OTP</h1>
+    <div class="flex gap-4">
+        <a
+          href="{% url 'login' %}"
+          class="px-4 py-1 w-full flex justify-center items-center rounded-full text-sm text-gray-700 border  bg-gray-100 hover:bg-gray-300 hover:shadow-md transition duration-300 ease-in group"
+        >
+          <i
+            class="fa-solid fa-arrow-left text-xl"
+          ></i>
+          <span class="ml-2">Retourner</span>
+        </a>
+      <a
+        href="{% url 'google_login' %}"
+        class="px-4 py-1 w-full flex justify-center items-center rounded-full text-sm text-gray-700 bg-white hover:shadow-md transition duration-300 ease-in group"
+      >
+        <i
+          class="fa-brands fa-google text-xl group-hover:text-red-500 transition duration-300 ease-in"
+        ></i>
+        <span class="ml-2">Google</span>
+      </a>
+      <!-- <a href="{% url 'google_login' %}" class="px-4 py-1 w-full flex justify-center items-center rounded-full text-sm text-gray-700 bg-white hover:shadow-md transition duration-300 ease-in group">
+        <i class="fa-brands fa-facebook text-xl group-hover:text-blue-500 transition duration-300 ease-in"></i>
+        <span class="ml-2">Facebook</span>
+      </a> -->
+    </div>
+    <div class="flex items-center my-2">
+      <div class="flex-grow h-px bg-gray-400"></div>
+      <span class="flex-shrink text-md text-black px-4 font-light">ou</span>
+      <div class="flex-grow h-px bg-gray-400"></div>
+    </div>
+    <form method="POST" class="w-full text-sm grid gap-1">
+      {% csrf_token %}
+      <label for="otpInput">Entrez le code OTP</label>
+      <input
+        type="text"
+        name="otp"
+        class="mb-2 px-4 py-2 rounded-full border border-gray-200 focus:border-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"
+        placeholder="OTP"
+        required
+      />
+      <button
+        class="w-fit px-8 py-2 bg-teal-700 hover:bg-teal-900 text-sm text-white rounded-full cursor-pointer"
+      >
+        Verifier
+      </button>
+    </form>
+    <p class="mt-2 text-xs">
+      Vous n'avez pas reçu le code ?
+      <a href="{% url 'resend_otp' %}" class="text-teal-500 hover:underline"
+        >Obtenir un autre</a
+      >
+    </p>
+  </div>
+</section>
+</div>
+{% endblock %}

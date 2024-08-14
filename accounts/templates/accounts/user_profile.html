@@ -12,29 +12,19 @@
       >
       Retourner
     </div>
-    <span
-      class="flex items-center gap-4 py-2 px-4 rounded-full bg-yellow-200 text-black"
-      ><i class="fa-solid fa-user"></i> Mon profil</span
-    >
   </div>
   <!--  -->
   <div class="w-full grid md:grid-cols-2 gap-4">
     <div
       class="p-3 w-full bg-teal-200 rounded-2xl flex flex-col lg:flex-row items-center gap-4"
     >
-      {% if not curr_obj.image %}
+
       <img
         class="h-40 w-40 bg-white rounded-full object-cover"
-        src="{% static 'imgs/anon.png' %}"
+        src="{{curr_obj.profile.image.url}}"
         alt="image"
       />
-      {% else %}
-      <img
-        class="h-40 w-40 bg-white rounded-full object-cover"
-        src="{{curr_obj.image.url}}"
-        alt="image"
-      />
-      {% endif %}
+
       <article class="text-gray-700 grid gap-1 w-full">
         <h4 class="text-black text-2xl font-bold">
           {{curr_obj.last_name}} {{curr_obj.first_name}}
@@ -68,7 +58,7 @@
             <span class="font-bold"> {{shipping_info.address}} </span>
           </p>
           <p>
-            <i class="fa-solid fa-phone text-teal-200 text-gray-800 mr-3"></i
+            <i class="fa-solid fa-phone text-teal-200 text-teal-300 mr-3"></i
             >Numero de livraison :
             <span class="font-bold"> {{shipping_info.phone}} </span>
           </p>
@@ -82,10 +72,10 @@
     />
   </div>
 
-  <section class="flex flex-col gap-4">
+  <section class="mb-4 flex flex-col gap-4">
     <!--------------------------------------- menu tabs buttons --------------------------------------->
     <div
-      class="flex justify-between gap-2 text-xs tabbar h-fit w-full max-w-80 lg:max-w-[600px] p-2 bg-teal-900 rounded-full"
+      class="flex justify-between gap-2 text-xs tabbar h-fit w-full lg:max-w-[600px] p-2 bg-teal-900 rounded-full"
     >
       <button
         class="tabBtn px-4 py-2 bg-white hover:bg-teal-900 hover:text-white rounded-full w-full"
@@ -198,10 +188,6 @@
     }
     document.getElementById(tabName).style.display = "block";
     event.currentTarget.className += " active";
-    var minitabs = document.getElementsByClassName("minitabcontent");
-    if (minitabs.length != 0) {
-      minitabs = tabcontent.children;
-    }
   }
 </script>
 {% endblock %}

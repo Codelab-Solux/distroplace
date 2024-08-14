@@ -4,21 +4,12 @@
   class="relative w-full h-full bg-white flex flex-col justify-between rounded-xl border hover:shadow-lg group transition duration-200 ease-in overflow-hidden"
 >
   <a class="w-full min-h-40" href="{% url 'product_details' obj.id %}">
-  {% if obj.thumbnail %}
   <img
     src="{{ obj.thumbnail.url }}"
     alt="{{ obj.name }}"
     class="w-full h-40 object-cover"
   />
-  {% else %}
-  <img
-    src="{% static 'imgs/logo-g.png' %}"
-    alt="image"
-    class="w-full h-40 object-cover"
-  />
-  {% endif %}
   </a>
-
   {% if obj.is_new %}
   <span
     class="absolute top-3 left-3 bg-white rounded-md px-2 py-1 text-teal-400 text-sm"
@@ -55,15 +46,3 @@
   </article>
 </div>
 
-<script>
-  function toggleDropdown(e, obj_id) {
-    activeMenu = document.getElementById(`actionMenu${obj_id}`);
-    e.name === `sentry`
-      ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
-      : ((e.name = `sentry`), activeMenu.classList.add("hidden"));
-  }
-
-  window.addEventListener("mouseup", function (event) {
-    activeMenu.classList.add("hidden");
-  });
-</script>

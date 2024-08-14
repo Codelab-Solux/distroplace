@@ -1,4 +1,4 @@
-{% load static %}
+{% extends 'main_alt.html' %} {% load static %} {% block content %}
 <div class="w-full max-w-7xl mx-auto flex flex-col justify-between gap-6">
   <div class="flex justify-between">
     <div
@@ -19,7 +19,7 @@
   </div>
 
   <div class="flex gap-4">
-    <!-- cart details -->
+    <!-- order details -->
     <div class="overflow-x-auto w-full overflow-y-hidden rounded-xl">
       <table id="items_table" class="w-full text-left db-table">
         <thead
@@ -28,8 +28,9 @@
           <tr>
             <th class="px-3 py-4 text-sm">Image</th>
             <th class="px-3 py-4 text-sm">Article</th>
+            <th class="px-3 py-4 text-sm">Marque</th>
             <th class="px-3 py-4 text-sm">Prix</th>
-            <th class="px-3 py-4 text-sm text-center">Quantité</th>
+            <th class="px-3 py-4 text-sm">Quantité</th>
             <th class="px-3 py-4 text-sm">Total</th>
           </tr>
         </thead>
@@ -55,6 +56,7 @@
               {% endif %}
             </td>
             <td class="px-3 py-1">{{obj.product.name}}</td>
+            <td class="px-3 py-1">{{obj.product.brand}}</td>
             {% if obj.product.is_promoted %}
             <td class="px-3 py-1">{{obj.product.promo_price}}</td>
             {% else %}
@@ -83,3 +85,5 @@
     </div>
   </div>
 </div>
+
+{% endblock %}

@@ -1,10 +1,15 @@
+from phonenumber_field.modelfields import PhoneNumberField
+import random
+import string
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.urls import reverse
 from datetime import date
 from django.utils import timezone
 from utils import h_encode, h_decode
-# from base.models import Company
+from django.contrib.auth.tokens import default_token_generator
+from django.conf import settings
+from django.core.mail import send_mail
 
 
 class Role(models.Model):
@@ -49,11 +54,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         max_length=255, unique=True, blank=True, null=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    phone = models.CharField(
-        max_length=100, unique=True, blank=True, null=True)
+    phone = PhoneNumberField(unique=True, blank=True, null=True)
     role = models.ForeignKey(
-        Role, on_delete=models.CASCADE, blank=True, null=True,)
-
+        Role, on_delete=models.CASCADE, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -64,7 +67,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        # return f'{self.last_name} {self.first_name}'
         return f' {self.email.split("@")[0]}'
 
     def get_hashid(self):
@@ -75,6 +77,19 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def get_full_name(self):
         return f' {self.last_name} {self.first_name}'
+
+    def send_verification_email(self):
+        token = default_token_generator.make_token(self)
+        uid = self.pk
+        url = reverse('verify_email', kwargs={'uid': uid, 'token': token})
+        full_url = f'{settings.SITE_URL}{url}'
+        send_mail(
+            'Verify your email address',
+            f'Please verify your email by clicking the following link: {full_url}',
+            settings.DEFAULT_FROM_EMAIL,
+            [self.email],
+        )
+
 
 
 gender_list = (
@@ -87,6 +102,7 @@ class Profile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     sex = models.CharField(
         max_length=10, choices=gender_list, blank=True, null=True)
+    otp = models.CharField(max_length=6, blank=True, null=True)
     saved_cart = models.CharField(max_length=255, blank=True, null=True)
     image = models.ImageField(
         upload_to='media/users/profiles', default='../static/imgs/anon.png', blank=True, null=True)
@@ -99,3 +115,5 @@ class Profile(models.Model):
 
     def get_absolute_url(self):
         return reverse('profile', kwargs={'pk': self.pk})
+
+

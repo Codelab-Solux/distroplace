@@ -4,6 +4,7 @@ from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.apps import apps
 from django.contrib import messages
+from base.forms import PromotionForm
 from base.models import Promotion
 from store.forms import *
 from store.models import *
@@ -14,15 +15,34 @@ def dashboard(req):
     products = Product.objects.all()
     categories = Category.objects.all()
     subcategories = SubCategory.objects.all()
-    promotions = Promotion.objects.filter(is_active=True)
+    clients = CustomUser.objects.filter(role__id=1)
+    suppliers = Supplier.objects.all()
+    delivery_types = DeliveryType.objects.all()
+    orders = Order.objects.all()
+    pending_ord= orders.filter(status = 'pending').count()
+    processed_ord = orders.filter(status='processed').count()
+    delivered_ord = orders.filter(status='delivered').count()
+    deliveries = Delivery.objects.all()
+    pending_dlv= deliveries.filter(status = 'pending').count()
+    dispatched_dlv = deliveries.filter(status='dispatched').count()
+    completed_dlv = deliveries.filter(status='completed').count()
 
     context = {
         "dashboard": "dash_active",
         'title': 'dashboard',
         'products': products,
-        'promotions': promotions,
+        'clients': clients,
+        'suppliers': suppliers,
         'categories': categories,
         'subcategories': subcategories,
+        'delivery_types': delivery_types,
+        'pending_ord':pending_ord,
+        'processed_ord':processed_ord,
+        'delivered_ord':delivered_ord,
+        'deliveries':deliveries,
+        'pending_dlv':pending_dlv,
+        'dispatched_dlv':dispatched_dlv,
+        'completed_dlv': completed_dlv,
     }
     return render(req, 'dashboard/index.html', context)
 
@@ -206,7 +226,7 @@ def add_product_image(req, pk):
                 image=image
             )
         messages.success(req, 'Images ajoutée avec success')
-        return HttpResponse(status=204, headers={'HX-Trigger': 'data_changed'})
+        return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
     else:
         return render(req, 'dashboard/components/image_form.html')
 
@@ -218,7 +238,7 @@ def product_images(req, pk):
     is_favorite = False
 
     if user.is_authenticated:
-            is_favorite = curr_obj.likes.filter(id=user.id).exists()
+        is_favorite = curr_obj.likes.filter(id=user.id).exists()
 
     context = {
         'curr_obj': curr_obj,
@@ -356,7 +376,7 @@ def order_info(req, pk):
     return render(req, 'dashboard/partials/order_info.html', context)
 
 
-# ------------------------------------------------- Delivries -------------------------------------------------
+# ------------------------------------------------- Deliveries -------------------------------------------------
 @login_required(login_url='login')
 def dash_deliveries(req):
     user = req.user
@@ -392,14 +412,14 @@ def dash_delivery(req, pk):
     order_items = OrderItem.objects.filter(order=curr_order)
     shipping_info = ShippingInfo.objects.filter(user=curr_obj.client).first()
     context = {
-        "delivery_details": "dash_active",
+        "dash_deliveries": "dash_active",
         'title': 'Delivery Details',
         'curr_obj': curr_obj,
         'curr_order': curr_order,
         'order_items': order_items,
         'shipping_info': shipping_info,
     }
-    return render(req, 'dashboard/delivery.html', context)
+    return render(req, 'dashboard/delivery_details.html', context)
 
 
 @login_required(login_url='login')
@@ -433,7 +453,7 @@ def manage_delivery(req, pk, kp):
         curr_obj.save()
 
     elif kp == 'finish':
-        curr_obj.status = 'finished'
+        curr_obj.status = 'completed'
         curr_obj.save()
 
     elif kp == 'postpone':
@@ -536,6 +556,43 @@ def promo_list(req):
     return render(req, 'dashboard/partials/promo_list.html', context)
 
 
+@login_required(login_url='login')
+def create_promotion(req):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
+    form = PromotionForm()
+    if req.method == 'POST':
+        form = PromotionForm(req.POST)
+        if form.is_valid():
+            form.save()
+        messages.success = 'Nouvelle promotion ajouté'
+        return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
+    else:
+        return render(req, 'basic_form.html', context={'form': form, 'form_title': 'Nouvelle promotion'})
+
+
+@login_required(login_url='login')
+def edit_promotion(req, pk):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
+    curr_obj = get_object_or_404(Promotion, id=pk)
+
+    form = PromotionForm(instance=curr_obj)
+    if req.method == 'POST':
+        form = PromotionForm(req.POST, instance=curr_obj)
+        if form.is_valid():
+            form.save()
+            # messages.success(req, 'Données modifiée avec success')
+        return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
+    else:
+        return render(req, 'basic_form.html', context={'form': form, 'form_title': 'Modifier cette promotion', 'curr_obj': curr_obj})
+
 # ------------------------------------------------- Clients-------------------------------------------------
 @login_required(login_url='login')
 def clients(req):
@@ -544,11 +601,9 @@ def clients(req):
         messages.info(req, "Access denied!!!")
         return redirect('home')
 
-    clients = CustomUser.objects.filter(role__id=1)
     context = {
         "clients_page": "dash_active",
-        'title': 'Customers',
-        'clients': clients,
+        'title': 'Clients',
     }
     return render(req, 'dashboard/clients.html', context)
 
@@ -559,7 +614,7 @@ def clients_list(req):
     context = {
         'clients': clients,
     }
-    return render(req, 'accounts/partials/clients_list.html', context)
+    return render(req, 'dashboard/partials/clients_list.html', context)
 
 
 # ------------------------------------------------- Staff -------------------------------------------------

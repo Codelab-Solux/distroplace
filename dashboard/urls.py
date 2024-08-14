@@ -36,7 +36,9 @@ urlpatterns = [
     path('deliveries/<hashid:pk>/<str:kp>/manage/',
          manage_delivery, name='manage_delivery'),
     path('promos/', promos, name='promos'),
+    path('promos/create/', create_promotion, name='create_promotion'),
     path('promos/list/', promo_list, name='promo_list'),
+    path('promos/<hashid:pk>/edit/', edit_promotion, name='edit_promotion'),
     # ----------------------------------------------------------------------------
     path('profile/<hashid:pk>/', dash_profile, name='dash_profile'),
     # ----------------------------------------------------------------------------

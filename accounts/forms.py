@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from .models import *
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 
 
 class SignupForm(UserCreationForm):
@@ -15,8 +16,9 @@ class SignupForm(UserCreationForm):
     class Meta:
         model = CustomUser
         fields = (
-            'email', 'first_name',
             'last_name',
+            'first_name',
+            'email',
             'password1',
             'password2',
         )
@@ -32,3 +34,16 @@ class SignupForm(UserCreationForm):
             'last_name': forms.TextInput(attrs={'class': "mb-2 px-4 py-2 rounded-full border border-gray-200 focus:border-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"}),
             'phone': forms.TextInput(attrs={'class': "mb-2 px-4 py-2 rounded-full border border-gray-200 focus:border-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"}),
         }
+
+
+class EmailOrPhoneLoginForm(AuthenticationForm):
+    username = forms.CharField(label="Email or Phone", max_length=254)
+
+
+class LoginForm(forms.Form):
+    email_or_phone = forms.CharField(max_length=100, required=True)
+    password = forms.CharField(widget=forms.PasswordInput, required=False)
+
+
+class OTPForm(forms.Form):
+    otp = forms.CharField(max_length=6, required=True)

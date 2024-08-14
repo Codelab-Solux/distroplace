@@ -20,22 +20,37 @@
   </div>
 
   <div class="mt-6 grid grid-cols-1 gap-10 sm:grid-cols-2">
-    <div
-      class="h-100 w-full product_images"
-      hx-get="{% url 'product_images' curr_obj.id %}"
-      hx-trigger="load, db_changed from:body"
-      hx-target="this"
-    >
-      <p
-        class="h-full w-full flex justify-center items-center text-teal-500 p-4"
+    <div class="grid gap-6">
+      <div
+        class="h-100 w-full product_images"
+        hx-get="{% url 'product_images' curr_obj.id %}"
+        hx-trigger="load, db_changed from:body"
+        hx-target="this"
       >
-        <i class="m-auto fas fa-spinner fa-spin text-3xl animate-spin"></i>
-      </p>
+        <p
+          class="h-full w-full flex justify-center items-center text-teal-500 p-4"
+        >
+          <i class="m-auto fas fa-spinner fa-spin text-3xl animate-spin"></i>
+        </p>
+      </div>
+      <hr />
+      <div
+        class="grid gap-2"
+        hx-get="{% url 'product_info' curr_obj.id %}"
+        hx-trigger="load, db_changed from:body"
+        hx-target="this"
+      >
+        <p
+          class="h-full w-full flex justify-center items-center text-teal-500 p-4"
+        >
+          <i class="m-auto fas fa-spinner fa-spin text-3xl animate-spin"></i>
+        </p>
+      </div>
     </div>
+    <!--  -->
     <div class="w-full flex flex-col gap-2">
       <h2 class="text-4xl font-bold text-black">{{curr_obj.name}}</h2>
       <h4>{{curr_obj.quantity}} en stock</h4>
-
       {% if not curr_obj.is_promoted %}
       <p class="text-teal-700 text-lg font-bold">
         <i class="fa-solid fa-tag text-teal-700 mr-2"></i>
@@ -48,12 +63,11 @@
           <span class="line-through">{{ curr_obj.price }} CFA</span>
         </p>
         <p class="text-yellow-500 text-lg font-bold">
-          <i class="fa-solid fa-tags text-yellow-300 mr-2"></i>
+          <i class="fa-solid fa-tags mr-2"></i>
           {{curr_obj.promo_price}} CFA
         </p>
       </div>
       {% endif %}
-      <p><b>Description : </b> {{curr_obj.description }}</p>
       <div class="flex gap-2">
         <button
           onclick="add_to_cart('{{ curr_obj.id }}')"
@@ -65,7 +79,7 @@
 
         {% if user.is_authenticated %}
         <a
-          hx-post="{% url 'like_product' curr_obj.id %}"
+          hx-post="{% url 'make_favorite' curr_obj.id %}"
           class="cursor-pointer bg-yellow-200 hover:bg-yellow-300 text-black px-4 py-2 rounded-full transition duration-200 ease-in"
         >
           <span class="md:text-xs"
@@ -77,6 +91,7 @@
         </a>
         {% endif %}
       </div>
+      <p><b>Description : </b> {{curr_obj.description }}</p>
     </div>
   </div>
 
@@ -157,5 +172,12 @@
   document.body.addEventListener("htmx:load", function () {
     document.querySelectorAll(".product-carousel").forEach(initializeCarousel);
   });
+
+  document
+    .getElementById("back-button")
+    .addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent the default anchor behavior
+      window.history.go(-1); // Go back two pages
+    });
 </script>
 {% endblock %}
