@@ -192,6 +192,13 @@ def mailing_list(req):
     }
     return render(req, 'base/partials/email_list.html', context)
 
+def join_newsletter(req):
+    if req.method == 'POST':
+        email = req.POST['email']
+        new_mail = NewsletterEmails(email=email)
+        new_mail.save()
+
+    return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
 
 # --------------------------Promotions--------------------------
 def promotions(req):
