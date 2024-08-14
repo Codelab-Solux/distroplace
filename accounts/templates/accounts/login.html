@@ -71,7 +71,8 @@
           />
           <p class="text-xs">
             Vous n'avez pas de compte?
-            <a href="{% url 'signup' %}" class="text-teal-500 hover:underline"
+            <a 
+        hx-boos="true" href="{% url 'signup' %}" class="text-teal-500 hover:underline"
               >Sign up</a
             >
           </p>
