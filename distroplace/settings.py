@@ -2,7 +2,6 @@
 from dotenv import load_dotenv
 from firebase_admin import credentials
 import firebase_admin
-import pprint
 import os
 from pathlib import Path
 
