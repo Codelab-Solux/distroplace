@@ -1,7 +1,7 @@
 {% if curr_obj.status == 'pending' %}
 <div class="p-4 flex flex-col gap-2 bg-red-100 rounded-xl">
   <p>Articles : {{ order_items|length }}</p>
-  <p>Grand Total : {{ curr_obj.amount }} Cfa</p>
+  <p>Grand Total : {{ curr_obj.amount }} CFA</p>
   <p>
     Status :
     <span class="py-2 px-4 bg-red-300 rounded-full"
@@ -14,7 +14,7 @@
 {% elif curr_obj.status == 'processed' %}
 <div class="p-4 flex flex-col gap-2 bg-yellow-100 rounded-xl">
   <p>Articles : {{ order_items|length }}</p>
-  <p>Grand Total : {{ curr_obj.amount }} Cfa</p>
+  <p>Grand Total : {{ curr_obj.amount }} CFA</p>
   <p>
     Status :
     <span class="py-2 px-4 bg-yellow-300 rounded-full"
@@ -27,7 +27,7 @@
 {% elif curr_obj.status == 'delivered' %}
 <div class="p-4 flex flex-col gap-2 bg-green-100 rounded-xl">
   <p>Articles : {{ order_items|length }}</p>
-  <p>Grand Total : {{ curr_obj.amount }} Cfa</p>
+  <p>Grand Total : {{ curr_obj.amount }} CFA</p>
   <p>
     Status :
     <span class="py-2 px-4 bg-green-300 rounded-full"
@@ -40,7 +40,7 @@
 {% else %}
 <div class="p-4 flex flex-col gap-2 bg-gray-100 rounded-xl">
   <p>Articles : {{ order_items|length }}</p>
-  <p>Grand Total : {{ curr_obj.amount }} Cfa</p>
+  <p>Grand Total : {{ curr_obj.amount }} CFA</p>
   <p>
     Status :
     <span class="py-2 px-4 bg-gray-300 rounded-full"

@@ -1,6 +1,8 @@
 {% extends 'main_plain.html' %} {% block content %}
 <!--  -->
 {% load socialaccount %}
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
 
 <div
   class="bg-teal-100 h-screen w-full flex flex-col justify-center items-center"
@@ -15,9 +17,26 @@
       class="bg-gray-100 border rounded-2xl p-6 flex-col h-fit w-full max-w-md shadow-md"
     >
       <h1 class="mb-4 text-black text-3xl font-bold">Connexion</h1>
-      <div class="flex gap-4">
+      <div class="flex justify-between items-center gap-4">
+        <div
+          class="flex justify-between p-1 gap-1 text-xs tabbar h-fit w-fit max-w-[200px] bg-teal-700 rounded-full"
+        >
+          <button
+            class="tabBtn px-3 py-2 bg-white hover:bg-teal-900 hover:text-white rounded-full w-full"
+            onclick="openTab(event, 'email_login')"
+            id="defaultTab"
+          >
+            <i class="fa-solid fa-at"></i>
+          </button>
+          <button
+            class="tabBtn px-3 py-2 bg-white hover:bg-teal-900 hover:text-white rounded-full w-full"
+            onclick="openTab(event, 'phone_login')"
+          >
+            <i class="fa-solid fa-phone"></i>
+          </button>
+        </div>
         <a
-          href="{% provider_login_url 'google' %}" 
+          href="{% provider_login_url 'google' %}"
           class="px-4 py-1 w-full flex justify-center items-center rounded-full text-sm text-gray-700 bg-white hover:shadow-md transition duration-300 ease-in group"
         >
           <i
@@ -25,31 +44,23 @@
           ></i>
           <span class="ml-2">Google</span>
         </a>
-        <!-- <a
-          href="{% url 'google_login' %}"
-          class="px-4 py-1 w-full flex justify-center items-center rounded-full text-sm text-gray-700 bg-white hover:shadow-md transition duration-300 ease-in group"
-        >
-          <i
-            class="fa-brands fa-facebook text-xl group-hover:text-blue-500 transition duration-300 ease-in"
-          ></i>
-          <span class="ml-2">Facebook</span>
-        </a> -->
       </div>
+
       <div class="flex items-center my-2">
         <div class="flex-grow h-px bg-gray-400"></div>
         <span class="flex-shrink text-md text-black px-4 font-light">ou</span>
         <div class="flex-grow h-px bg-gray-400"></div>
       </div>
 
-      <form method="POST" class="w-full text-sm">
+      <form id="email_login" method="POST" class="tabcontent w-full text-sm">
         {% csrf_token %}
         <div class="flex flex-col mb-2">
-          <label for="email_or_phone">Email ou Téléphone</label>
+          <label for="email">Email</label>
           <input
             type="text"
-            name="email_or_phone"
+            name="email"
             class="px-4 py-2 rounded-full border border-gray-200 focus:border-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"
-            placeholder="Email or Phone"
+            placeholder="Entrez votre email"
             required
           />
         </div>
@@ -59,31 +70,145 @@
             type="password"
             name="password"
             class="px-4 py-2 rounded-full border border-gray-200 focus:border-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"
-            placeholder="Password"
+            placeholder="Entrez vos mots de passe"
             required
           />
         </div>
         <div class="mt-2 flex justify-between items-center gap-2">
           <input
             type="submit"
-            value="Login"
+            value="Se connecter"
             class="px-8 py-2 bg-teal-700 hover:bg-teal-900 text-sm text-white rounded-full cursor-pointer"
           />
           <p class="text-xs">
             Vous n'avez pas de compte?
-            <a 
-        hx-boos="true" href="{% url 'signup' %}" class="text-teal-500 hover:underline"
-              >Sign up</a
+            <a
+              hx-boos="true"
+              href="{% url 'signup' %}"
+              class="text-teal-500 hover:underline"
+              >S'inscrire</a
             >
           </p>
         </div>
       </form>
+
+      <div id="phone_login" class="tabcontent w-full text-sm">
+        <div class="grid gap-2">
+          <!-- Phone Number Input -->
+          <input
+            type="text"
+            id="phone"
+            class="px-4 py-2 rounded-full border border-gray-200 focus:border-none focus:outline-none focus:ring-1 focus:ring-teal-400 w-full"
+            placeholder="Entrez votre numéro de téléphone"
+          />
+          <div class="mt-2 flex justify-between items-center gap-2">
+            <!-- Button to trigger OTP sending -->
+            <button
+              class="px-8 py-2 bg-teal-700 hover:bg-teal-900 text-sm text-white rounded-full cursor-pointer"
+              onclick="phoneAuth()"
+            >
+              Recevoir l'OTP
+            </button>
+            <p class="text-xs">
+              Vous n'avez pas de compte?
+              <a
+                hx-boos="true"
+                href="{% url 'signup' %}"
+                class="text-teal-500 hover:underline"
+                >S'inscrire</a
+              >
+            </p>
+          </div>
+
+          <!-- Container for reCAPTCHA -->
+          <div id="recaptcha-container"></div>
+        </div>
+
+        <!-- Placeholder for OTP input and submission -->
+        <div id="otp-section" style="display: none">
+          <input type="text" id="otp" placeholder="Enter OTP" />
+          <button onclick="submitOTP()">Submit OTP</button>
+        </div>
+      </div>
     </div>
   </section>
 </div>
 
-<!-- Firebase App (the core Firebase SDK) -->
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+<script>
+  //  tabs controller ----------------------------------------------------------------------------------------------------
+  document.getElementById("defaultTab").click();
+  function openTab(event, tabName) {
+    var i, tabcontent, tabBtn;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tabBtn = document.getElementsByClassName("tabBtn");
+    for (i = 0; i < tabBtn.length; i++) {
+      tabBtn[i].className = tabBtn[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    event.currentTarget.className += " active";
+  }
 
+  //  Firebase login logic ----------------------------------------------------------------------------------------------------
+  // Fetch Firebase configuration from the server and initialize Firebase
+  fetch("/accounts/firebase-config/")
+    .then((response) => response.json())
+    .then((config) => {
+      firebase.initializeApp(config);
+      console.log("Firebase initialized successfully", config);
+    })
+    .catch((error) => console.error("Error loading Firebase config:", error));
+
+  // Sign in with phone number using Firebase
+function phoneAuth() {
+    var phoneNumber = document.getElementById("phone").value;
+    console.log("Phone number:", phoneNumber);
+    var appVerifier = new firebase.auth.RecaptchaVerifier("recaptcha-container");
+
+    console.log("App Verifier:", appVerifier);
+    firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+       .then(function (confirmationResult) {
+           window.confirmationResult = confirmationResult;
+           document.getElementById("otp-section").style.display = "block";
+           alert("OTP sent to " + phoneNumber);
+       })
+       .catch(function (error) {
+           console.error(error);
+           alert("Error during sign-in with phone number. Please try again.");
+       });
+}
+
+
+  // SUbmit OTP sent to phone number using Firebase
+  function submitOTP() {
+    var otp = document.getElementById("otp").value;
+    window.confirmationResult
+      .confirm(otp)
+      .then(function (result) {
+        return result.user.getIdToken();
+      })
+      .then(function (firebaseToken) {
+        fetch("/firebase-login/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: "firebase_token=" + firebaseToken,
+        }).then(function (response) {
+          if (response.ok) {
+            alert("Login successful!");
+            window.location.href = "/";
+          } else {
+            alert("Login failed!");
+          }
+        });
+      })
+      .catch(function (error) {
+        console.error(error);
+        alert("Error verifying OTP. Please try again.");
+      });
+  }
+</script>
 {% endblock %}

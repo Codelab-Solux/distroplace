@@ -1,4 +1,5 @@
-from decouple import config
+# from decouple import config
+from dotenv import load_dotenv
 from firebase_admin import credentials
 import firebase_admin
 import pprint
@@ -7,7 +8,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -56,7 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # ---------third party apps-----------
-    'decouple',
+    # 'decouple',
     'corsheaders',
     # 'gdstorage',
     # allauth stuff-------
@@ -184,6 +185,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 AUTHENTICATION_BACKENDS = (
+    'distroplace.backends.FirebaseBackend',
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
@@ -242,22 +244,27 @@ FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, 'firebase-admin.json')
 cred = credentials.Certificate(FIREBASE_ADMIN_CREDENTIAL)
 firebase_admin.initialize_app(cred)
 
+# Firebase frontend settings
+FIREBASE_API_KEY = os.getenv('FIREBASE_API_KEY')
+FIREBASE_AUTH_DOMAIN = os.getenv('FIREBASE_AUTH_DOMAIN')
+FIREBASE_PROJECT_ID = os.getenv('FIREBASE_PROJECT_ID')
+FIREBASE_STORAGE_BUCKET = os.getenv('FIREBASE_STORAGE_BUCKET')
+FIREBASE_MESSAGING_SENDER_ID = os.getenv('FIREBASE_MESSAGING_SENDER_ID')
+FIREBASE_APP_ID = os.getenv('FIREBASE_APP_ID')
 
-FIREBASE_API_KEY = config('FIREBASE_API_KEY')
-FIREBASE_AUTH_DOMAIN = config('FIREBASE_AUTH_DOMAIN')
-FIREBASE_PROJECT_ID = config('FIREBASE_PROJECT_ID')
-FIREBASE_STORAGE_BUCKET = config('FIREBASE_STORAGE_BUCKET')
-FIREBASE_MESSAGING_SENDER_ID = config('FIREBASE_MESSAGING_SENDER_ID')
-FIREBASE_APP_ID = config('FIREBASE_APP_ID')
-FIREBASE_MEASUREMENT_ID = config('FIREBASE_MEASUREMENT_ID')
+# Firebase backend settings
+FIREBASE_ADMIN_CREDENTIALS = {
+    "type": os.getenv("FIREBASE_TYPE"),
+    "project_id": os.getenv("FIREBASE_PROJECT_ID"),
+    "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
+    "private_key": os.getenv("FIREBASE_PRIVATE_KEY").replace('\\n', '\n'),
+    "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
+    "client_id": os.getenv("FIREBASE_CLIENT_ID"),
+    "auth_uri": os.getenv("FIREBASE_AUTH_URI"),
+    "token_uri": os.getenv("FIREBASE_TOKEN_URI"),
+    "auth_provider_x509_cert_url": os.getenv("FIREBASE_AUTH_PROVIDER_CERT_URL"),
+    "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_CERT_URL")
+}
 
-FIREBASE_TYPE = config('FIREBASE_TYPE')
-FIREBASE_PRIVATE_KEY_ID = config('FIREBASE_PRIVATE_KEY_ID')
-FIREBASE_PRIVATE_KEY = config('FIREBASE_PRIVATE_KEY').replace('\\n', '\n')
-FIREBASE_CLIENT_EMAIL = config('FIREBASE_CLIENT_EMAIL')
-FIREBASE_CLIENT_ID = config('FIREBASE_CLIENT_ID')
-FIREBASE_AUTH_URI = config('FIREBASE_AUTH_URI')
-FIREBASE_TOKEN_URI = config('FIREBASE_TOKEN_URI')
-FIREBASE_AUTH_PROVIDER_CERT_URL = config('FIREBASE_AUTH_PROVIDER_CERT_URL')
-FIREBASE_CLIENT_CERT_URL = config('FIREBASE_CLIENT_CERT_URL')
-FIREBASE_UNIVERSE_DOMAIN = config('FIREBASE_UNIVERSE_DOMAIN')
+cred = credentials.Certificate(FIREBASE_ADMIN_CREDENTIALS)
+firebase_admin.initialize_app(cred, name='distroplace')

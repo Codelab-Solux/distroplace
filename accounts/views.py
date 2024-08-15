@@ -13,6 +13,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
+from distroplace.backends import FirebaseBackend
 from store.cart import *
 from store.models import *
 from .forms import *
@@ -105,25 +106,18 @@ def user_favorites(req):
     return render(req, 'accounts/partials/user_favorites.html', context)
 
 
-# ---------------------------------------- Login views----------------------------------------
+# ---------------------------------------- Login ----------------------------------------
 def loginView(request):
     if request.user.is_authenticated:
         return redirect('home')
 
     if request.method == 'POST':
-        email_or_phone = request.POST.get('email_or_phone')
+        email = request.POST.get('email')
         password = request.POST.get('password')
 
         try:
-            # Check if the input is an email
-            if '@' in email_or_phone:
-                user = authenticate(
-                    request, email=email_or_phone, password=password)
-            else:
-                # Assume it's a phone number and look up the user by phone
-                user = CustomUser.objects.get(phone=email_or_phone)
-                user = authenticate(
-                    request, email=user.email, password=password)
+            user = authenticate(
+                    request, email=email, password=password)
 
             if user is not None:
                 if user.is_active:
@@ -144,63 +138,31 @@ def loginView(request):
     return render(request, 'accounts/login.html', {'login_page': 'active', 'title': 'Login'})
 
 
-def verify_otp(request):
+# ---------------------------------------- firebase/OTP login views----------------------------------------
+
+def firebase_config(request):
+    config = {
+        "apiKey": settings.FIREBASE_API_KEY,
+        "authDomain": settings.FIREBASE_AUTH_DOMAIN,
+        "projectId": settings.FIREBASE_PROJECT_ID,
+        "storageBucket": settings.FIREBASE_STORAGE_BUCKET,
+        "messagingSenderId": settings.FIREBASE_MESSAGING_SENDER_ID,
+        "appId": settings.FIREBASE_APP_ID,
+    }
+    return JsonResponse(config)
+
+@csrf_exempt
+def firebase_login(request):
     if request.method == 'POST':
-        otp = request.POST.get('otp')
-        verification_id = request.session.get('verification_id')
-        user_id = request.session.get('otp_user_id')
-
-        if not user_id:
-            messages.error(request, 'Session expired or invalid.')
-            return redirect('login')
-
-        try:
-            user = CustomUser.objects.get(id=user_id)
-            if verification_id and otp:
-                try:
-                    # Verify the OTP using Firebase
-                    # credentials = auth.verify_phone_number(
-                    #     verification_id, otp)
-                    login(request, user)
-                    del request.session['verification_id']
-                    del request.session['otp_user_id']
-                    return redirect('home')
-                except Exception as e:
-                    messages.error(request, f"Error verifying OTP: {e}")
-                    return redirect('verify_otp')
-            else:
-                messages.error(request, 'Invalid or expired OTP.')
-        except CustomUser.DoesNotExist:
-            messages.error(request, 'Invalid session or user does not exist.')
-
-    return render(request, 'accounts/otp.html')
-
-
-def resend_otp(request):
-    user_id = request.session.get('otp_user_id')
-
-    if not user_id:
-        messages.error(request, 'Session expired or invalid.')
-        return redirect('login')
-
-    try:
-        user = CustomUser.objects.get(id=user_id)
-        # Ensure the phone number format is correct
-        phone_number = f"+{user.phone}"
-
-        # Send a new OTP using Firebase
-        try:
-            verification = auth.send_verification_code(phone_number)
-            request.session['verification_id'] = verification['sessionInfo']
-            messages.success(request, 'A new OTP has been sent to your phone.')
-            return redirect('verify_otp')
-        except Exception as e:
-            messages.error(request, f"Error sending OTP: {e}")
-            return redirect('verify_otp')
-
-    except CustomUser.DoesNotExist:
-        messages.error(request, 'Invalid session or user does not exist.')
-        return redirect('login')
+        firebase_token = request.POST.get('firebase_token')
+        backend = FirebaseBackend()
+        user = backend.authenticate(request, firebase_token=firebase_token)
+        if user is not None:
+            login(request, user)
+            return JsonResponse({'status': 'success'})
+        else:
+            return JsonResponse({'status': 'failed'}, status=401)
+    return JsonResponse({'status': 'bad_request'}, status=400)
 
 
 def verify_email(request, uid, token):
@@ -216,46 +178,4 @@ def verify_email(request, uid, token):
         return redirect('login')
     else:
         return render(request, 'email_verification_failed.html')
-
-
-# ---------------------------------------- firebase/OTP login views----------------------------------------
-@csrf_exempt
-def firebase_auth(request):
-    if request.method == 'POST':
-        id_token = request.POST.get('idToken')
-        try:
-            decoded_token = auth.verify_id_token(id_token)
-            phone_number = decoded_token['phone_number']
-            uid = decoded_token['uid']
-
-            # Check if the user already exists
-            user, created = CustomUser.objects.get_or_create(
-                phone=phone_number)
-
-            if created:
-                user.username = uid  # You can customize how you want to set the username
-                user.save()
-
-            # Log the user in
-            login(request, user)
-            return JsonResponse({'status': 'success'})
-
-        except Exception as e:
-            return JsonResponse({'status': 'error', 'message': str(e)})
-
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
-
-
-def firebase_config(request):
-    config = {
-        "apiKey": settings.FIREBASE_API_KEY,
-        "authDomain": settings.FIREBASE_AUTH_DOMAIN,
-        "projectId": settings.FIREBASE_PROJECT_ID,
-        "storageBucket": settings.FIREBASE_STORAGE_BUCKET,
-        "messagingSenderId": settings.FIREBASE_MESSAGING_SENDER_ID,
-        "appId": settings.FIREBASE_APP_ID,
-        "measurementId": settings.FIREBASE_MEASUREMENT_ID,
-    }
-    return JsonResponse(config)
-
 

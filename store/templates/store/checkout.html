@@ -64,7 +64,7 @@
             <td class="px-3 py-1">{{ item.product.price }}</td>
             {% endif %}
             <td class="px-3 py-1 text-center">{{ item.quantity }}</td>
-            <td class="px-3 py-1">{{ item.total_price }} Cfa</td>
+            <td class="px-3 py-1">{{ item.total_price }} CFA</td>
           </tr>
           <input type="hidden" id="csrf_token" value="{{ csrf_token }}" />
           {% endfor %}
@@ -78,7 +78,7 @@
 
         <p>Quantité : {{ cart_items|length }}</p>
 
-        <p>Grand Total : {{ total_price }} Cfa</p>
+        <p>Grand Total : {{ total_price }} CFA</p>
 
         {% if shipping_info %}
         <a
@@ -100,9 +100,7 @@
         class="bg-teal-900 text-sm p-4 rounded-xl flex flex-col gap-1"
       >
         {% csrf_token %}
-        <h2 class="my-1 font-bold text-teal-200 text-lg">
-          Infos de livraison
-        </h2>
+        <h2 class="my-1 font-bold text-teal-200 text-lg">Infos de livraison</h2>
 
         <div class="grid gap-1">
           {% for field in form %}

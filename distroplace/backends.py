@@ -1,26 +1,28 @@
 # distroplace/backends.py
 
-from django.contrib.auth.backends import ModelBackend
+from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth import get_user_model
+from accounts.models import CustomUser
+from firebase_admin import auth
 
-CustomUser = get_user_model()
+User = get_user_model()
 
 
-class EmailOrPhoneBackend(ModelBackend):
-    def authenticate(self, request, username=None, password=None, **kwargs):
-        if username is None or password is None:
-            return None
+class FirebaseBackend(BaseBackend):
+    def authenticate(self, request, firebase_token=None, **kwargs):
         try:
-            if '@' in username:
-                user = CustomUser.objects.get(email=username)
-            else:
-                user = CustomUser.objects.get(phone=username)
-        except CustomUser.DoesNotExist:
+            decoded_token = auth.verify_id_token(firebase_token)
+            phone_number = decoded_token.get('phone_number')
+            if phone_number:
+                try:
+                    user = CustomUser.objects.get(phone=phone_number)
+                except CustomUser.DoesNotExist:
+                    user = CustomUser.objects.create(phone=phone_number)
+                    user.set_unusable_password()
+                    user.save()
+                return user
+        except Exception as e:
             return None
-
-        if user.check_password(password) and self.user_can_authenticate(user):
-            return user
-        return None
 
     def get_user(self, user_id):
         try:

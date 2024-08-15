@@ -242,7 +242,7 @@ class DeliveryType(models.Model):
 class Delivery(models.Model):
     order = models.ForeignKey(
         Order, on_delete=models.SET_NULL, null=True)
-    delivery_type = models.ForeignKey(
+    type = models.ForeignKey(
         DeliveryType, on_delete=models.SET_NULL, default=1, null=True)
     client = models.ForeignKey(
         CustomUser, on_delete=models.SET_NULL, null=True)

@@ -7,43 +7,37 @@ fetch("/accounts/firebase-config/")
   .catch((error) => console.error("Error loading Firebase config:", error));
 
 // Sign in with phone number using Firebase
-function signInWithPhoneNumber(phoneNumber) {
-  const appVerifier = new firebase.auth.RecaptchaVerifier(
-    "recaptcha-container"
-  );
-
+function phoneAuth() {
+  var phoneNumber = document.getElementById("phone").value;
+  var appVerifier = new firebase.auth.RecaptchaVerifier("recaptcha-container");
   firebase
     .auth()
     .signInWithPhoneNumber(phoneNumber, appVerifier)
     .then(function (confirmationResult) {
-      // SMS sent. Ask the user for the verification code.
-      const code = prompt("Enter the OTP");
+      var code = prompt("Enter the OTP");
       return confirmationResult.confirm(code);
     })
     .then(function (result) {
-      // User signed in successfully.
-      const user = result.user;
-      // Send the user data to your backend
-      sendUserToBackend(user);
+      return result.user.getIdToken();
+    })
+    .then(function (firebaseToken) {
+      fetch("/firebase-login/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: "firebase_token=" + firebaseToken,
+      }).then(function (response) {
+        if (response.ok) {
+          alert("Login successful!");
+          window.location.href = "/";
+        } else {
+          alert("Login failed!");
+        }
+      });
     })
     .catch(function (error) {
-      console.error("Error during sign-in:", error);
+      console.error(error);
+      alert("Something went wrong!");
     });
-}
-
-// Send authenticated user data to the backend
-function sendUserToBackend(user) {
-  user.getIdToken().then((idToken) => {
-    fetch("/accounts/firebase-auth/", {
-      method: "POST",
-      body: JSON.stringify({ idToken: idToken }),
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": csrftoken,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.error("Error sending user to backend:", error));
-  });
 }

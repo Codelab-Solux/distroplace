@@ -14,10 +14,8 @@ urlpatterns = [
     path('users/user_favorites/', user_favorites, name='user_favorites'),
     path('users/activate/<uidb64>/<token>/', activate, name='activate'),
     path('users/<hashid:pk>/', user_profile, name='user_profile'),
-    path('verify-otp/', verify_otp, name='verify_otp'),
-    path('resend-otp/', resend_otp, name='resend_otp'),
     path('verify-email/<uid>/<token>/', verify_email, name='verify_email'),
-    path('firebase-auth/', firebase_auth, name='firebase_auth'),
+    path('firebase-login/', firebase_login, name='firebase_login'),
     path('firebase-config/', firebase_config, name='firebase_config'),
 
     # password reset URLs
