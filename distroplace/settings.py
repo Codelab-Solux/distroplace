@@ -1,4 +1,5 @@
 # from decouple import config
+import json
 from dotenv import load_dotenv
 from firebase_admin import credentials
 import firebase_admin
@@ -247,7 +248,7 @@ FIREBASE_MESSAGING_SENDER_ID = os.getenv('FIREBASE_MESSAGING_SENDER_ID')
 FIREBASE_APP_ID = os.getenv('FIREBASE_APP_ID')
 
 # Firebase backend settings
-FIREBASE_ADMIN_CREDENTIALS = {
+FIREBASE_ADMIN_CREDENTIALS = json.dumps({
     "type": os.getenv("FIREBASE_TYPE"),
     "project_id": os.getenv("FIREBASE_PROJECT_ID"),
     "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
@@ -257,7 +258,7 @@ FIREBASE_ADMIN_CREDENTIALS = {
     "auth_uri": os.getenv("FIREBASE_AUTH_URI"),
     "token_uri": os.getenv("FIREBASE_TOKEN_URI"),
     "auth_provider_x509_cert_url": os.getenv("FIREBASE_AUTH_PROVIDER_CERT_URL"),
-    "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_CERT_URL")
+    "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_CERT_URL"),
 }
 
 cred = credentials.Certificate(FIREBASE_ADMIN_CREDENTIALS)
