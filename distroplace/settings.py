@@ -239,11 +239,6 @@ LOGGING = {
 }
 
 
-# firebase settings for OTP
-FIREBASE_ADMIN_CREDENTIAL = os.path.join(BASE_DIR, 'firebase-admin.json')
-cred = credentials.Certificate(FIREBASE_ADMIN_CREDENTIAL)
-firebase_admin.initialize_app(cred)
-
 # Firebase frontend settings
 FIREBASE_API_KEY = os.getenv('FIREBASE_API_KEY')
 FIREBASE_AUTH_DOMAIN = os.getenv('FIREBASE_AUTH_DOMAIN')
