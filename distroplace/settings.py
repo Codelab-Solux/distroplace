@@ -248,18 +248,7 @@ FIREBASE_MESSAGING_SENDER_ID = os.getenv('FIREBASE_MESSAGING_SENDER_ID')
 FIREBASE_APP_ID = os.getenv('FIREBASE_APP_ID')
 
 # Firebase backend settings
-FIREBASE_ADMIN_CREDENTIALS = json.dumps({
-    "type": os.getenv("FIREBASE_TYPE"),
-    "project_id": os.getenv("FIREBASE_PROJECT_ID"),
-    "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
-    "private_key": os.getenv("FIREBASE_PRIVATE_KEY"),
-    "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
-    "client_id": os.getenv("FIREBASE_CLIENT_ID"),
-    "auth_uri": os.getenv("FIREBASE_AUTH_URI"),
-    "token_uri": os.getenv("FIREBASE_TOKEN_URI"),
-    "auth_provider_x509_cert_url": os.getenv("FIREBASE_AUTH_PROVIDER_CERT_URL"),
-    "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_CERT_URL"),
-})
-
+FIREBASE_ADMIN_CREDENTIALS = os.path.join(
+    BASE_DIR, 'firebase_admin.json')
 cred = credentials.Certificate(FIREBASE_ADMIN_CREDENTIALS)
 firebase_admin.initialize_app(cred, name='distroplace')
