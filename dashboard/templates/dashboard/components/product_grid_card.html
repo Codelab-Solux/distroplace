@@ -31,7 +31,7 @@
     <button
       type="button"
       class="hover:text-black bg-white hover:text-teal-400 px-2 py-1 hover:text-teal-400 text-sm"
-      name="sentry"
+      name="actions"
       aria-expanded="false"
       aria-haspopup="true"
       onclick="toggleMenu(this,'menu_c_{{obj.id}}')"
@@ -107,9 +107,9 @@
 <script>
   function toggleDropdown(e, obj_id) {
     activeMenu = document.getElementById(`actionMenu${obj_id}`);
-    e.name === `sentry`
+    e.name === `actions`
       ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
-      : ((e.name = `sentry`), activeMenu.classList.add("hidden"));
+      : ((e.name = `actions`), activeMenu.classList.add("hidden"));
   }
 
   window.addEventListener("mouseup", function (event) {

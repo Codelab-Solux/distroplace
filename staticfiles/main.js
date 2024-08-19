@@ -99,18 +99,18 @@ function toggleNav(e) {
 }
 
 //  dropdown controllers ----------------------------------------------------------------------------------------------------
-function toggleDropdown(e) {
-  e.name === "dropdownBtn"
-    ? ((e.name = "close"), dropdownMenu.classList.remove("hidden"))
-    : ((e.name = "dropdownBtn"), dropdownMenu.classList.add("hidden"));
-}
+// function toggleDropdown(e) {
+//   e.name === "dropdownBtn"
+//     ? ((e.name = "close"), dropdownMenu.classList.remove("hidden"))
+//     : ((e.name = "dropdownBtn"), dropdownMenu.classList.add("hidden"));
+// }
 
-function toggleMenu(e, obj_id) {
-  activeMenu = document.getElementById(obj_id);
-  e.name === `sentry`
-    ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
-    : ((e.name = `sentry`), activeMenu.classList.add("hidden"));
-}
+// function toggleMenu(e, obj_id) {
+//   activeMenu = document.getElementById(obj_id);
+//   e.name === `sentry`
+//     ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
+//     : ((e.name = `sentry`), activeMenu.classList.add("hidden"));
+// }
 
 window.addEventListener("mouseup", function (event) {
   if (

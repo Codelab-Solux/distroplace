@@ -617,6 +617,16 @@ def clients_list(req):
     return render(req, 'dashboard/partials/clients_list.html', context)
 
 
+@login_required(login_url='login')
+def client_details(req, pk):
+    curr_obj = CustomUser.objects.get(id=pk)
+
+    context = {
+        "clients_page": "dash_active",
+        "curr_obj": curr_obj,
+    }
+    return render(req, 'dashboard/client_details.html', context)
+
 # ------------------------------------------------- Staff -------------------------------------------------
 @login_required(login_url='login')
 def staff(req):

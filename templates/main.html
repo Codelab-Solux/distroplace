@@ -30,7 +30,7 @@
 
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Helvetica:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&display=swap"
     />
     <link
       rel="shortcut icon"
@@ -41,7 +41,7 @@
     <style>
       body {
         /* font-family: 'Noto Sans', sans-serif; */
-        font-family: "Helvetica", sans-serif;
+        font-family: "Prompt", sans-serif;
         /* font-family: 'Roboto', sans-serif; */
       }
     </style>
@@ -61,15 +61,22 @@
     {% include 'navbar.html' %}
     <!--  -->
     {% if messages %}
-    <div class="messages">
+    <div class="messages flex flex-col items-end p-4">
       {% for message in messages %}
-      <div class="alert {% if message.tags %}{{ message.tags }}{% endif %}">
-        {{ message }}
+      <div
+        class="alert mx-auto max-w-[400px] p-3 rounded-lg text-black flex items-center justify-between shadow-lg {% if message.tags == 'error' %} bg-red-300 {% elif message.tags == 'success' %} bg-green-300 {% elif message.tags == 'warning' %} bg-yellow-300 {% elif message.tags == 'info' %} bg-blue-300 {% endif %}"
+      >
+        <span>{{ message }}</span>
+        <button
+          class="ml-4 font-bold text-lg leading-none focus:outline-none"
+          onclick="this.parentElement.remove();"
+        >
+          ×
+        </button>
       </div>
       {% endfor %}
     </div>
     {% endif %}
-
     <!--  -->
     <div id="base" class="min-h-screen lg:mt-[6%]">
       {% block content %} {% endblock %}
@@ -201,19 +208,20 @@
       }
 
       function toggleMenu(e, obj_id) {
+        // alert("clicked");
         activeMenu = document.getElementById(obj_id);
-        e.name === `sentry`
+        e.name === `actions`
           ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
-          : ((e.name = `sentry`), activeMenu.classList.add("hidden"));
+          : ((e.name = `actions`), activeMenu.classList.add("hidden"));
       }
 
       window.addEventListener("mouseup", function (event) {
         if (
           !activeMenu.contains(event.target) &&
-          !document.getElementById("sentry").contains(event.target)
+          !document.getElementById("actions").contains(event.target)
         ) {
           activeMenu.classList.add("hidden");
-          document.getElementById("sentry").name = "sentry";
+          document.getElementById("actions").name = "actions";
         }
 
         if (

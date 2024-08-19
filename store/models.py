@@ -46,7 +46,7 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
     is_featured = models.BooleanField(default=False)
     image = models.ImageField(
-        upload_to='store/categories/', default='../static/imgs/logo-g.png', blank=True, null=True)
+        upload_to='store/categories/', default='/static/imgs/logo-g.png')
 
     def __str__(self):
         return self.name
@@ -56,7 +56,7 @@ class SubCategory(models.Model):
     name = models.CharField(max_length=100)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     image = models.ImageField(
-        upload_to='store/subcategories/', default='../static/imgs/logo-g.png', blank=True, null=True)
+        upload_to='store/subcategories/', default='/static/imgs/logo-g.png')
 
     def __str__(self):
         return self.name
@@ -91,7 +91,7 @@ class Product(models.Model):
     is_new = models.BooleanField(default=True)
     timestamp = models.DateTimeField(auto_now_add=True,  blank=True, null=True)
     thumbnail = models.ImageField(
-        upload_to='store/products/', blank=True, null=True)
+        upload_to='store/products/', default='/static/imgs/logo-g.png')
 
     def __str__(self):
         return f'{self.name} - {self.quantity} - {self.unit}'
@@ -115,7 +115,7 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='store/products/images/', default='../static/imgs/logo-g.png')
+    image = models.ImageField(upload_to='store/products/images/', default='/static/imgs/logo-g.png')
 
     def __str__(self):
         return f'Image for {self.product.name}'

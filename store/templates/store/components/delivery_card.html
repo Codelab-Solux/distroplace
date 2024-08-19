@@ -1,29 +1,14 @@
 {% load static %}
 
 <div
-  class="py-2 px-4 w-full bg-white hover:bg-gray-100 {% if obj.status == 'cancelled' %} text-gray-400 {% else %}  text-gray-600 {% endif %} text-xs xl:text-sm flex justify-between items-center lg:grid lg:grid-cols-8 rounded-full border hover:shadow-lg transition duration-200 ease-in"
+  class="py-2 px-4 w-full bg-white hover:bg-gray-100 {% if obj.status == 'cancelled' %} text-gray-400 {% else %} text-gray-600 {% endif %} text-xs xl:text-sm flex justify-between items-center lg:grid lg:grid-cols-8 rounded-full border hover:shadow-lg transition duration-200 ease-in"
 >
   <h3 class="font-bold text-black">Livraison N°{{obj.id}}</h3>
-  <p>
-    
-    {{obj.d_day}}
-  </p>
-  <p>
-  
-    {{obj.items}} articles
-  </p>
-  <p>
-
-    {{obj.amount_due}} CFA
-  </p>
-  <p>
-    Tel:
-    {{obj.phone}}
-  </p>
-  <p>
-    
-    {{obj.delivery_type}}
-  </p>
+  <p>{{obj.d_day}}</p>
+  <p>{{obj.items}} articles</p>
+  <p>{{obj.amount_due}} CFA</p>
+  <p>Tel: {{obj.phone}}</p>
+  <p>{{obj.delivery_type}}</p>
 
   {% include 'store/components/delivery_status.html' %}
   <!--  -->
@@ -32,24 +17,16 @@
     <button
       type="button"
       class="hover:text-black bg-white hover:text-teal-700 px-3 py-1 rounded-full"
-      name="deliverySentry"
-      id="deliverySentry"
-      aria-expanded="false"
-      aria-haspopup="true"
-      onclick="toggleHostActionDropdown(this,'{{obj.id}}')"
+      name="actions"
+      onclick="toggleMenu(this,'dlv_{{obj.id}}')"
     >
       <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
     </button>
 
     <div
       class="hidden bg-gray-50 w-40 shadow-md lg:w-[180px] p-2 absolute right-0 top-12 origin-top-left bg-white z-10 rounded-xl flex flex-col items-center gap-2 text-xs lg:text-sm overflow-hidden"
-      role="status menu"
-      aria-orientation="vertical"
-      aria-labelledby="status-menu-button"
-      tabindex="-1"
-      id="actionMenu{{obj.id}}"
+      id="dlv_{{obj.id}}"
     >
-    
       <a
         href="{% url 'delivery_details' obj.id %}"
         class="px-4 py-2 flex items-center hover:text-black hover:bg-gray-200 rounded-full w-full text-center cursor-pointer"
@@ -66,18 +43,17 @@
         Reporter
       </a>
       {% endif %}
-
     </div>
   </div>
 </div>
 
 <script>
-  function toggleHostActionDropdown(e, obj_id) {
-    activeMenu = document.getElementById(`actionMenu${obj_id}`);
-    e.name === `deliverySentry`
-      ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
-      : ((e.name = `deliverySentry`), activeMenu.classList.add("hidden"));
-  }
+  // function toggleHostActionDropdown(e, obj_id) {
+  //   activeMenu = document.getElementById(`actionMenu${obj_id}`);
+  //   e.name === `deliverySentry`
+  //     ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
+  //     : ((e.name = `deliverySentry`), activeMenu.classList.add("hidden"));
+  // }
 
   window.addEventListener("mouseup", function (event) {
     activeMenu.classList.add("hidden");

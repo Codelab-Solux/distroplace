@@ -197,8 +197,9 @@ def join_newsletter(req):
         email = req.POST['email']
         new_mail = NewsletterEmails(email=email)
         new_mail.save()
+        messages.success(req, 'Successfully subscribed to the newsletter!')
 
-    return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
+    return redirect(req.META.get('HTTP_REFERER', '/'))
 
 # --------------------------Promotions--------------------------
 def promotions(req):

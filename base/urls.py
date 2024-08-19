@@ -27,6 +27,7 @@ urlpatterns = [
     path('feedbacks/', feedbacks, name='feedbacks'),
     path('about/', about, name='about'),
     path('contact/', contact, name='contact'),
+    path('join_newsletter/', join_newsletter, name='join_newsletter'),
     # --------------------------
     path('base/objects/<hashid:pk>/<str:model_name>/delete/',
          delete_base_object, name='delete_base_object'),

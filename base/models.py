@@ -13,7 +13,7 @@ class Promotion(models.Model):
     products = models.ManyToManyField(
         Product, related_name='promotions', blank=True)
     image = models.ImageField(
-        upload_to='store/blogposts/', blank=True, null=True)
+        upload_to='base/promotions/', default='/static/imgs/promo.png')
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -32,7 +32,7 @@ class Blogpost(models.Model):
         max_length=255, default='', blank=True, null=True)
     content = models.TextField(default='')
     image = models.ImageField(
-        upload_to='store/blogposts/', blank=True, null=True)
+        upload_to='base/blogposts/', default='/static/imgs/blog.png')
     timestamp = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(
         CustomUser, related_name='blogpost_likes', blank=True,)
@@ -77,3 +77,20 @@ class NewsletterEmails(models.Model):
 
     def get_absolute_url(self):
         return reverse('news_letter_email', kwargs={'pk': self.pk})
+
+
+class HomeImages(models.Model):
+    title = models.CharField(max_length=255, default='')
+    catch_phrase = models.TextField(default='')
+    image = models.ImageField(
+        upload_to='base/home_images/', blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title
+
+    def get_hashid(self):
+        return h_encode(self.id)
+
+    def get_absolute_url(self):
+        return reverse('home_image', kwargs={'pk': self.pk})

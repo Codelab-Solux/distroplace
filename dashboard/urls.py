@@ -44,6 +44,7 @@ urlpatterns = [
     # ----------------------------------------------------------------------------
     path('clients/', clients, name='clients'),
     path('clients/list/', clients_list, name='clients_list'),
+    path('clients/<hashid:pk>/', client_details, name='client_details'),
     # ----------------------------------------------------------------------------
     path('staff/', staff, name='staff'),
     path('staff/grid/', staff_grid, name='staff_grid'),

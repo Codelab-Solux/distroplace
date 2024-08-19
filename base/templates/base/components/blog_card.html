@@ -5,13 +5,13 @@
   <a href="{% url 'blogpost' obj.id %}">
     {% if obj.image %}
     <img
-      src="{{ obj.image.url }}"
+      src="{{ MEDIA_URL }} {{ obj.image.url }}"
       alt="{{ obj.name }}"
       class="w-full h-40 object-cover hover:scale"
     />
     {% else %}
     <img
-      src="{% static 'imgs/banner_1.webp' %}"
+      src="{% static 'imgs/blog.png' %}"
       alt="image"
       class="w-full h-40 object-cover hover:scale"
     />

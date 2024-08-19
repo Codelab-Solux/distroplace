@@ -1,6 +1,4 @@
-{% load static %}
-
-{% if not suppliers %}
+{% load static %} {% if not suppliers %}
 <div class="flex flex-col items-center gap-2 my-20 mx-auto">
   <i class="fa-solid fa-boxes-packing text-teal-900 text-9xl"></i>
   <span>Aucun fournisseur trouvé</span>
@@ -39,10 +37,7 @@
           <button
             type="button"
             class="hover:text-black bg-white hover:text-teal-700 px-3 py-1 rounded-full"
-            name="sentry"
-            id="sentry"
-            aria-expanded="false"
-            aria-haspopup="true"
+            name="actions"
             onclick="toggleMenu(this,'frn_{{obj.id}}')"
           >
             <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
@@ -50,10 +45,6 @@
 
           <div
             class="hidden bg-gray-50 w-40 shadow-md lg:w-[180px] p-2 absolute right-0 top-12 origin-top-left bg-white z-10 rounded-xl flex flex-col items-center gap-2 text-xs lg:text-sm overflow-hidden"
-            role="status menu"
-            aria-orientation="vertical"
-            aria-labelledby="status-menu-button"
-            tabindex="-1"
             id="frn_{{obj.id}}"
           >
             <a
@@ -94,4 +85,4 @@
     {% endfor %}
   </tbody>
 </table>
-{% endif %} 
+{% endif %}

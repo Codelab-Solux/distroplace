@@ -3,6 +3,7 @@
 <!-- Footer start -->
 
 <footer class="bg-teal-900 text-center text-white lg:text-left">
+  <!-- newsletter box -->
   <div
     class="p-8 w-full max-w-5xl mx-auto rounded-b-xl shadow-xl bg-teal-700 flex flex-col lg:flex-row gap-2 mx-auto justify-between items-center"
   >
@@ -16,13 +17,14 @@
       </div>
     </div>
     <form
+      action="{% url 'join_newsletter' %}"
       class="w-full max-w-[400px] flex items-center gap-4 bg-white rounded-full p-2 text-sm text-gray-700"
       method="POST"
     >
       <input
         class="px-3 py-1 border-none w-full rounded-full outline-none focus:bg-teal-100"
-        type="text"
-        name="query"
+        type="email"
+        name="email"
         placeholder="Votre adresse mail..."
       />
       <button
@@ -33,6 +35,7 @@
       </button>
     </form>
   </div>
+  <!-- footer links -->
   <div
     class="px-4 lg:px-8 max-w-7xl mt-6 mx-auto text-center md:text-left grid gap-4"
   >

@@ -1,4 +1,4 @@
-console.log('hello cart')
+// console.log('hello cart')
 
 function update_cart(obj_id, action) {
   const csrfToken = document.getElementById("csrf_token").value;

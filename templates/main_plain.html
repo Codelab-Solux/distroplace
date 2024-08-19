@@ -25,19 +25,22 @@
       src="https://kit.fontawesome.com/f601cf3e61.js"
       crossorigin="anonymous"
     ></script>
-    <!-- <script src="{% static 'firebase.js' %}" defer="true"></script> -->
     <link href="{% static 'styles.css' %}" rel="stylesheet" />
-    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap"> -->
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Helvetica:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&display=swap"
     />
-    <link rel="shortcut icon" href="{% static 'imgs/logo.png' %}" type="image/x-icon">
+
+    <link
+      rel="shortcut icon"
+      href="{% static 'imgs/logo.png' %}"
+      type="image/x-icon"
+    />
 
     <style>
       body {
         /* font-family: 'Noto Sans', sans-serif; */
-        font-family: "Helvetica", sans-serif;
+        font-family: "Prompt", sans-serif;
         /* font-family: 'Roboto', sans-serif; */
       }
     </style>
@@ -47,24 +50,31 @@
     <title>Distroplace</title>
     {% endif %}
   </head>
-  <body
-    hx-headers='{"X-CSRFToken" : "{{ csrf_token }}"}'
-    class="flex flex-col"
-  >
+  <body hx-headers='{"X-CSRFToken" : "{{ csrf_token }}"}' class="flex flex-col">
     {% csrf_token %}
     <!--  -->
     {% if messages %}
-    <div class="messages">
+    <div class="messages flex flex-col items-end p-4">
       {% for message in messages %}
-      <div class="alert {% if message.tags %}{{ message.tags }}{% endif %}">
-        {{ message }}
+      <div
+        class="alert mx-auto max-w-[400px] p-3 rounded-lg text-black flex items-center justify-between shadow-lg {% if message.tags == 'error' %} bg-red-300 {% elif message.tags == 'success' %} bg-green-300 {% elif message.tags == 'warning' %} bg-yellow-300 {% elif message.tags == 'info' %} bg-blue-300 {% endif %}"
+      >
+        <span>{{ message }}</span>
+        <button
+          class="ml-4 font-bold text-lg leading-none focus:outline-none"
+          onclick="this.parentElement.remove();"
+        >
+          ×
+        </button>
       </div>
       {% endfor %}
     </div>
     {% endif %}
-
     <!--  -->
-    <div id="base" class="min-h-screen flex flex-col justify-center items-center">
+    <div
+      id="base"
+      class="min-h-screen flex flex-col justify-center items-center"
+    >
       {% block content %} {% endblock %}
     </div>
     <!--  -->

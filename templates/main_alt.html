@@ -63,10 +63,8 @@
     {% include 'modal.html' %}
     <!--  -->
   </body>
-
   <!--  -->
   {{ request.user.id|json_script:"user_id" }}
-
   <script>
     htmx.onLoad(function (content) {
       scripts.init(content);
@@ -186,19 +184,20 @@
     }
 
     function toggleMenu(e, obj_id) {
+      // alert("clicked");
       activeMenu = document.getElementById(obj_id);
-      e.name === `sentry`
+      e.name === `actions`
         ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
-        : ((e.name = `sentry`), activeMenu.classList.add("hidden"));
+        : ((e.name = `actions`), activeMenu.classList.add("hidden"));
     }
 
     window.addEventListener("mouseup", function (event) {
       if (
         !activeMenu.contains(event.target) &&
-        !document.getElementById("sentry").contains(event.target)
+        !document.getElementById("actions").contains(event.target)
       ) {
         activeMenu.classList.add("hidden");
-        document.getElementById("sentry").name = "sentry";
+        document.getElementById("actions").name = "actions";
       }
 
       if (

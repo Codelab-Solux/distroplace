@@ -43,7 +43,9 @@
       {% if not obj.is_promoted %}
       <td class="px-3 py-1">{{obj.price}} CFA</td>
       {% else %}
-      <td class="px-3 py-1 text-teal-500"><i class="fa-solid fa-tags mr-2"></i>{{obj.promo_price}} CFA</td>
+      <td class="px-3 py-1 text-teal-500">
+        <i class="fa-solid fa-tags mr-2"></i>{{obj.promo_price}} CFA
+      </td>
       {% endif %}
       <td class="px-3 py-1">{{obj.quantity}}</td>
 
@@ -52,10 +54,7 @@
           <button
             type="button"
             class="hover:text-black bg-white hover:text-teal-700 px-3 py-1 rounded-full"
-            name="sentry"
-            id="sentry"
-            aria-expanded="false"
-            aria-haspopup="true"
+            name="actions"
             onclick="toggleMenu(this,'prd_{{obj.id}}')"
           >
             <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
@@ -63,10 +62,6 @@
 
           <div
             class="hidden bg-gray-50 w-40 shadow-md lg:w-[180px] p-2 absolute right-0 top-12 origin-top-left bg-white z-10 rounded-xl flex flex-col items-center gap-2 text-xs lg:text-sm overflow-hidden"
-            role="status menu"
-            aria-orientation="vertical"
-            aria-labelledby="status-menu-button"
-            tabindex="-1"
             id="prd_{{obj.id}}"
           >
             <a
