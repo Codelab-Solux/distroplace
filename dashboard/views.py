@@ -4,8 +4,8 @@ from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.apps import apps
 from django.contrib import messages
-from base.forms import PromotionForm
-from base.models import Promotion
+from base.forms import *
+from base.models import *
 from store.forms import *
 from store.models import *
 
@@ -19,11 +19,11 @@ def dashboard(req):
     suppliers = Supplier.objects.all()
     delivery_types = DeliveryType.objects.all()
     orders = Order.objects.all()
-    pending_ord= orders.filter(status = 'pending').count()
+    pending_ord = orders.filter(status='pending').count()
     processed_ord = orders.filter(status='processed').count()
     delivered_ord = orders.filter(status='delivered').count()
     deliveries = Delivery.objects.all()
-    pending_dlv= deliveries.filter(status = 'pending').count()
+    pending_dlv = deliveries.filter(status='pending').count()
     dispatched_dlv = deliveries.filter(status='dispatched').count()
     completed_dlv = deliveries.filter(status='completed').count()
 
@@ -36,12 +36,12 @@ def dashboard(req):
         'categories': categories,
         'subcategories': subcategories,
         'delivery_types': delivery_types,
-        'pending_ord':pending_ord,
-        'processed_ord':processed_ord,
-        'delivered_ord':delivered_ord,
-        'deliveries':deliveries,
-        'pending_dlv':pending_dlv,
-        'dispatched_dlv':dispatched_dlv,
+        'pending_ord': pending_ord,
+        'processed_ord': processed_ord,
+        'delivered_ord': delivered_ord,
+        'deliveries': deliveries,
+        'pending_dlv': pending_dlv,
+        'dispatched_dlv': dispatched_dlv,
         'completed_dlv': completed_dlv,
     }
     return render(req, 'dashboard/index.html', context)
@@ -100,7 +100,7 @@ def product_overview(req, pk):
 
 
 @login_required(login_url='login')
-def add_product(req):
+def create_product(req):
     user = req.user
     if not user.is_staff:
         messages.info(req, "Access denied!!!")
@@ -210,7 +210,7 @@ def load_subcategories(req):
 
 
 @login_required(login_url='login')
-def add_product_image(req, pk):
+def create_product_image(req, pk):
     user = req.user
     if not user.is_staff:
         messages.info(req, "Access denied!!!")
@@ -533,7 +533,7 @@ def dash_promo(req, pk):
     promotion = get_object_or_404(Promotion, pk=pk)
     products = promotion.products.all()
     context = {
-        "promo_page": "active",
+        "promo_page": "dash_active",
         'title': 'Promo Details',
         'promotion': promotion,
         'products': products,
@@ -588,12 +588,81 @@ def edit_promotion(req, pk):
         form = PromotionForm(req.POST, instance=curr_obj)
         if form.is_valid():
             form.save()
-            # messages.success(req, 'Données modifiée avec success')
+            messages.success(req, 'Données modifiée avec success')
         return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
     else:
         return render(req, 'basic_form.html', context={'form': form, 'form_title': 'Modifier cette promotion', 'curr_obj': curr_obj})
 
+
+# -------------------------------------------------Feedbacks-------------------------------------------------
+@login_required(login_url='login')
+def dash_feedbacks(req):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+    
+    feedbacks = Feedback.objects.all().order_by('-timestamp')
+    context = {
+        "comms_page": "dash_active",
+        'title': 'Feedbacks',
+        'feedbacks': feedbacks,
+    }
+    return render(req, 'dashboard/feedbacks.html', context)
+
+
+@login_required(login_url='login')
+def dash_feedback_details(req, pk):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
+    curr_obj = get_object_or_404(Feedback, pk=pk)
+    context = {
+        "comms_page": "dash_active",
+        'title': 'Details du Feedback',
+        'curr_obj': curr_obj,
+    }
+    return render(req, 'dashboard/feedback_details.html', context)
+
+
+# -------------------------------------------------Contact mails-------------------------------------------------
+@login_required(login_url='login')
+def contact_mails(req):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+    
+    contact_mails = ContactMail.objects.all().order_by('-timestamp')
+    context = {
+        "comms_page": "dash_active",
+        'title': 'Courriers',
+        'contact_mails': contact_mails,
+    }
+    return render(req, 'dashboard/contact_mails.html', context)
+
+
+@login_required(login_url='login')
+def contact_mail_details(req, pk):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect('home')
+
+    curr_obj = get_object_or_404(ContactMail, pk=pk)
+    context = {
+        "comms_page": "dash_active",
+        'title': 'Details du contact_mail',
+        'curr_obj': curr_obj,
+    }
+    return render(req, 'dashboard/contact_mail_details.html', context)
+
+
 # ------------------------------------------------- Clients-------------------------------------------------
+
+
 @login_required(login_url='login')
 def clients(req):
     user = req.user
@@ -626,6 +695,33 @@ def client_details(req, pk):
         "curr_obj": curr_obj,
     }
     return render(req, 'dashboard/client_details.html', context)
+
+
+@login_required(login_url='login')
+def filter_clients(req):
+    email_query = req.POST.get('email')
+    phone_query = req.POST.get('phone')
+    last_name_query = req.POST.get('last_name')
+    first_name_query = req.POST.get('first_name')
+
+    base_query = CustomUser.objects.filter(
+        role__sec_level=1).order_by('last_name')
+
+    if email_query:
+        base_query = base_query.filter(email__icontains=email_query)
+    if phone_query:
+        base_query = base_query.filter(phone__icontains=phone_query)
+    if last_name_query:
+        base_query = base_query.filter(last_name__icontains=last_name_query)
+    if first_name_query:
+        base_query = base_query.filter(first_name__icontains=first_name_query)
+
+    clients = base_query
+
+    context = {"clients": clients}
+
+    return render(req, 'dashboard/partials/clients_list.html', context)
+
 
 # ------------------------------------------------- Staff -------------------------------------------------
 @login_required(login_url='login')
@@ -863,7 +959,7 @@ def subcategories_list(req):
     subcategories = SubCategory.objects.all().order_by('name')
     context = {
         'subcategories': subcategories,
-        'title': 'titleeeeeeeeeee',
+        'title': 'title',
     }
     return render(req, 'dashboard/partials/subcategories_list.html', context)
 
@@ -991,3 +1087,95 @@ def dash_profile(req, pk):
         'curr_obj': curr_obj,
     }
     return render(req, 'dashboard/profile.html', context)
+
+
+# ------------------------------------------------- Blog views -------------------------------------------------
+def dash_blog(req):
+    blogposts = Blogpost.objects.all().order_by('-timestamp')
+    context = {
+        "dash_blog_page": "dash_active",
+        'title': 'Blog',
+        'blogposts': blogposts,
+    }
+    return render(req, 'dashboard/blog.html', context)
+
+
+def dash_blogpost(req, pk):
+    curr_obj = get_object_or_404(Blogpost, id=pk)
+    comments = BlogComment.objects.filter(blogpost=curr_obj)
+    blogposts = Blogpost.objects.all().order_by(
+        '-timestamp').exclude(id=curr_obj.id)[:4]
+
+    context = {
+        "dash_blog_page": "dash_active",
+        'title': 'Blogpost details',
+        'curr_obj': curr_obj,
+        'comments': comments,
+        'blogposts': blogposts,
+
+    }
+
+    return render(req, 'dashboard/blogpost.html', context)
+
+
+def blog_grid(req):
+    blogposts = Blogpost.objects.all().order_by('-timestamp')
+    context = {
+        'blogposts': blogposts,
+    }
+    return render(req, 'dashboard/partials/blog_grid.html', context)
+
+
+@login_required(login_url='login')
+def create_blogpost(req):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect(req.META.get('HTTP_REFERER', '/'))
+
+    form = BlogForm()
+    if req.method == 'POST':
+        form = BlogForm(req.POST)
+        if form.is_valid():
+            blogpost = form.save()
+            # messages.success(req, 'Nouvel article ajouté')
+            return redirect('dash_blogpost', pk=blogpost.id)
+        else:
+            print("Form errors:", form.errors)
+            messages.error(req, 'Error in form submission')
+
+    context = {
+        "dash_blog_page": "dash_active",
+        'title': 'Nouvel Article',
+        'form_title': 'Nouvel article',
+        'form': form,
+    }
+
+    return render(req, 'dashboard/blog_form.html', context)
+
+
+@login_required(login_url='login')
+def edit_blogpost(req, pk):
+    user = req.user
+    if not user.is_staff:
+        messages.info(req, "Access denied!!!")
+        return redirect(req.META.get('HTTP_REFERER', '/'))
+
+    curr_obj = get_object_or_404(Blogpost, id=pk)
+    form = BlogForm(instance=curr_obj)
+    if req.method == 'POST':
+        print(req.POST)
+
+        form = BlogForm(req.POST, req.FILES, instance=curr_obj)
+        if form.is_valid():
+            form.save()
+            return redirect('dash_blogpost', pk=curr_obj.id)
+
+    context = {
+        "dash_blog_page": "dash_active",
+        'form_title': 'Modifier cet article',
+        'form': form,
+        "curr_obj": curr_obj,
+    }
+
+    return render(req, 'dashboard/blog_form.html', context)

@@ -7,17 +7,18 @@ register_converter(HashIdConverter, "hashid")
 urlpatterns = [
     path('', dashboard, name='dashboard'),
     path('products/', dash_products, name='dash_products'),
-    path('products/add/', add_product, name='add_product'),
+    path('products/add/', create_product, name='create_product'),
     path('products/new/', new_arrivals, name='new_arrivals'),
     path('products/list/', products_list, name='products_list'),
     path('products/grid/', products_grid, name='products_grid'),
     path('products/filter/', filter_products, name='filter_products'),
     path('products/image/add/<hashid:pk>/',
-         add_product_image, name='add_product_image'),
+         create_product_image, name='create_product_image'),
     path('products/image/list/<hashid:pk>/',
          product_images, name='product_images'),
     path('products/<hashid:pk>/', dash_product, name='dash_product'),
-    path('products/<hashid:pk>/overview/', product_overview, name='product_overview'),
+    path('products/<hashid:pk>/overview/',
+         product_overview, name='product_overview'),
     path('products/<hashid:pk>/edit/', edit_product, name='edit_product'),
     # ----------------------------------------------------------------------------
     path('orders/', dash_orders, name='dash_orders'),
@@ -44,6 +45,7 @@ urlpatterns = [
     # ----------------------------------------------------------------------------
     path('clients/', clients, name='clients'),
     path('clients/list/', clients_list, name='clients_list'),
+    path('clients/filter/', filter_clients, name='filter_clients'),
     path('clients/<hashid:pk>/', client_details, name='client_details'),
     # ----------------------------------------------------------------------------
     path('staff/', staff, name='staff'),
@@ -78,7 +80,18 @@ urlpatterns = [
          edit_delivery_type, name='edit_delivery_type'),
     # --------------------------
     path('promotions/list/', promo_list, name='promo_list'),
-    path('promotions/<hashid:pk>/',dash_promo, name='dash_promo'),
+    path('promotions/<hashid:pk>/', dash_promo, name='dash_promo'),
+    path('feedbacks/', dash_feedbacks, name='dash_feedbacks'),
+    path('feedbacks/<hashid:pk>/', dash_feedback_details,
+         name='dash_feedback_details'),
+    path('contact_mails/', contact_mails, name='contact_mails'),
+    path('contact_mails/<hashid:pk>/',
+         contact_mail_details, name='contact_mail_details'),
+    # --------------------------
+    path('blogposts/', dash_blog, name='dash_blog'),
+    path('blogposts/<hashid:pk>/', dash_blogpost, name='dash_blogpost'),
+    path('blogposts/create/', create_blogpost, name='create_blogpost'),
+    path('blogposts/<hashid:pk>/edit/', edit_blogpost, name='edit_blogpost'),
     # --------------------------
     path('store/objects/<hashid:pk>/<str:model_name>/delete/',
          delete_store_object, name='delete_store_object'),

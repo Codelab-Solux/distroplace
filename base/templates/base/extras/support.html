@@ -1,0 +1,45 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<section
+  class="p-4 lg:p-8 h-full min-h-[900px] w-full max-w-5xl mx-auto flex flex-col justify-center gap-4 border border-b-0 rounded-t-xl shadow-lg"
+>
+  <div>
+    <h3 class="font-bold text-3xl text-teal-700 mb-2">Aide et Support</h2>
+    <p class="mt-2">
+      Bienvenue sur notre page de support. Nous sommes là pour vous aider à
+      résoudre tous les problèmes que vous pourriez rencontrer. Que vous ayez
+      des questions sur nos services ou sur notre application, ou que vous ayez
+      besoin d'une assistance technique, nous sommes là pour vous accompagner.
+      Merci de nous avoir contactés et nous sommes impatients de vous aider. Il
+      vous suffira de remplir le formulaire si dessous :
+    </p>
+    <ol>
+      <li>1 - Raison sociale : [Veuillez renseigner votre Raison sociale]</li>
+      <li>2 - Nom complet : [Veuillez renseigner votre nom complet]</li>
+      <li>3 - Adresse e-mail : [Veuillez renseigner votre adresse e-mail]</li>
+      <li>
+        4 - Numéro de téléphone : [Veuillez renseigner votre Numéro de
+        téléphone]
+      </li>
+      <li>
+        5 - Sujet : Description du problème : [Zone de texte pour décrire le
+        problème]
+      </li>
+      <li>
+        6 - Priorité : [Menu déroulant pour sélectionner la priorité : haute,
+        moyenne, faible]
+      </li>
+      <li>
+        7 - Captures d'écran : [Zone pour télécharger des captures d'écran du
+        problème]
+      </li>
+    </ol>
+    <p>
+      Informations supplémentaires : [Zone de texte pour fournir des
+      informations supplémentaires ou des commentaires] Une fois que vous avez
+      rempli le formulaire, cliquez sur "Envoyer" pour soumettre votre demande
+      de support. Nous ferons de notre mieux pour répondre à votre demande dans
+      les plus brefs délais.
+    </p>
+  </div>
+</section>
+{% endblock %}

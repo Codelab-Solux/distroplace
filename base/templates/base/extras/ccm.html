@@ -1,0 +1,167 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<section
+  class="p-4 lg:p-8 h-full min-h-[900px] w-full max-w-5xl mx-auto flex flex-col justify-center gap-4 border border-b-0 rounded-t-xl shadow-lg"
+>
+  <div>
+    <h2 class="mt-4 text-black text-3xl font-bold">Comment ça marche (CCM)</h2>
+
+    <p class="mt-2">
+      Distroplace, votre application de gestion des utilisateurs est un outil qui
+      permet de suivre et de contrôler les entrées et les sorties des utilisateurs
+      dans un bâtiment ou dans une zone spécifique. Voici les étapes générales
+      de son fonctionnement :
+    </p>
+
+    <button
+      onclick="toggleAccordion('ccm1')"
+      class="mt-4 p-4 w-full border bg-gray-100 rounded-t-xl flex justify-between items-center text-black text-lg font-bold cursor-pointer"
+    >
+      1 - Enregistrement des utilisateurs
+      <i id="shower_ccm1" class="fa-solid fa-plus"></i>
+      <i id="hider_ccm1" class="hidden fa-solid fa-minus"></i>
+    </button>
+    <p id="ccm1" class="accordion hidden border rounded-b-xl p-2 lg:p-4">
+      A l'entrée de l'immeuble ou à l’accueil, le visiteur est enregistré par
+      une personne habilitée, qui leur demande leur nom, leur entreprise, leur
+      numéro de téléphone, leur adresse e-mail, leur identité et le but de leur
+      visite.
+    </p>
+    <button
+      onclick="toggleAccordion('ccm2')"
+      class="mt-4 p-4 w-full border bg-gray-100 rounded-t-xl flex justify-between items-center text-black text-lg font-bold cursor-pointer"
+    >
+      2 - Attribution d'un badge
+      <i id="shower_ccm2" class="fa-solid fa-plus"></i>
+      <i id="hider_ccm2" class="hidden fa-solid fa-minus"></i>
+    </button>
+    <p id="ccm2" class="accordion hidden border rounded-b-xl p-2 lg:p-4">
+      Une fois que les utilisateurs sont enregistrés et identifiés, ils se voient
+      attribuer un badge d'identification ou un code QR qui leur permettra
+      d'accéder aux zones autorisées.
+    </p>
+    <button
+      onclick="toggleAccordion('ccm3')"
+      class="mt-4 p-4 w-full border bg-gray-100 rounded-t-xl flex justify-between items-center text-black text-lg font-bold cursor-pointer"
+    >
+      3 - Suivi des utilisateurs
+      <i id="shower_ccm3" class="fa-solid fa-plus"></i>
+      <i id="hider_ccm3" class="hidden fa-solid fa-minus"></i>
+    </button>
+    <p id="ccm3" class="accordion hidden border rounded-b-xl p-2 lg:p-4">
+      L’application enregistre le mouvement des utilisateurs dans le bâtiment, en
+      enregistrant leur heure d'entrée et de sortie. A la sortie les utilisateurs
+      signent via une tablette électronique.
+    </p>
+    <button
+      onclick="toggleAccordion('ccm4')"
+      class="mt-4 p-4 w-full border bg-gray-100 rounded-t-xl flex justify-between items-center text-black text-lg font-bold cursor-pointer"
+    >
+      4 - Notification des hôtes
+      <i id="shower_ccm4" class="fa-solid fa-plus"></i>
+      <i id="hider_ccm4" class="hidden fa-solid fa-minus"></i>
+    </button>
+    <p id="ccm4" class="accordion hidden border rounded-b-xl p-2 lg:p-4">
+      L’application peut automatiquement notifier les hôtes de la visite de leur
+      invité, par e-mail ou par SMS.
+    </p>
+    <button
+      onclick="toggleAccordion('ccm5')"
+      class="mt-4 p-4 w-full border bg-gray-100 rounded-t-xl flex justify-between items-center text-black text-lg font-bold cursor-pointer"
+    >
+      5 - Gestion des données
+      <i id="shower_ccm5" class="fa-solid fa-plus"></i>
+      <i id="hider_ccm5" class="hidden fa-solid fa-minus"></i>
+    </button>
+    <p id="ccm5" class="accordion hidden border rounded-b-xl p-2 lg:p-4">
+      Toutes les informations relatives aux utilisateurs sont stockées dans une
+      base de données, permettant ainsi aux gestionnaires de suivre les
+      utilisateurs et de générer des rapports d'activité.
+    </p>
+    <button
+      onclick="toggleAccordion('ccm6')"
+      class="mt-4 p-4 w-full border bg-gray-100 rounded-t-xl flex justify-between items-center text-black text-lg font-bold cursor-pointer"
+    >
+      6 - Personnalisation des profils de utilisateurs
+      <i id="shower_ccm6" class="fa-solid fa-plus"></i>
+      <i id="hider_ccm6" class="hidden fa-solid fa-minus"></i>
+    </button>
+    <p id="ccm6" class="accordion hidden border rounded-b-xl p-2 lg:p-4">
+      L’application peut permettre aux hôtes de personnaliser les profils des
+      utilisateurs, en ajoutant des informations complémentaires telles que leur
+      photo, leur titre ou leur département, pour faciliter leur identification.
+    </p>
+    <button
+      onclick="toggleAccordion('ccm7')"
+      class="mt-4 p-4 w-full border bg-gray-100 rounded-t-xl flex justify-between items-center text-black text-lg font-bold cursor-pointer"
+    >
+      7 - Gestion des autorisations
+      <i id="shower_ccm7" class="fa-solid fa-plus"></i>
+      <i id="hider_ccm7" class="hidden fa-solid fa-minus"></i>
+    </button>
+    <p id="ccm7" class="accordion hidden border rounded-b-xl p-2 lg:p-4">
+      Les administrateurs peuvent définir des autorisations d'accès
+      personnalisées pour chaque visiteur en fonction de leur statut, de leur
+      entreprise, de leur objectif de visite ou de leur position dans le
+      bâtiment.
+    </p>
+    <button
+      onclick="toggleAccordion('ccm8')"
+      class="mt-4 p-4 w-full border bg-gray-100 rounded-t-xl flex justify-between items-center text-black text-lg font-bold cursor-pointer"
+    >
+      8 - Analyse des données
+      <i id="shower_ccm8" class="fa-solid fa-plus"></i>
+      <i id="hider_ccm8" class="hidden fa-solid fa-minus"></i>
+    </button>
+    <p id="ccm8" class="accordion hidden border rounded-b-xl p-2 lg:p-4">
+      Les données enregistrées par l'application peuvent être utilisées pour
+      générer des rapports d'activité et des analyses de l'utilisation des
+      zones, des statistiques de fréquentation, de la durée moyenne de visite et
+      d'autres informations utiles pour améliorer l'efficacité de la gestion des
+      utilisateurs.
+    </p>
+    <button
+      onclick="toggleAccordion('ccm9')"
+      class="mt-4 p-4 w-full border bg-gray-100 rounded-t-xl flex justify-between items-center text-black text-lg font-bold cursor-pointer"
+    >
+      9 - Conformité réglementaire
+      <i id="shower_ccm9" class="fa-solid fa-plus"></i>
+      <i id="hider_ccm9" class="hidden fa-solid fa-minus"></i>
+    </button>
+    <p id="ccm9" class="accordion hidden border rounded-b-xl p-2 lg:p-4">
+      En gardant une trace précise des utilisateurs qui entrent et sortent du
+      bâtiment, l'application peut aider à se conformer aux exigences
+      réglementaires en matière de sécurité et de protection des données.
+    </p>
+    <button
+      onclick="toggleAccordion('ccm10')"
+      class="mt-4 p-4 w-full border bg-gray-100 rounded-t-xl flex justify-between items-center text-black text-lg font-bold cursor-pointer"
+    >
+      10 - Gestion des urgences
+      <i id="shower_ccm10" class="fa-solid fa-plus"></i>
+      <i id="hider_ccm10" class="hidden fa-solid fa-minus"></i>
+    </button>
+    <p id="ccm10" class="accordion hidden border rounded-b-xl p-2 lg:p-4">
+      En cas d'urgence, les données enregistrées par l'application peuvent aider
+      à localiser rapidement les utilisateurs présents dans le bâtiment et à
+      assurer leur sécurité.
+    </p>
+    <button
+      onclick="toggleAccordion('ccm11')"
+      class="mt-4 p-4 w-full border bg-gray-100 rounded-t-xl flex justify-between items-center text-black text-lg font-bold cursor-pointer"
+    >
+      11 - Flexibilité
+      <i id="shower_ccm11" class="fa-solid fa-plus"></i>
+      <i id="hider_ccm11" class="hidden fa-solid fa-minus"></i>
+    </button>
+    <p id="ccm11" class="accordion hidden border rounded-b-xl p-2 lg:p-4">
+      Distroplace est un outil polyvalent qui offre de nombreux avantages pour
+      améliorer la sécurité, la gestion des utilisateurs et l'expérience globale
+      des utilisateurs dans le local de votre entreprise ou une zone spécifique.
+      L’application peut être configurées pour répondre aux besoins spécifiques
+      de votre organisation. Les administrateurs peuvent définir des règles
+      d'accès et des autorisations personnalisées pour chaque visiteur en
+      fonction de leur statut ou de leur objectif de visite.
+    </p>
+  </div>
+</section>
+{% endblock %}

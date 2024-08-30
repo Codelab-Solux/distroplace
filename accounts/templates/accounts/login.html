@@ -17,7 +17,7 @@
       class="bg-gray-100 border rounded-2xl p-6 flex-col h-fit w-full max-w-md shadow-md"
     >
       <h1 class="mb-4 text-black text-3xl font-bold">Connexion</h1>
-      <div class="flex justify-between items-center gap-4">
+      <div class="mb-4 flex justify-between items-center gap-4">
         <div
           class="flex justify-between p-1 gap-1 text-xs tabbar h-fit w-fit max-w-[200px] bg-teal-700 rounded-full"
         >
@@ -28,12 +28,12 @@
           >
             <i class="fa-solid fa-at"></i>
           </button>
-          <button
+          <!-- <button
             class="tabBtn px-3 py-2 bg-white hover:bg-teal-900 hover:text-white rounded-full w-full"
             onclick="openTab(event, 'phone_login')"
           >
             <i class="fa-solid fa-phone"></i>
-          </button>
+          </button> -->
         </div>
         <a
           href="{% provider_login_url 'google' %}"
@@ -45,12 +45,12 @@
           <span class="ml-2">Google</span>
         </a>
       </div>
-
+<!-- 
       <div class="flex items-center my-2">
         <div class="flex-grow h-px bg-gray-400"></div>
         <span class="flex-shrink text-md text-black px-4 font-light">ou</span>
         <div class="flex-grow h-px bg-gray-400"></div>
-      </div>
+      </div> -->
 
       <form id="email_login" method="POST" class="tabcontent w-full text-sm">
         {% csrf_token %}
@@ -86,7 +86,7 @@
               hx-boos="true"
               href="{% url 'signup' %}"
               class="text-teal-500 hover:underline"
-              >S'inscrire</a
+              >Cliquez ici</a
             >
           </p>
         </div>
@@ -115,7 +115,7 @@
                 hx-boos="true"
                 href="{% url 'signup' %}"
                 class="text-teal-500 hover:underline"
-                >S'inscrire</a
+                >Cliquez ici</a
               >
             </p>
           </div>

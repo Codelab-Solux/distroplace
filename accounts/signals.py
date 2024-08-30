@@ -32,4 +32,4 @@ def create_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=CustomUser)
 def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+    Profile.objects.get_or_create(user=instance)

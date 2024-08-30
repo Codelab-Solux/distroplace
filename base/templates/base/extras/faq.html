@@ -1,0 +1,111 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<section
+  class="p-4 lg:p-8 h-full min-h-[900px] w-full max-w-5xl mx-auto flex flex-col justify-center gap-4 border border-b-0 rounded-t-xl shadow-lg"
+>
+  <div>
+    <h2 class="mt-4 text-teal-700 text-3xl font-bold">Foire Aux Question (FAQ)</h2>
+
+    <p class="mt-2">
+      Bienvenue dans la foire aux questions de Distroplace, votre application de
+      gestion des utilisateurs ! Voici quelques réponses aux questions les plus
+      fréquemment posées :
+    </p>
+
+    <button
+      onclick="toggleAccordion('faq1')"
+      class="mt-4 p-4 w-full border bg-gray-100 rounded-t-xl flex justify-between items-center text-black text-lg font-bold cursor-pointer"
+    >
+      Qu'est-ce que Distroplace?
+      <i id="shower_faq1" class="fa-solid fa-plus"></i>
+      <i id="hider_faq1" class="hidden fa-solid fa-minus"></i>
+    </button>
+    <p id="faq1" class="accordion hidden border rounded-b-xl p-2 lg:p-4">
+      Distroplace, votre application de gestion des utilisateurs est un logiciel
+      qui permet aux entreprises ou aux organisations de suivre et de gérer les
+      visites de leurs utilisateurs. L'application peut aider à enregistrer les
+      informations des utilisateurs, à imprimer des badges d'identification, à
+      suivre les horaires de visite, à envoyer des notifications aux hôtes et à
+      effectuer des vérifications de sécurité.
+    </p>
+
+    <button
+      onclick="toggleAccordion('faq2')"
+      class="mt-4 p-4 w-full border bg-gray-100 rounded-t-xl flex justify-between items-center text-black text-lg font-bold cursor-pointer"
+    >
+      Qui peut utiliser Distroplace ?
+      <i id="shower_faq2" class="fa-solid fa-plus"></i>
+      <i id="hider_faq2" class="hidden fa-solid fa-minus"></i>
+    </button>
+    <p id="faq2" class="accordion hidden border rounded-b-xl p-2 lg:p-4">
+      Distroplace est utile pour toutes les entreprises ou organisations qui ont
+      des utilisateurs réguliers, notamment les entreprises, les écoles, les
+      hôpitaux, les centres de congrès, les musées, les galeries d'art, les
+      bibliothèques, les centres de formation, etc.
+    </p>
+
+    <button
+      onclick="toggleAccordion('faq3')"
+      class="mt-4 p-4 w-full border bg-gray-100 rounded-t-xl flex justify-between items-center text-black text-lg font-bold cursor-pointer"
+    >
+      Comment fonctionne Distroplace ?
+      <i id="shower_faq3" class="fa-solid fa-plus"></i>
+      <i id="hider_faq3" class="hidden fa-solid fa-minus"></i>
+    </button>
+    <p id="faq3" class="accordion hidden border rounded-b-xl p-2 lg:p-4">
+      Distroplace permet de créer un profil pour chaque visiteur, qui peut
+      inclure des informations telles que son nom, son adresse e-mail, sa photo,
+      son entreprise, son numéro de téléphone, etc. Lorsqu'un visiteur arrive,
+      il peut se présenter à la réception, où son identité peut être vérifiée et
+      un badge peut être imprimé. L'application peut également envoyer une
+      notification à l'hôte pour l'informer de l'arrivée du visiteur.
+    </p>
+
+    <button
+      onclick="toggleAccordion('faq4')"
+      class="mt-4 p-4 w-full border bg-gray-100 rounded-t-xl flex justify-between items-center text-black text-lg font-bold cursor-pointer"
+    >
+      Comment garantir la sécurité des utilisateurs ?
+      <i id="shower_faq4" class="fa-solid fa-plus"></i>
+      <i id="hider_faq4" class="hidden fa-solid fa-minus"></i>
+    </button>
+    <p id="faq4" class="accordion hidden border rounded-b-xl p-2 lg:p-4">
+      Distroplace peut effectuer des vérifications de sécurité, telles que la
+      vérification de l'identité des utilisateurs, la vérification des antécédents
+      criminels et la comparaison avec des listes de surveillance. Elle peut
+      également permettre aux utilisateurs de signer des accords de non-divulgation
+      ou de confidentialité avant leur visite.
+    </p>
+
+    <button
+      onclick="toggleAccordion('faq5')"
+      class="mt-4 p-4 w-full border bg-gray-100 rounded-t-xl flex justify-between items-center text-black text-lg font-bold cursor-pointer"
+    >
+      Comment gérer les données des utilisateurs ?
+      <i id="shower_faq5" class="fa-solid fa-plus"></i>
+      <i id="hider_faq5" class="hidden fa-solid fa-minus"></i>
+    </button>
+    <p id="faq5" class="accordion hidden border rounded-b-xl p-2 lg:p-4">
+      Les données des utilisateurs peuvent être stockées dans une base de données
+      sécurisée et accessible uniquement aux personnes autorisées. Les
+      entreprises et les organisations doivent respecter les lois sur la
+      protection des données personnelles et informer les utilisateurs de la façon
+      dont leurs données sont collectées, stockées et utilisées.
+    </p>
+
+    <button
+      onclick="toggleAccordion('faq6')"
+      class="mt-4 p-4 w-full border bg-gray-100 rounded-t-xl flex justify-between items-center text-black text-lg font-bold cursor-pointer"
+    >
+      Quelles sont les fonctionnalités les plus courantes de Distroplace?
+      <i id="shower_faq6" class="fa-solid fa-plus"></i>
+      <i id="hider_faq6" class="hidden fa-solid fa-minus"></i>
+    </button>
+    <p id="faq6" class="accordion hidden border rounded-b-xl p-2 lg:p-4">
+      Les fonctionnalités les plus courantes incluent l'enregistrement des
+      utilisateurs, l'impression de badges, la notification des hôtes, les
+      vérifications de sécurité, la gestion des horaires de visite, l'analyse
+      des données et la génération de rapports.
+    </p>
+  </div>
+</section>
+{% endblock %}

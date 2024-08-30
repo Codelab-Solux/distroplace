@@ -1,5 +1,5 @@
 {% extends 'main.html' %} {% load static %} {% block content %}
-<div class="px-4 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between gap-6">
+<div class="px-4 lg:px-8 max-w-7xl mx-auto flex flex-col gap-6">
   <div class="flex justify-between">
     <div
       class="bg-teal-900 py-2 px-4 rounded-full flex items-center text-white gap-4"
@@ -12,58 +12,36 @@
       >
       Retourner
     </div>
-    <span
-      class="flex items-center gap-4 py-2 px-4 rounded-full bg-yellow-200 text-black"
-      ><i class="fa-solid fa-newspaper"></i>{{ curr_obj.title }}</span
+    {% if user.is_staff %}
+    <a
+      href="{% url 'create_blogpost' %}"
+      class="bg-yellow-200 hover:bg-yellow-300 rounded-full py-1 px-4 text-sm flex items-center gap-4 group"
     >
+      Nouvel article
+      <i class="fa-solid fa-plus ml-2"></i>
+    </a>
+    {% endif %}
   </div>
 
-  <!--------------------------------------- blogpost layout --------------------------------------->
+  <!--------------------------------------- blogpost form --------------------------------------->
 
   <section class="grid lg:flex lg:flex-row items-start gapy-4">
     <!--------------------- current blogpost -------------------------->
 
     <div class="mb-8 relative bg-white border rounded-xl flex flex-col w-full">
       {% if user.is_staff %}
-      <div class="absolute right-4 top-4 text-xs w-fit text-gray-700">
-        <button
-          type="button"
-          class="bg-white hover:text-teal-600 px-3 py-1 rounded-full transition ease-in duration-200"
-          name="actions"
-          onclick="toggleMenu(this,'blg_{{curr_obj.id}}')"
-        >
-          <i class="fa-sharp fa-solid fa-ellipsis"></i>
-        </button>
-
-        <div
-          class="hidden z-30 bg-gray-50 w-40 shadow-md lg:w-[180px] p-2 absolute right-4 top-8 origin-top-left bg-white z-10 rounded-lg flex flex-col items-center gap-2 text-xs overflow-hidden"
-          id="blg_{{curr_obj.id}}"
-        >
-          <a
-            onclick="hide_dialogs()"
-            hx-target="#basic_dialog"
-            hx-get="{% url 'edit_blogpost' curr_obj.id %}"
-            class="px-4 py-2 flex items-center hover:text-black hover:bg-green-200 rounded-full w-full text-center cursor-pointer"
-            ><i class="fa-solid fa-pen-to-square mr-2"></i>
-            Modifier
-          </a>
-
-          <button
-            hx-confirm="Voulez vous vraiment supprimer ceci?"
-            hx-delete="{% url 'delete_base_object' curr_obj.id 'Blogpost' %}"
-            class="px-4 py-2 flex items-center hover:text-black hover:bg-red-200 rounded-full w-full text-center cursor-pointer"
-          >
-            <i class="fa-solid fa-trash mr-2"></i>
-            Supprimer
-          </button>
-        </div>
-      </div>
+      <a
+        hx-boost="false"
+        href="{% url 'edit_blogpost' curr_obj.id %}"
+        class="absolute right-4 top-4 bg-white text-sm hover:text-teal-600 px-3 py-1 rounded-full transition ease-in duration-200"
+        ><i class="fa-solid fa-pen"></i>
+      </a>
       {% endif %}
       <!--  -->
       {% if not curr_obj.image %}
       <img
-        class="h-80 w-full rounded-t-md object-cover"
-        src="{% static 'imgs/banner_1.webp' %}"
+        class="h-80 py-8 w-full rounded-t-md object-contain"
+        src="{% static 'imgs/logo-g.png' %}"
         alt="blogpost image"
       />
       {% else %}
@@ -73,7 +51,7 @@
         alt="blogpost image"
       />
       {% endif %}
-
+      <hr />
       <div class="p-4 lg:p-6 flex flex-col gap-4">
         <article class="flex flex-col gap-2 pt-2">
           <h4 class="text-black text-3xl font-bold">{{curr_obj.title}}</h4>
@@ -115,4 +93,12 @@
   </section>
 </div>
 
+<script>
+  document
+    .getElementById("back-button")
+    .addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent the default anchor behavior
+      window.history.go(-1); // Go back two pages
+    });
+</script>
 {% endblock %}

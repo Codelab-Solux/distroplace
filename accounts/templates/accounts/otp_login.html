@@ -1,0 +1,62 @@
+{% extends 'main_plain.html' %}
+
+{% block content %}
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+
+<form id="login-form">
+    <input type="text" id="phone-number" placeholder="Enter your phone number">
+    <button type="button" onclick="sendOTP()">Send OTP</button>
+</form>
+
+<div id="recaptcha-container"></div>
+
+<form id="verify-form" style="display:none;">
+    <input type="text" id="otp" placeholder="Enter OTP">
+    <button type="button" onclick="verifyOTP()">Verify OTP</button>
+</form>
+
+<script>
+    // Fetch Firebase config and initialize Firebase
+    fetch('/firebase-config/')
+        .then(response => response.json())
+        .then(config => {
+            firebase.initializeApp(config);
+        })
+        .catch(error => {
+            console.log("Error fetching Firebase config:", error);
+        });
+
+    // Send OTP
+    function sendOTP() {
+        alert('OTP')
+        var phoneNumber = document.getElementById('phone-number').value;
+        var appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+        firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+            .then(function (confirmationResult) {
+                window.confirmationResult = confirmationResult;
+                document.getElementById('verify-form').style.display = 'block';
+            }).catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    // Verify OTP
+    function verifyOTP() {
+        var otp = document.getElementById('otp').value;
+        confirmationResult.confirm(otp).then(function (result) {
+            var user = result.user;
+            // Send the token to the backend
+            fetch('/otp-verify/', {
+                method: 'POST',
+                body: JSON.stringify({ 'otp': user.getIdToken() }),
+                headers: { 'Content-Type': 'application/json' }
+            }).then(response => response.json()).then(data => {
+                console.log(data);
+            });
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
+</script>
+{% endblock %}

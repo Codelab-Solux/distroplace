@@ -1,36 +1,33 @@
 {% load static %}
-<div class="relative bg-gray-200 h-80 w-full border rounded-xl overflow-hidden">
+<div
+  class="bg-gray-100 h-20 w-full border rounded-xl flex justify-between items-center overflow-hidden"
+>
   {% if obj.image %}
   <img
     src="{{ obj.image.url }}"
     alt="{{ obj.name }}"
-    class="w-full object-contain rounded-lg"
+    class="w-40 object-contain rounded-lg"
   />
   {% else %}
   <img
-    src="{% static 'imgs/hero_2.webp' %}"
+    src="{% static 'imgs/promo.png' %}"
     alt="image"
-    class="w-full object-contain rounded-lg"
+    class="w-40 object-contain rounded-lg"
   />
   {% endif %}
-  <article
-    class="p-6 lg:p-10 absolute top-0 right-0 w-full h-full flex flex-col justify-center gap-1 z-5"
+
+  <h2 class="text-black font-bold text-lg">{{ obj.title }}</h2>
+  <span>{{ obj.catch_phrase}}</span>
+  <small>
+    à partir de
+    <span class="text-yellow-500 font-bold ml-2">{{ obj.price }} CFA</span>
+  </small>
+  <a
+    hx-get="{% url 'dash_promo' obj.id %}"
+    hx-target="#dashbase"
+    hx-swap="outerHTML"
+    class="cursor-pointer bg-teal-700 hover:bg-teal-900 rounded-full mr-4 py-2 px-3 text-white flex items-center gap-4"
   >
-    <span>{{ obj.catch_phrase}}</span>
-    <h2 class="text-black font-bold text-2xl">{{ obj.title }}</h2>
-    <small>
-      A partir de
-      <span class="text-red-500 font-bold text-xl ml-2"
-        >{{ obj.price }} CFA</span
-      >
-    </small>
-    <a
-      hx-get="{% url 'dash_promo' obj.id %}"
-      hx-target="#dashbase"
-      hx-swap="outerHTML"
-      class="w-fit bg-teal-700 hover:bg-teal-900 rounded-full py-2 px-4 text-white flex items-center gap-4"
-    >
-      Voir les produits de cette promo <span> &rarr; </span>
-    </a>
-  </article>
+    <span> &rarr; </span>
+  </a>
 </div>

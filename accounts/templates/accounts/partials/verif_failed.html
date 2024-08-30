@@ -1,0 +1,29 @@
+{% extends 'main_plain.html' %} {% block content %}
+<div
+  class="bg-teal-100 h-screen w-full flex flex-col justify-center items-center"
+>
+  <section
+    class="bg-white p-4 lg:p-6 w-full max-w-5xl rounded-3xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8"
+  >
+    <i
+      class="fa-solid fa-arrow-right-to-bracket text-teal-700 text-9xl mx-auto"
+    ></i>
+    <div
+      class="bg-gray-100 border rounded-2xl p-6 flex-col h-fit w-full max-w-md shadow-md"
+    >
+      <h1 class="mb-4 text-black text-3xl font-bold">Echec de vérification</h1>
+      <p>
+        La vérification de votre adrese email a échouée. Veuillez ressayer le même
+        lien ou demander un nouveau mail de vérification.
+      </p>
+      <br />
+
+      <a
+        class="px-8 py-2 bg-teal-700 hover:bg-teal-900 text-sm text-white rounded-full cursor-pointer"
+        href="{% url 'resend_verif_mail' user.id %}"
+        >Recevoir un nouveau lien</a
+      >
+    </div>
+  </section>
+</div>
+{% endblock %}

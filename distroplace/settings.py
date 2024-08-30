@@ -17,8 +17,8 @@ load_dotenv()
 SECRET_KEY = 'django-insecure-@u0f6%r&_-_#znj87l$xc3yl6bzuf%dfosqnctm9)vkrz0z&)j'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
 
 ALLOWED_HOSTS = [
@@ -55,11 +55,12 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     # ---------third party apps-----------
     # 'decouple',
     'corsheaders',
-    # 'gdstorage',
+    'django_ckeditor_5',
     # allauth stuff-------
     'django.contrib.sites',
     'allauth',
@@ -67,6 +68,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
+    # firebase stuff-------
+    # "django_firebase_auth",
     # ---------project apps-----------
     'base.apps.BaseConfig',
     'store.apps.StoreConfig',
@@ -77,8 +80,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Place WhiteNoise here
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Place WhiteNoise here
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -160,12 +163,17 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+]
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # if DEBUG:
 #     # Local storage settings
@@ -202,24 +210,24 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-# email setings -----------------------------------------------------
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.example.com'
-EMAIL_HOST_USER = 'codelabsolux@gmail.com'
-EMAIL_HOST_PASSWORD = 'Ex@ct00tc@xE'
+# email config -----------------------------------------------------
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Replace with your email provider's SMTP server
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587  # Common port for TLS
+# EMAIL_USE_TLS = True  # Use TLS
+# EMAIL_HOST_USER = 'codelabsolux@gmail.com'  # Your email address
+# EMAIL_HOST_PASSWORD = 'password'  # Your email password
+# # DEFAULT_FROM_EMAIL = 'noreply@distroplace.com'
 
-# Optionally, you can set a default from email address
-DEFAULT_FROM_EMAIL = 'noreply@distroplace.com'
+# django-allauth config -----------------------------------------------------
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False  # new
+ACCOUNT_USERNAME_REQUIRED = False  # new
+ACCOUNT_AUTHENTICATION_METHOD = 'email'  # new
+ACCOUNT_EMAIL_REQUIRED = True  # new
+ACCOUNT_UNIQUE_EMAIL = True  # new
 
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
-# very important for overiding the default user model!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-AUTH_USER_MODEL = "accounts.CustomUser"
-
-
-# App logs !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# app crash logs -----------------------------------------------------
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -240,7 +248,7 @@ LOGGING = {
 }
 
 
-# Firebase frontend settings
+# Firebase frontend settings -----------------------------------------------------
 FIREBASE_API_KEY = os.getenv('FIREBASE_API_KEY')
 FIREBASE_AUTH_DOMAIN = os.getenv('FIREBASE_AUTH_DOMAIN')
 FIREBASE_PROJECT_ID = os.getenv('FIREBASE_PROJECT_ID')
@@ -248,8 +256,40 @@ FIREBASE_STORAGE_BUCKET = os.getenv('FIREBASE_STORAGE_BUCKET')
 FIREBASE_MESSAGING_SENDER_ID = os.getenv('FIREBASE_MESSAGING_SENDER_ID')
 FIREBASE_APP_ID = os.getenv('FIREBASE_APP_ID')
 
-# Firebase backend settings
-FIREBASE_ADMIN_CREDENTIALS = os.path.join(
-    BASE_DIR, 'firebase_admin.json')
-cred = credentials.Certificate(FIREBASE_ADMIN_CREDENTIALS)
-firebase_admin.initialize_app(cred, name='distroplace')
+# # Firebase backend settings
+# FIREBASE_ADMIN_CREDENTIALS = os.path.join(
+#     BASE_DIR, 'firebase_admin.json')
+# cred = credentials.Certificate(FIREBASE_ADMIN_CREDENTIALS)
+# firebase_admin.initialize_app(cred, name='distroplace')
+
+# FIREBASE_CREDENTIALS_FILE = os.path.join(
+#     BASE_DIR, 'firebase_admin.json')
+
+# CKEditor config -----------------------------------------------------
+CKEDITOR_5_CONFIGS = {
+    'default': {
+        'toolbar': [
+            'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote',
+            'imageUpload', 'insertTable', 'mediaEmbed', 'undo', 'redo'
+        ],
+        'image': {
+            'toolbar': [
+                'imageTextAlternative', 'imageStyle:full', 'imageStyle:side'
+            ]
+        },
+        'table': {
+            'contentToolbar': ['tableColumn', 'tableRow', 'mergeTableCells']
+        },
+        'mediaEmbed': {
+            'previewsInData': True
+        },
+    }
+}
+
+
+# login/logout redirects -----------------------------------------------------
+LOGIN_REDIRECT_URL = "/"
+ACCOUNT_LOGOUT_REDIRECT = "/" #allauth redirect overrides the default redirect
+# LOGOUT_REDIRECT_URL = "/"
+# very important for overiding the default user model!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+AUTH_USER_MODEL = "accounts.CustomUser"

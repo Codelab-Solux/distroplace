@@ -12,7 +12,7 @@
   </a>
 
   <ul
-    class="h-[calc(100vh-70px)] w-full flex flex-col gap-2 mx-auto items-center xl:items-start overflow-y-aut"
+    class="h-[calc(100vh-70px)] w-full flex flex-col gap-0 mx-auto items-center xl:items-start"
   >
     <a
       class="px-1 xl:px-3 py-2 text-center xl:text-left rounded-full hover:bg-white hover:text-black transition ease-in duration-200 w-full {{dashboard}}"
@@ -56,6 +56,13 @@
       <i class="fa-solid fa-users xl:mr-2 text-sm"></i>
       <span class="hidden xl:inline"> Clients </span>
     </a>
+    <a
+      class="px-1 xl:px-3 py-2 text-center xl:text-left rounded-full hover:bg-white hover:text-black transition ease-in duration-200 w-full {{suppliers_page}}"
+      href="{% url 'suppliers' %}"
+    >
+      <i class="fa-solid fa-boxes-packing xl:mr-2 text-sm"></i>
+      <span class="hidden xl:inline"> Fournisseurs </span>
+    </a>
     {% if user.role.sec_level > 3 %}
     <a
       class="px-1 xl:px-3 py-2 text-center xl:text-left rounded-full hover:bg-white hover:text-black transition ease-in duration-200 w-full {{staff_page}}"
@@ -64,13 +71,51 @@
       <i class="fa-solid fa-user-tie xl:mr-2 text-sm"></i>
       <span class="hidden xl:inline"> Personnel </span>
     </a>
+    {% endif %}
     <a
-      class="px-1 xl:px-3 py-2 text-center xl:text-left rounded-full hover:bg-white hover:text-black transition ease-in duration-200 w-full {{suppliers_page}}"
-      href="{% url 'suppliers' %}"
+      class="px-1 xl:px-3 py-2 text-center xl:text-left rounded-full hover:bg-white hover:text-black transition ease-in duration-200 w-full {{dash_blog_page}}"
+      href="{% url 'dash_blog' %}"
     >
-      <i class="fa-solid fa-boxes-packing xl:mr-2 text-sm"></i>
-      <span class="hidden xl:inline"> Fournisseurs </span>
+      <i class="fa-solid fa-blog xl:mr-2 text-sm"></i>
+      <span class="hidden xl:inline"> Blog </span>
     </a>
+    <div class="my-1 flex flex-col w-full">
+      <button
+        name="optionsBtn"
+        onclick="toggleOptions(this,'comm_options')"
+        class="px-1 xl:px-3 py-2 flex justify-between items-center text-center xl:text-left rounded-full hover:bg-white hover:text-black transition ease-in duration-200 w-full {{dash_comms_page}}"
+      >
+        <div class="flex">
+          <i class="fa-solid fa-people-arrows xl:mr-2 text-sm"></i>
+          <span class="hidden xl:inline"> Communications </span>
+        </div>
+
+        <i id="comm_options_caret" class="fa-sharp fa-solid fa-caret-down"></i>
+      </button>
+      <div
+        class="w-full xl:p-2 hidden bg-teal-700 text-gray-200 rounded-xl grid gap-2 overflow-hidden"
+        role="menu"
+        aria-orientation="vertical"
+        aria-labelledby="user-menu-button"
+        id="comm_options"
+      >
+        <a
+          href="{% url 'dash_feedbacks' %}"
+          class="px-3 py-2 flex text-sm hover:text-black hover:bg-teal-200 xl:rounded-full w-full transition ease-in duration-200"
+        >
+          <i class="fa-solid fa-comment-dots xl:mr-2 text-sm"></i>
+          <span class="hidden xl:inline">Feedbacks</span>
+        </a>
+
+        <a
+          href="{% url 'contact_mails' %}"
+          class="px-3 py-2 flex text-sm hover:text-black hover:bg-teal-200 xl:rounded-full w-full transition ease-in duration-200"
+        >
+          <i class="fa-solid fa-envelopes-bulk xl:mr-2 text-sm"></i>
+          <span class="hidden xl:inline">Courriers</span>
+        </a>
+      </div>
+    </div>
     <a
       class="px-1 xl:px-3 py-2 text-center xl:text-left rounded-full hover:bg-white hover:text-black transition ease-in duration-200 w-full {{dash_parameters}}"
       href="{% url 'dash_parameters' %}"
@@ -78,25 +123,6 @@
       <i class="fa-solid fa-gears xl:mr-2 text-sm"></i>
       <span class="hidden xl:inline"> Parametres </span>
     </a>
-    {% endif %}
-
-    <!--  -->
-    <!-- {% if user.role.sec_level >= 4 %}
-    <a
-      class="px-1 xl:px-3 py-2 text-center xl:text-left rounded-full hover:bg-white hover:text-black transition ease-in duration-200 w-full {{finances_page}}"
-      href="{% url 'finances' %}"
-    >
-      <i class="fa-solid fa-coins xl:mr-2 text-sm"></i>
-      <span class="hidden xl:inline"> Finances </span>
-    </a>
-    <a
-      class="px-1 xl:px-3 py-2 text-center xl:text-left rounded-full hover:bg-white hover:text-black transition ease-in duration-200 w-full {{report_page}}"
-      href="{% url 'reports' %}"
-    >
-      <i class="fa-sharp fa-solid fa-file-lines xl:mr-2"></i>
-      <span class="hidden xl:inline"> Rapports </span>
-    </a>
-    {% endif %} -->
     <!--  -->
     {% if user.is_superuser %}
     <a
@@ -133,13 +159,15 @@
         <button
           type="button"
           class="bg-white hover:bg-yellow-200 text-gray-500 hover:text-black px-4 py-2 rounded-full"
-          name="dropdownBtn"
-          id="dropdownBtn"
+          name="optionsBtn"
           aria-expanded="false"
           aria-haspopup="true"
-          onclick="toggleDropdown(this)"
+          onclick="toggleOptions(this,'account_options')"
         >
-          <i class="fa-sharp fa-solid fa-caret-down"></i>
+          <i
+            id="account_options_caret"
+            class="fa-sharp fa-solid fa-caret-down"
+          ></i>
         </button>
 
         <div
@@ -147,7 +175,7 @@
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="user-menu-button"
-          id="dropdownMenu"
+          id="account_options"
         >
           <a
             href="{% url 'dash_profile' user.id %}"
@@ -160,7 +188,7 @@
           <a
             id="logout-link"
             hx-boost="false"
-            href="{% url 'logout' %}"
+            href="{% url 'account_logout' %}"
             class="px-3 py-2 flex text-sm text-red-700 hover:bg-red-700 hover:text-white xl:rounded-full w-full"
           >
             <i class="fa-solid fa-right-from-bracket xl:mr-2 text-sm"></i>
@@ -188,20 +216,59 @@
       : ((e.name = "nav"), navlinks.classList.add("hidden"));
   }
 
-  function toggleDropdown(e) {
-    e.name === "dropdownBtn"
-      ? ((e.name = "close"), dropdownMenu.classList.remove("hidden"))
-      : ((e.name = "dropdownBtn"), dropdownMenu.classList.add("hidden"));
+  function toggleOptions(e, div_id) {
+    const allDropdowns = document.querySelectorAll("[id$='_options']");
+    const allCarets = document.querySelectorAll("[id$='_caret']");
+
+    // Close all other dropdowns
+    allDropdowns.forEach((dropdown) => {
+      if (dropdown.id !== div_id) {
+        dropdown.classList.add("hidden");
+      }
+    });
+
+    // Reset all carets
+    allCarets.forEach((caret) => {
+      if (caret.id !== `${div_id}_caret`) {
+        caret.classList.remove("rotate-180");
+      }
+    });
+
+    const options = document.getElementById(div_id);
+    const div_caret = document.getElementById(`${div_id}_caret`);
+
+    if (e.name === "optionsBtn") {
+      e.name = "close";
+      options.classList.remove("hidden");
+      div_caret.classList.add("rotate-180");
+    } else {
+      e.name = "optionsBtn";
+      options.classList.add("hidden");
+      div_caret.classList.remove("rotate-180");
+    }
   }
 
   window.addEventListener("mouseup", function (event) {
-    if (
-      !dropdownMenu.contains(event.target) &&
-      !document.getElementById("dropdownBtn").contains(event.target)
-    ) {
-      dropdownMenu.classList.add("hidden");
-      document.getElementById("dropdownBtn").name = "dropdownBtn";
-    }
+    const allDropdowns = document.querySelectorAll("[id$='_options']");
+    const allButtons = document.querySelectorAll("[name='close']");
+
+    allDropdowns.forEach((dropdown) => {
+      if (!dropdown.contains(event.target)) {
+        dropdown.classList.add("hidden");
+      }
+    });
+
+    allButtons.forEach((button) => {
+      if (!button.contains(event.target)) {
+        button.name = "optionsBtn";
+        const caret = document.getElementById(
+          `${button.id.replace("Btn", "")}_caret`
+        );
+        if (caret) {
+          caret.classList.remove("rotate-180");
+        }
+      }
+    });
 
     if (
       !navlinks.contains(event.target) &&

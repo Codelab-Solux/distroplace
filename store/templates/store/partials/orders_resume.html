@@ -3,7 +3,9 @@
   class="p-4 text-xs lg:rounded-full lg:text-base grid grid-cols-2 lg:flex justify-between items-center gap-4"
 >
   {% if orders %}
-  <div class="p-4 w-full border border-teal-500 rounded-xl shadow-lg flex justify-evenly items-center">
+  <div
+    class="p-4 w-full border border-teal-500 rounded-xl shadow-lg flex justify-evenly items-center"
+  >
     <span>Effectuées : <b>{{ orders|length }}</b></span>
     <span>En attente : <b>{{ pending|length }}</b></span>
     <span>Traitées : <b>{{ processed|length }}</b></span>
@@ -20,12 +22,12 @@
         >&rarr;</a
       >
     </div>
-
   </div>
   {% else %}
   <div class="flex flex-col items-center gap-2 my-20 mx-auto">
-    <i class="fa-solid fa-dolly text-teal-900 text-2xl"></i>
-    <span>Vous n'aver aucne commande</span>
+    <i class="fa-solid fa-dolly text-teal-700 text-2xl"></i>
+    <span>Aucne commande</span>
+    {% if profile_page %}
     <a
       href="{% url 'products' %}"
       class="bg-yellow-200 rounded-full text-xs py-2 px-4 flex items-center gap-4 group"
@@ -35,6 +37,7 @@
         >&rarr;</span
       ></a
     >
+    {% endif %}
   </div>
   {% endif %}
 </div>

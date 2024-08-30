@@ -18,8 +18,8 @@ urlpatterns = [
     path('cart/', cart, name='cart'),
     path('cart/add_item/', add_to_cart, name='add_to_cart'),
     path('cart/remove_item/', remove_from_cart, name='remove_from_cart'),
-    path('cart/clear_item/', clear_from_cart, name='clear_cart'),
-    path('cart/clear/', clear_cart, name='cart_remove'),
+    path('cart/clear_item/', clear_from_cart, name='clear_from_cart'),
+    path('cart/clear/', clear_cart, name='clear_cart'),
     path('cart/resume/', cart_resume, name='cart_resume'),
     path('checkout/', checkout, name='checkout'),
     # ----------------------- orders ------------------------------

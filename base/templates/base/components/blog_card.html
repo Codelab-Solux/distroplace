@@ -1,46 +1,56 @@
 {% load static %}
 <div
-  class="flex flex-col gap-1 bg-white border hover:border-teal-500 rounded-lg overflow-hidden"
+  class="h-full flex flex-col gap-1 bg-white border hover:border-teal-500 rounded-lg overflow-hidden group transition ease-in duration-300 font-light"
 >
   <a href="{% url 'blogpost' obj.id %}">
-    {% if obj.image %}
+    {% if not obj.image %}
     <img
-      src="{{ MEDIA_URL }} {{ obj.image.url }}"
-      alt="{{ obj.name }}"
-      class="w-full h-40 object-cover hover:scale"
+      src="{% static 'imgs/logo-g.png' %}"
+      alt="image"
+      class="w-full h-40 py-4 object-contain hover:scale"
     />
     {% else %}
     <img
-      src="{% static 'imgs/blog.png' %}"
-      alt="image"
+      src="{{ obj.image.url }}"
+      alt="{{ obj.name }}"
       class="w-full h-40 object-cover hover:scale"
     />
     {% endif %}
   </a>
-
-  <article class="p-2 grid gap-2">
-    <div class="flex justify-between items-center">
-      <small
-        class="px-4 py-1 {% if user in obj.likes.all %} text-yellow-400 text-black {% else %} text-gray-400 {% endif %} rounded-full flex items-center gap-1 cursor-pointer"
-      >
-        <i class="fa-solid fa-thumbs-up"></i> {{ obj.likes.count }}
-      </small>
-
-      <small
-        class="px-4 py-1 text-gray-400 rounded-full flex items-center gap-1 cursor-pointer"
-      >
-        <i class="fa-solid fa-comments"></i>
-        {{obj.blogcomment_set.count}}</small
+  <article class="p-2 h-full flex flex-col justify-between gap-2">
+    <div class="grid gap-2">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-1">
+          <small class="text-gray-400 rounded-full flex items-center gap-1">
+            <i class="fa-solid fa-thumbs-up"></i> {{ obj.likes.count }}
+          </small>
+  
+          <small class="text-gray-400 rounded-full flex items-center gap-1">
+            <i class="fa-solid fa-comments"></i>
+            {{obj.blogcomment_set.count}}</small
+          >
+        </div>
+        <a
+          href="{% url 'blogpost' obj.id %}"
+          class="px-3 py-1 bg-teal-700 hover:bg-teal-900 rounded-full text-white text-xs"
+          >Lire<span class="ml-2">&rarr;</span></a
+        >
+      </div>
+      <hr />
+      <h3 class="text-teal-700 font-bold">{{obj.title}}</h3>
+      <small class="text-wrap text-ellipsis break-word"
+      >{{obj.content|safe|truncatechars:200}}</small
       >
     </div>
-    <div class="flex justify-between items-center">
-      <small>{{obj.timestamp.date}}</small>
-      <a
-        href="{% url 'blogpost' obj.id %}"
-        class="px-3 py-1 bg-teal-700 hover:bg-teal-900 rounded-full text-white text-xs"
-        >Lire<span class="ml-2">&rarr;</span></a
-      >
+
+    <div class="px-2 py-1 border border-b-0 rounded-lg group-hover:border-teal-500 group-hover:bg-teal-50 transition ease-in duration-300 font-light">
+      <small class="text-xs font-light">{{obj.timestamp.date}}</small>
     </div>
-    <h3 class="text-teal-900 font-bold">{{obj.title}}</h3>
   </article>
 </div>
+<script>
+  // activeMenu = document.getElementById("blg_{{obj.id}}");
+  window.addEventListener("mouseup", function (event) {
+    activeMenu.classList.add("hidden");
+  });
+</script>

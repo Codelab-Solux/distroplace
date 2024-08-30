@@ -1,0 +1,57 @@
+{% extends 'main_alt.html' %} {% load static %} {% block content %}
+<div class="px-4 lg:px-8 max-w-7xl mx-auto flex flex-col gap-6">
+  <div class="flex justify-between items-center">
+    <h3 class="bg-teal-900 rounded-full text-white py-2 px-4">
+      <a
+        id="back-button"
+        class="inline-block px-2 py-1 text-white bg-teal-900 hover:bg-yellow-300 hover:text-black rounded-full transition-all duration-300"
+        href="#"
+        >&larr;</a
+      >
+      Retourner
+    </h3>
+
+    <h2
+      class="px-6 py-2 bg-yellow-200 rounded-full mb-4 text-center text-black"
+    >
+      {{ form_title }}
+    </h2>
+  </div>
+
+  <section class="mb-8 grid lg:flex lg:flex-row items-start gapy-4">
+    <form
+      hx-boost="false"
+      id="blog_form"
+      class="w-full max-w-7xl mx-auto p-4 bg-gray-100 rounded-3xl flex flex-col gap-3 text-sm"
+      method="POST"
+      action="{{ request.path }}"
+      enctype="multipart/form-data"
+    >
+      {% csrf_token %} {{ form.media }}
+      <!-- Ensure this is included -->
+      {{ form.as_p }}
+
+      <div class="flex flex-row-reverse gap-2 items-end text-sm">
+        <button
+          class="px-4 py-2 bg-teal-700 text-white hover:bg-teal-900 rounded-full transition duration-200 ease-in"
+          type="submit"
+        >
+          {% if not curr_obj %} Poster {% else %} Enregistrer {% endif %}
+        </button>
+      </div>
+    </form>
+
+    <!--------------------------------------- other blogposts --------------------------------------->
+    <!-- <div
+      class="w-full lg:w-[500px] grid md:grid-cols-2 lg:grid-cols-1 gap-4 mt-6 lg:mt-0 lg:ml-6"
+    >
+      {% for obj in blogposts %}
+      {% include 'base/components/blog_card_alt.html' %}
+      {% endfor %}
+    </div> -->
+  </section>
+</div>
+
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
+{% endblock %}

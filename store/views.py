@@ -36,7 +36,7 @@ def products(req):
         | Q(subcategory__name__icontains=query),
     ).distinct().order_by('name')
     objects = paginate_objects(req, products)
-    
+
     context = {
         "products_page": "active",
         'title': 'Products',
@@ -143,9 +143,12 @@ def edit_prod_comment(req, pk):
     else:
         return render(req, 'basic_form.html', context={'form': form, 'form_title': 'Modifier ce commentaire', "curr_obj": curr_obj})
 
+
 # --------------------------Cart--------------------------
 
 # @login_required(login_url='login')
+
+
 def cart(req):
     cart = Cart(req)
     cart_count = len(cart)
@@ -159,6 +162,8 @@ def cart(req):
     return render(req, 'store/cart.html', context)
 
 # @login_required(login_url='login')
+
+
 def cart_partial(req):
     cart = Cart(req)
     cart_count = len(cart)
@@ -172,6 +177,8 @@ def cart_partial(req):
     return render(req, 'store/partials/cart_items.html', context)
 
 # @login_required(login_url='login')
+
+
 def cart_resume(req):
     cart = Cart(req)
     cart_count = len(cart)
@@ -186,6 +193,8 @@ def cart_resume(req):
     return render(req, 'store/partials/cart_resume.html', context)
 
 # @login_required(login_url='login')
+
+
 def add_to_cart(req):
     cart = Cart(req)
     if req.POST.get('action') == 'post':
@@ -196,8 +205,10 @@ def add_to_cart(req):
         cart_count = len(cart)
         res = JsonResponse({'cart_count': cart_count})
         return res
-    
+
 # @login_required(login_url='login')
+
+
 def remove_from_cart(req):
     cart = Cart(req)
     if req.POST.get('action') == 'post':
@@ -210,8 +221,10 @@ def remove_from_cart(req):
         # Ensure the key matches in the AJAX call
         res = JsonResponse({'cart_count': cart_count})
         return res
-    
+
 # @login_required(login_url='login')
+
+
 def clear_from_cart(req):
     cart = Cart(req)
     if req.POST.get('action') == 'post':
@@ -224,22 +237,17 @@ def clear_from_cart(req):
         # Ensure the key matches in the AJAX call
         res = JsonResponse({'cart_count': cart_count})
         return res
-    
+
 # @login_required(login_url='login')
+
+
 def clear_cart(req):
     cart = Cart(req)
-    if req.POST.get('action') == 'post':
-        product_id = int(req.POST.get('product_id'))
-        product = get_object_or_404(Product, id=product_id)
-        # Save to a session
-        cart.clear_cart()
-        # Use len(cart) to get the number of distinct items
-        cart_count = len(cart)
-        # Ensure the key matches in the AJAX call
-        res = JsonResponse({'cart_count': cart_count})
-        return res
+    cart.clear_cart()
+    return redirect('cart')
 
 # --------------------------Checkout--------------------------
+
 
 @login_required(login_url='login')
 def checkout(req):
@@ -249,7 +257,7 @@ def checkout(req):
     if cart_count == 0:
         messages.info(req, "Access denied: Your cart is empty.")
         return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
-    
+
     cart_items = cart.get_cart_items()
     total_price = cart.get_total_price()
     shipping_info = ShippingInfo.objects.filter(user=req.user).first()
@@ -316,9 +324,10 @@ def orders(req):
     }
     return render(req, 'store/orders.html', context)
 
+
 def order_details(req, pk):
     curr_obj = Order.objects.get(id=pk)
-    order_items = OrderItem.objects.filter(order = curr_obj)
+    order_items = OrderItem.objects.filter(order=curr_obj)
     rel_orders = Order.objects.filter(
         client=curr_obj.client).order_by('-timestamp').exclude(id=pk)[:4]
     delivery_types = DeliveryType.objects.all()
@@ -326,7 +335,6 @@ def order_details(req, pk):
     has_delivery = Delivery.objects.filter(order=curr_obj).first()
     # if not has_delivery:
     #     has_delivery = False
-
 
     context = {
         "order_details": "active",
@@ -412,6 +420,7 @@ def orders_resume(req):
 
 # --------------------------Deliveries--------------------------
 
+
 @login_required(login_url='login')
 def deliveries(req):
     user = req.user
@@ -449,6 +458,7 @@ def deliveries(req):
         'objects': objects,
     }
     return render(req, 'store/deliveries.html', context)
+
 
 def new_delivery(req, pk):
     user = req.user
@@ -488,6 +498,7 @@ def postpone_delivery(req, pk):
     curr_obj.dday = new_dday
     curr_obj.save()
 
+
 def delivery_details(req, pk):
     curr_obj = Delivery.objects.get(id=pk)
     curr_order = Order.objects.get(id=curr_obj.order.id)
@@ -495,7 +506,7 @@ def delivery_details(req, pk):
     rel_deliveries = Delivery.objects.filter(
         client=curr_obj.client).order_by('-timestamp').exclude(id=pk)[:4]
     shipping_info = ShippingInfo.objects.filter(user=req.user).first()
-    
+
     context = {
         "order_details": "active",
         'title': 'Order Details',

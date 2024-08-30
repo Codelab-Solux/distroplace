@@ -21,7 +21,7 @@
   <!--  -->
   <form
     id="filter"
-    class="p-2 w-full bg-yellow-100 rounded-full flex justify-between items-center gap-1 text-sm xl:text-sm"
+    class="p-2 w-full bg-gray-200 border rounded-full flex justify-between items-center gap-1 text-sm xl:text-sm"
   >
     {% csrf_token %}
     <section class="w-full flex justify-between items-center gap-1 text-xs">
@@ -35,7 +35,7 @@
         class="px-3 py-2 rounded-full focus:bg-gray-100 outilne-none w-full cursor-pointer"
       />
       <!-- items counts -->
-      <select
+      <!-- <select
         name="items"
         class="hidden md:inline px-3 py-2 rounded-full focus:bg-gray-100 outilne-none w-full"
       >
@@ -45,7 +45,7 @@
         <option value="50">31 - 50</option>
         <option value="100">51 - 100</option>
         <option value="101">plus de 100</option>
-      </select>
+      </select> -->
       <!-- statuses -->
       <select
         name="status"
@@ -65,7 +65,7 @@
       <i class="fa-solid fa-filter"></i>
     </button>
     <button
-      class="px-3 py-2 bg-yellow-50 hover:bg-yellow-300 hover:text-black rounded-full transition duration-200 ease-in"
+      class="px-3 py-2 bg-gray-100 hover:bg-gray-400 hover:text-black rounded-full transition duration-200 ease-in"
       hx-on:click="clearForm('filter')"
       type="submit"
     >
@@ -76,7 +76,7 @@
 
   {% if not objects %}
   <div class="flex flex-col items-center gap-4 my-20 mx-auto">
-    <i class="fa-solid fa-truck text-teal-900 text-9xl"></i>
+    <i class="fa-solid fa-truck text-teal-700 text-9xl"></i>
     <span>Aucune livraison trouvée</span>
   </div>
   {% else %}

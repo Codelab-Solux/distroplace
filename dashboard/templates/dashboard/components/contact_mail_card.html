@@ -1,0 +1,11 @@
+{% load static %}
+<a
+href="{% url 'contact_mail_details' obj.id %}"
+  class="cursor-pointer py-2 px-4 bg-white relative flex justify-between h-fit w-full border rounded-full flex justify-between items-center overflow-hidden group"
+>
+  <div class="flex gap-2 text-sm">
+    <h3 class="text-teal-700 font-bold w-60">{{obj.email}}</h3>
+    <p><b>{{obj.subject}}</b> - {{obj.message|truncatechars:200}}</p>
+  </div>
+  <small class="font-light">{{obj.timestamp.date}}</small>
+</a>

@@ -1,0 +1,76 @@
+{% load static %}
+<div
+  class="bg-white h-fit w-full border rounded-xl flex justify-between items-center overflow-hidden group"
+>
+  <a href="{% url 'dash_blogpost' obj.id %}">
+    {% if not obj.image %}
+    <img
+      src="{% static 'imgs/logo-g.png' %}"
+      alt="image"
+      class="p-4 w-full w-40 py-4 object-contain hover:scale"
+    />
+    {% else %}
+    <img
+      src="{{ obj.image.url }}"
+      alt="{{ obj.name }}"
+      class="w-full w-40 object-cover hover:scale"
+    />
+    {% endif %}
+  </a>
+
+  <article
+    class="relative min-h-40 w-full bg-gray-100 group-hover:bg-teal-50 transition ease-in duration-300 py-2 px-4 flex flex-col gap-2"
+  >
+    <div class="flex justify-between text-xs">
+      <small class="text-xs font-light">{{obj.timestamp}}</small>
+      <button
+        type="button"
+        class="bg-white hover:text-teal-600 px-3 py-1 rounded-full transition ease-in duration-200"
+        name="actions"
+        onclick="toggleMenu(this,'blg_{{obj.id}}')"
+      >
+        <i class="fa-sharp fa-solid fa-ellipsis"></i>
+      </button>
+      <div
+        class="hidden z-30 bg-gray-50 w-40 shadow-md lg:w-[180px] p-2 absolute right-6 bottom-2 origin-top-left bg-white z-10 rounded-lg flex flex-col items-center gap-2 text-xs overflow-hidden"
+        id="blg_{{obj.id}}"
+      >
+        <a
+          href="{% url 'dash_blogpost' obj.id %}"
+          class="px-4 py-2 flex items-center hover:text-black hover:bg-green-200 rounded-full w-full text-center cursor-pointer"
+          ><i class="fa-solid fa-book-open mr-2"></i>
+          Lire
+        </a>
+
+        {% if user.is_staff %}
+        <a
+          hx-boost="false"
+          href="{% url 'edit_blogpost' obj.id %}"
+          class="px-4 py-2 flex items-center hover:text-black hover:bg-yellow-200 rounded-full w-full text-center cursor-pointer"
+          ><i class="fa-solid fa-pen-to-square mr-2"></i>
+          Modifier
+        </a>
+
+        <button
+          hx-confirm="Voulez vous vraiment supprimer ceci?"
+          hx-delete="{% url 'delete_base_object' obj.id 'Blogpost' %}"
+          class="px-4 py-2 flex items-center hover:text-black hover:bg-red-200 rounded-full w-full text-center cursor-pointer"
+        >
+          <i class="fa-solid fa-trash mr-2"></i>
+          Supprimer
+        </button>
+        {% endif %}
+      </div>
+    </div>
+    <h3 class="text-teal-700 font-bold">{{obj.title}}</h3>
+    <small class="text-wrap text-ellipsis break-word">
+      {{obj.content|safe|truncatechars:200}}
+    </small>
+  </article>
+</div>
+<script>
+  // activeMenu = document.getElementById("blg_{{obj.id}}");
+  window.addEventListener("mouseup", function (event) {
+    activeMenu.classList.add("hidden");
+  });
+</script>

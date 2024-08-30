@@ -1,5 +1,5 @@
 {% load static %}
-<nav class="text-gray-700 py-4 lg:fixed w-full bg-white z-20">
+<nav class="navbar border-b text-gray-700 py-4 lg:fixed w-full bg-white z-20">
   <div
     class="px-4 lg:px-8 max-w-7xl mx-auto flex flex-col gap-4 lg:flex-row lg:items-center justify-between"
   >
@@ -31,14 +31,17 @@
     </form>
     {% endif %}
 
-    <div class="hidden w-full lg:w-fit lg:flex lg:mt-0 lg:items-center text-sm" id="navlinks">
+    <div
+      class="hidden w-full lg:w-fit lg:flex lg:mt-0 lg:items-center text-sm"
+      id="navlinks"
+    >
       <ul
         class="py-2 w-full flex flex-col lg:flex-row justify-between items-end lg:items-center gap-4 menu-list"
       >
         <li>
           <a
             href="{% url 'products' %}"
-            class="w-full font-bold text-gray-500 hover:text-teal-900 transition duration-200 ease-in"
+            class="w-full text-gray-700 hover:text-teal-700 transition duration-200 ease-in"
           >
             Produits
           </a>
@@ -46,7 +49,7 @@
         <li>
           <a
             href="{% url 'blog' %}"
-            class="w-full font-bold text-gray-500 hover:text-teal-900 transition duration-200 ease-in"
+            class="w-full text-gray-700 hover:text-teal-700 transition duration-200 ease-in"
           >
             Blog
           </a>
@@ -54,13 +57,21 @@
         <li>
           <a
             href="{% url 'cart' %}"
-            class="relative border px-3 py-2 rounded-full border hover:border-teal-700 hover:text-teal-700 transition duration-200 ease-in"
+            class="relative border px-3 py-3 rounded-full border hover:border-teal-700 hover:text-teal-700 transition duration-200 ease-in"
           >
-            <small
-              id="cart_counter"
-              class="absolute top-0 right-0 bg-red-600 px-1 py-[1px] rounded-full text-white text-[10px]"
-              >{{cart|length}}</small
-            >
+          {% if not cart %}
+          <small
+            id="cart_counter"
+            class="absolute top-0 right-0 bg-gray-200 text-black px-1 py-[1px] rounded-full text-[10px]"
+            >{{cart|length}}</small
+          >
+          {% else %}
+          <small
+            id="cart_counter"
+            class="absolute top-0 right-0 bg-yellow-400 text-black px-1 py-[1px] rounded-full text-[10px]"
+            >{{cart|length}}</small
+          >
+          {% endif %}
             <i class="fa-solid fa-cart-shopping"></i>
           </a>
         </li>
@@ -143,7 +154,6 @@
   </div>
 </nav>
 
-
 <script>
   document
     .getElementById("logout-link")
@@ -161,7 +171,7 @@
   }
 
   function toggleDropdown(e) {
-    alert('!!!!!!')
+    alert("!!!!!!");
     e.name === "dropdownBtn"
       ? ((e.name = "close"), dropdownMenu.classList.remove("hidden"))
       : ((e.name = "dropdownBtn"), dropdownMenu.classList.add("hidden"));

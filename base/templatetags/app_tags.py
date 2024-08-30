@@ -51,3 +51,9 @@ def user_deliveries(pk):
     user = CustomUser.objects.filter(id=pk).first()
     deliveries = Delivery.objects.filter(client=user).count()
     return deliveries
+
+
+# email splitter ----------------------------------------
+@register.filter
+def split_email(value):
+    return value.split('@')[0]

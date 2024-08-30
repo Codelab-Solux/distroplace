@@ -1,3 +1,4 @@
+from django_ckeditor_5.fields import CKEditor5Field
 from django.db.models import Sum, Avg
 from django.db import models
 from django.urls import reverse
@@ -46,7 +47,7 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
     is_featured = models.BooleanField(default=False)
     image = models.ImageField(
-        upload_to='store/categories/', default='/static/imgs/logo-g.png')
+        upload_to='store/categories', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -56,7 +57,7 @@ class SubCategory(models.Model):
     name = models.CharField(max_length=100)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     image = models.ImageField(
-        upload_to='store/subcategories/', default='/static/imgs/logo-g.png')
+        upload_to='store/subcategories', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -79,7 +80,8 @@ class Product(models.Model):
     quantity = models.IntegerField(default='0', blank=True, null=True)
     price = models.IntegerField(default='0', blank=True, null=True)
     promo_price = models.IntegerField(default='0', blank=True, null=True)
-    description = models.CharField(max_length=500, blank=True, null=True)
+    description = CKEditor5Field(
+        'Description', config_name='extends', blank=True, null=True)
     is_expirable = models.BooleanField(default=False)
     is_promoted = models.BooleanField(default=False)
     production_date = models.DateField(null=True, blank=True)
@@ -91,7 +93,7 @@ class Product(models.Model):
     is_new = models.BooleanField(default=True)
     timestamp = models.DateTimeField(auto_now_add=True,  blank=True, null=True)
     thumbnail = models.ImageField(
-        upload_to='store/products/', default='/static/imgs/logo-g.png')
+        upload_to='store/products', blank=True, null=True)
 
     def __str__(self):
         return f'{self.name} - {self.quantity} - {self.unit}'
@@ -115,7 +117,7 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='store/products/images/', default='/static/imgs/logo-g.png')
+    image = models.ImageField(upload_to='store/products/images', blank=True, null=True)
 
     def __str__(self):
         return f'Image for {self.product.name}'
@@ -156,7 +158,7 @@ class ProductComment(models.Model):
 
     def get_absolute_url(self):
         return reverse('product_comment', kwargs={'pk': self.pk})
-    
+
 
 class ShippingInfo(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
@@ -259,7 +261,7 @@ class Delivery(models.Model):
     is_cancelled = models.BooleanField(default=False)
     observation = models.CharField(max_length=500, blank=True, null=True)
     signature = models.ImageField(
-        upload_to='signatures/deliveries/', null=True, blank=True)
+        upload_to='deliveries/signatures', null=True, blank=True)
 
     def __str__(self):
         return str(self.id)

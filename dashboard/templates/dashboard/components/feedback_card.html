@@ -1,0 +1,20 @@
+<a
+href="{% url 'dash_feedback_details' obj.id %}"
+  class="cursor-pointer py-2 px-4 bg-white relative flex justify-between h-fit w-full border rounded-full flex justify-between items-center overflow-hidden group"
+>
+  <div class="flex items-center gap-2 text-sm">
+    <h3 class="text-teal-700 font-bold w-60">{{obj.email}}</h3>
+    <p><b>{{obj.full_name}}</b> - {{obj.comment|truncatechars:200}}</p>
+    <div class="obj-rating">
+      {% for i in "12345"|slice:":"|cut:"" %} 
+      <!--  -->
+      {% if forloop.counter <= obj.rating.stars %}
+      <i class="fa-solid fa-star text-yellow-400 text-xs"></i>
+      {% else %}
+      <i class="fa-solid fa-star text-gray-300 text-xs"></i>
+      <!-- Empty star -->
+      {% endif %} {% endfor %}
+    </div>
+  </div>
+  <small class="font-light">{{obj.timestamp.date}}</small>
+</a>

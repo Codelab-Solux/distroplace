@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from django.apps import apps
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
@@ -13,7 +14,7 @@ from .models import *
 
 
 def home(req):
-    latest_posts = Blogpost.objects.all().order_by('-timestamp')[:3]
+    latest_posts = Blogpost.objects.all().order_by('-timestamp')[:4]
     appliances = Product.objects.filter(is_featured=True, category__id=1)
     fruits_veggies_spices = Product.objects.filter(
         is_featured=True
@@ -58,7 +59,7 @@ def blog(req):
     blogposts = Blogpost.objects.all().order_by('-timestamp')
     context = {
         "blog_page": "active",
-        'title': 'Store',
+        'title': 'Blog',
         'blogposts': blogposts,
     }
     return render(req, 'base/blog.html', context)
@@ -67,11 +68,8 @@ def blog(req):
 def blogpost(req, pk):
     curr_obj = get_object_or_404(Blogpost, id=pk)
     comments = BlogComment.objects.filter(blogpost=curr_obj)
-    query = req.GET.get('query') if req.GET.get('query') != None else ''
-    blogposts = Blogpost.objects.filter(
-        Q(title__icontains=query)
-        | Q(subtitle__icontains=query)
-    ).order_by('-timestamp').exclude(id=curr_obj.id)[:4]
+    blogposts = Blogpost.objects.all().order_by(
+        '-timestamp').exclude(id=curr_obj.id)[:4]
 
     context = {
         "blogpost_page": "active",
@@ -83,44 +81,6 @@ def blogpost(req, pk):
     }
 
     return render(req, 'base/blogpost.html', context)
-
-
-@login_required(login_url='login')
-def add_blogpost(req):
-    user = req.user
-    if not user.is_staff:
-        messages.info(req, "Access denied!!!")
-        return redirect('home')
-
-    form = BlogForm()
-    if req.method == 'POST':
-        form = BlogForm(req.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(req, 'Nouveau produit ajouté')
-            return redirect('blog')
-
-    else:
-        return render(req, 'base/blog_form.html', context={
-            'title': 'Products', 'form': form, 'form_title': 'Nouvel article'})
-
-
-@login_required(login_url='login')
-def edit_blogpost(req, pk):
-    user = req.user
-    curr_obj = get_object_or_404(Blogpost, id=pk)
-
-    if not user.is_staff:
-        return redirect(req.META.get('HTTP_REFERER', '/'))
-
-    form = BlogForm(instance=curr_obj)
-    if req.method == 'POST':
-        form = BlogForm(req.POST,  instance=curr_obj)
-        if (form.is_valid):
-            form.save()
-        return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
-    else:
-        return render(req, 'basic_form.html', context={'form': form, 'form_title': 'Modifier cet article', "curr_obj": curr_obj})
 
 
 @login_required(login_url='login')
@@ -138,6 +98,8 @@ def like_blogpost(req, pk):
     return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
 
 # ----------------------------------------
+
+
 def create_blog_comment(req, pk):
     user = req.user
     curr_obj = get_object_or_404(Blogpost, id=pk)
@@ -170,7 +132,8 @@ def edit_blog_comment(req, pk):
 
 def blogpost_info(req, pk):
     curr_obj = get_object_or_404(Blogpost, id=pk)
-    comments = BlogComment.objects.filter(blogpost=curr_obj).order_by('-timestamp')    
+    comments = BlogComment.objects.filter(
+        blogpost=curr_obj).order_by('-timestamp')
     is_liked = False
     if curr_obj.likes.filter(id=req.user.id).exists():
         is_liked = True
@@ -192,16 +155,24 @@ def mailing_list(req):
     }
     return render(req, 'base/partials/email_list.html', context)
 
+
 def join_newsletter(req):
     if req.method == 'POST':
         email = req.POST['email']
-        new_mail = NewsletterEmails(email=email)
-        new_mail.save()
-        messages.success(req, 'Successfully subscribed to the newsletter!')
+        if NewsletterEmails.objects.filter(email=email).exists():
+            messages.error(
+                req, 'Cet adresse mail est déjà souscrit à notre newsletter!')
+        else:
+            new_mail = NewsletterEmails(email=email)
+            new_mail.save()
+            messages.success(
+                req, 'Vous avez souscrit avec succes à notre newsletter!')
 
     return redirect(req.META.get('HTTP_REFERER', '/'))
 
 # --------------------------Promotions--------------------------
+
+
 def promotions(req):
     promotions = Promotion.objects.filter(
         is_active=True).order_by('-timestamp')
@@ -229,7 +200,7 @@ def promo_details(request, pk):
 def privacy_policy(req):
     context = {
         "privacy_policy_page": "active",
-        "title": 'Privacy Policy',
+        "title": 'Termes et Conditions',
     }
     return render(req, 'base/extras/privacy_policy.html', context)
 
@@ -237,7 +208,7 @@ def privacy_policy(req):
 def terms_of_use(req):
     context = {
         "terms_of_use_page": "active",
-        "title": 'Privacy Policy',
+        "title": 'Politiques de confidentialité',
     }
     return render(req, 'base/extras/terms_of_use.html', context)
 
@@ -245,7 +216,7 @@ def terms_of_use(req):
 def delivery_policy(req):
     context = {
         "delivery_policy_page": "active",
-        "title": 'Privacy Policy',
+        "title": 'Politiques de livraison',
     }
     return render(req, 'base/extras/delivery_policy.html', context)
 
@@ -253,33 +224,146 @@ def delivery_policy(req):
 def return_policy(req):
     context = {
         "return_policy_page": "active",
-        "title": 'Privacy Policy',
+        "title": 'Politiques de retour',
     }
     return render(req, 'base/extras/return_policy.html', context)
 
 
 def feedbacks(req):
+    form = FeedbackForm()
+    if req.method == 'POST':
+        form = FeedbackForm(req.POST)
+        if (form.is_valid):
+            form.save()
+            messages.success(req, "Feedback envoyer!!!")
+            return redirect('home')
+        else:
+            messages.error(req, "Erreur d'envoie!!!")
+
     context = {
         "feedbacks_page": "active",
-        "title": 'Privacy Policy',
+        "title": 'Feedback',
+        "form": form,
     }
     return render(req, 'base/extras/feedbacks.html', context)
+
+
+def create_feedback(req):
+    form = FeedbackForm()
+    if req.method == 'POST':
+        form = FeedbackForm(req.POST)
+        if form.is_valid():
+            form.save()
+        messages.success = 'Nouvelle promotion ajouté'
+        return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
+    else:
+        return render(req, 'basic_form.html', context={'form': form, 'form_title': 'Laisser un feedback'})
+
+
+def edit_feedback(req, pk):
+    user = req.user
+    curr_obj = get_object_or_404(Feedback, id=pk)
+
+    if curr_obj.email != user.email:
+        return redirect(req.META.get('HTTP_REFERER', '/'))
+
+    form = FeedbackForm(instance=curr_obj)
+    if req.method == 'POST':
+        form = FeedbackForm(req.POST, instance=curr_obj)
+        if (form.is_valid):
+            form.save()
+        return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
+    else:
+        return render(req, 'basic_form.html', context={'form': form, 'form_title': 'Modifier ce feedback'})
 
 
 def about(req):
     context = {
         "about_page": "active",
-        "title": 'Privacy Policy',
+        "title": 'À propos',
     }
     return render(req, 'base/extras/about.html', context)
 
 
+def accessibility(req):
+    context = {
+        "accessibility_page": "active",
+        "title": 'Accessibilité',
+    }
+    return render(req, 'base/extras/accessibility.html', context)
+
+
 def contact(req):
+    if req.method == 'POST':
+        form = ContactMailForm(req.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+
+            # Send email
+            send_mail(
+                subject,
+                message,
+                email,  # From email
+                ['your_email@example.com'],  # To email
+            )
+
+            new_mail = ContactMail(email=email, subject = subject, message= message,)
+
+            new_mail.save()
+
+            messages.success(
+                req, 'Votre message a été envoyé avec succès.')
+            return redirect(req.META.get('HTTP_REFERER', '/'))
+    else:
+        form = ContactMailForm()
     context = {
         "contact_page": "active",
-        "title": 'Privacy Policy',
+        "title": 'Contactez-nous',
+        'form': form,
     }
     return render(req, 'base/extras/contact.html', context)
+
+
+def faq(req):
+    context = {
+        "faq_page": "active",
+        "title": 'Foire aux questions',
+    }
+    return render(req, 'base/extras/faq.html', context)
+
+
+def ccm(req):
+    context = {
+        "ccm_page": "active",
+        "title": 'Comment ça marche',
+    }
+    return render(req, 'base/extras/ccm.html', context)
+
+
+def support(req):
+    context = {
+        "support_page": "active",
+        "title": 'Aide et support',
+    }
+    return render(req, 'base/extras/support.html', context)
+
+
+def sale_policy(req):
+    context = {
+        "sale_policy_page": "active",
+        "title": 'Condition de vente',
+    }
+    return render(req, 'base/extras/sale_policy.html', context)
+
+
+def cstm_service(req):
+    context = {
+        "cstm_service_page": "active",
+        "title": 'Service Client',
+    }
+    return render(req, 'base/extras/cstm_service.html', context)
 
 
 def not_found(req, exception):

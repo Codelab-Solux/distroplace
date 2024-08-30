@@ -1,0 +1,61 @@
+{% load static %}
+<!--  -->
+{% if messages %}
+<div class="messages fixed top-[100px] left-1/3 right-1/3 transform -translate-x-[1/2] flex flex-col justify-center items-center transition-transform duration-500 z-50">
+  {% for message in messages %}
+  <div
+    class="alert mx-auto max-w-[600px] p-3 rounded-lg text-black flex items-center justify-between shadow-lg {% if message.tags == 'error' %} bg-red-200 {% elif message.tags == 'success' %} bg-green-200 {% elif message.tags == 'warning' %} bg-yellow-200 {% elif message.tags == 'info' %} bg-blue-200 {% endif %} slide-down"
+  >
+    <span>{{ message }}</span>
+    <button
+      class="ml-4 font-bold text-lg leading-none focus:outline-none"
+      onclick="this.parentElement.parentElement.classList.add('slide-up');"
+    >
+      ×
+    </button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+<div
+  id="snackbar"
+  class="fixed top-[-100px] right-4 p-4 rounded w-80 flex items-center justify-between transition-transform duration-500"
+>
+  <span id="snackbar-message"></span>
+  <button onclick="hideSnackbar()">×</button>
+</div>
+
+<style>
+  @keyframes slideDown {
+    from {
+      transform: translateY(-200%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(-200%);
+      opacity: 0;
+    }
+  }
+
+  .slide-down {
+    animation: slideDown 0.5s ease-in-out forwards;
+  }
+
+  .slide-up {
+    animation: slideUp 0.5s ease-in-out forwards;
+    pointer-events: none; /* Prevent click during animation */
+  }
+</style>
+
+<script src="{% static 'snackbar.js' %}" defer="true"></script>

@@ -1,3 +1,4 @@
+{% load app_tags %}
 <div id="delivery_slip" class="w-full">
   <div class="flex flex-col gap-3 w-full max-w-60 xl:max-w-80">
     {% include 'store/components/delivery_status_card.html' %}
@@ -9,7 +10,7 @@
         <span>{{obj.product.brand}}</span>
         <span>{{obj.price}} CFA</span>
         <span>x{{obj.quantity}}</span>
-        <span class="font">{{obj.get_total}} CFA</span>
+        <span class="font-bold">{{obj.price|multiply:obj.quantity}} CFA</span>
       </div>
       {% endfor %}
     </div>

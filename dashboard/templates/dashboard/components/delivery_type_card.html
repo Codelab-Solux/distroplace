@@ -43,7 +43,6 @@
       id="menu_d_{{obj.id}}"
     >
       <button
-        onclick="hide_dialogs()"
         hx-target="#basic_dialog"
         hx-get="{% url 'edit_delivery_type' obj.id %}"
         class="px-4 py-2 flex items-center hover:text-black hover:bg-yellow-200 rounded-full w-full text-center cursor-pointer"

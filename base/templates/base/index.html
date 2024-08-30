@@ -12,11 +12,11 @@
         class="w-full h-full object-cover"
       />
       <article
-        class="p-4 lg:p-8 absolute top-0 right-0 bg-black bg-opacity-50 w-full h-full flex flex-col justify-center text-white z-5"
+        class="px-4 lg:px-8 absolute top-0 right-0 bg-black bg-opacity-50 w-full h-full flex flex-col justify-center text-white z-5"
       >
         <span>100% bio, sans additives</span>
         <h2 class="font-bold text-4xl">Des produits de qualité...</h2>
-        <p class=" text-2xl ">
+        <p class="text-2xl">
           ...à partir de
           <span class="text-yellow-400 font-bold">2500 CFA</span>
         </p>
@@ -39,7 +39,9 @@
         <article
           class="p-6 lg:p-10 absolute top-0 right-0 bg-black bg-opacity-50 w-full h-full flex flex-col justify-center gap-1 z-5"
         >
-          <h2 class="text-white font-bold text-2xl">Livraison à partir de...</h2>
+          <h2 class="text-white font-bold text-2xl">
+            Livraison à partir de...
+          </h2>
 
           <span class="text-yellow-300 font-bold text-xl">...1000 CFA </span>
 
@@ -61,9 +63,7 @@
         <article
           class="p-6 lg:p-10 absolute top-0 right-0 bg-black bg-opacity-50 w-full h-full flex flex-col justify-center gap-1 z-5"
         >
-          <h2 class="text-white font-bold text-2xl">
-            Restez à la une avec...
-          </h2>
+          <h2 class="text-white font-bold text-2xl">Restez à la une avec...</h2>
 
           <span class="text-teal-300 font-bold text-xl ml-2"
             >...nos articles</span
@@ -80,20 +80,20 @@
     </div>
   </section>
   <!-- edibles -->
-  <section class="bg-white p-8 w-full flex flex-col gap-2">
-    <div class="p-8 w-full max-w-7xl mx-auto">
+  <section class="bg-white p-4 lg:p-8 w-full flex flex-col gap-2">
+    <div class="lg:p-8 w-full max-w-7xl mx-auto">
       <div class="flex justify-between items-center">
         <h3 class="font-bold text-black text-lg">Fruits & Légumes</h3>
-        <div class="flex justify-between gap-1 text-xs tabbar h-fit w-60">
+        <div class="flex justify-between gap-1 text-xs tabbar h-fit lg:w-60">
           <a
             href="{% url 'products' %}?query=fruits"
-            class="px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-center text-xs rounded-full w-full"
+            class="hidden lg:inline px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-center text-xs rounded-full w-full"
           >
             Fruits
           </a>
           <a
             href="{% url 'products' %}?query=légumes"
-            class="px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-center text-xs rounded-full w-full"
+            class="hidden lg:inline px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-center text-xs rounded-full w-full"
           >
             Legumes
           </a>
@@ -116,20 +116,20 @@
     </div>
   </section>
   <!-- electronics -->
-  <section class="bg-gray-100 p-8 w-full flex flex-col gap-2">
-    <div class="p-8 w-full max-w-7xl mx-auto">
+  <section class="bg-gray-100 p-4 lg:p-8 w-full flex flex-col gap-2">
+    <div class="lg:p-8 w-full max-w-7xl mx-auto">
       <div class="flex justify-between items-center">
         <h3 class="font-bold text-black text-lg">Appareils Electro Menager</h3>
-        <div class="flex justify-between gap-1 text-xs tabbar h-fit w-60">
+        <div class="flex justify-between gap-1 text-xs tabbar h-fit lg:w-60">
           <a
             href="{% url 'products' %}?query=réfrigirateurs"
-            class="px-2 py-1 bg-teal-200 hover:bg-teal-300 text-center text-xs rounded-full w-full"
+            class="hidden lg:inline px-2 py-1 bg-teal-200 hover:bg-teal-300 text-center text-xs rounded-full w-full"
           >
             Réfrigirateurs
           </a>
           <a
             href="{% url 'products' %}?query=mixeurs"
-            class="px-2 py-1 bg-teal-200 hover:bg-teal-300 text-center text-xs rounded-full w-full"
+            class="hidden lg:inline px-2 py-1 bg-teal-200 hover:bg-teal-300 text-center text-xs rounded-full w-full"
           >
             Mixeurs
           </a>
@@ -152,20 +152,20 @@
     </div>
   </section>
   <!-- clothing -->
-  <section class="bg-white p-8 w-full flex flex-col gap-2">
-    <div class="p-8 w-full max-w-7xl mx-auto">
+  <section class="bg-white p-4 lg:p-8 w-full flex flex-col gap-2">
+    <div class="lg:p-8 w-full max-w-7xl mx-auto">
       <div class="flex justify-between items-center">
         <h3 class="font-bold text-black text-lg">Vêtements</h3>
-        <div class="flex justify-between gap-1 text-xs tabbar h-fit w-60">
+        <div class="flex justify-between gap-1 text-xs tabbar h-fit lg:w-60">
           <a
             href="{% url 'products' %}?query=chemises"
-            class="px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-center text-xs rounded-full w-full"
+            class="hidden lg:inline px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-center text-xs rounded-full w-full"
           >
             Chemises
           </a>
           <a
             href="{% url 'products' %}?query=pantalons"
-            class="px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-center text-xs rounded-full w-full"
+            class="hidden lg:inline px-2 py-1 bg-yellow-100 hover:bg-yellow-300 text-center text-xs rounded-full w-full"
           >
             Pantalons
           </a>
@@ -191,8 +191,8 @@
   <!-- cta -->
 
   <!-- blogposts -->
-  <section class="bg-gray-100 p-8 w-full flex flex-col gap-2">
-    <div class="p-8 w-full max-w-7xl mx-auto">
+  <section class="bg-gray-100 p-4 lg:p-8 w-full flex flex-col gap-2">
+    <div class="lg:p-8 w-full max-w-7xl mx-auto">
       <h3 class="font-bold text-black text-xl">Nouvelles publications</h3>
       <p>
         Present posts in a best way to highlight interesting moments of your

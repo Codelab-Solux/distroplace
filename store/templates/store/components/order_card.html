@@ -4,18 +4,9 @@
   class="py-2 px-4 w-full bg-white hover:bg-gray-100 {% if obj.status == 'cancelled' %} text-gray-400 {% else %} text-gray-600 {% endif %} text-xs xl:text-sm flex justify-between items-center lg:grid lg:grid-cols-6 rounded-full border hover:shadow-lg transition duration-200 ease-in"
 >
   <h3 class="font-bold text-black">Commande N°{{obj.id}}</h3>
-  <p>
-    
-    {{obj.timestamp.date}}
-  </p>
-  <p>
-    
-    {{obj.timestamp.time}}
-  </p>
-  <p>
-    
-    {{obj.amount}} CFA
-  </p>
+  <p>{{obj.timestamp.date}}</p>
+  <p>{{obj.timestamp.time}}</p>
+  <p>{{obj.amount}} CFA</p>
 
   {% include 'store/components/order_status.html' %}
   <!--  -->
@@ -28,7 +19,7 @@
       id="orderSentry"
       aria-expanded="false"
       aria-haspopup="true"
-      onclick="toggleHostActionDropdown(this,'{{obj.id}}')"
+      onclick="toggleMenu(this,'ord_{{obj.id}}')"
     >
       <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
     </button>
@@ -39,9 +30,8 @@
       aria-orientation="vertical"
       aria-labelledby="status-menu-button"
       tabindex="-1"
-      id="actionMenu{{obj.id}}"
+      id="ord_{{obj.id}}"
     >
-     
       <a
         href="{% url 'order_details' obj.id %}"
         class="px-4 py-2 flex items-center hover:text-black hover:bg-gray-200 rounded-full w-full text-center cursor-pointer"
@@ -63,14 +53,8 @@
 </div>
 
 <script>
-  function toggleHostActionDropdown(e, obj_id) {
-    activeMenu = document.getElementById(`actionMenu${obj_id}`);
-    e.name === `orderSentry`
-      ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
-      : ((e.name = `orderSentry`), activeMenu.classList.add("hidden"));
-  }
-
-  window.addEventListener("mouseup", function (event) {
+  // activeMenu = document.getElementById(obj_id);
+   window.addEventListener("mouseup", function (event) {
     activeMenu.classList.add("hidden");
   });
 </script>

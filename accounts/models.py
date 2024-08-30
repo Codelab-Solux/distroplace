@@ -58,6 +58,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     phone = PhoneNumberField(unique=True, blank=True, null=True)
     role = models.ForeignKey(
         Role, on_delete=models.CASCADE, blank=True, null=True)
+    is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -92,7 +93,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         )
 
 
-
 gender_list = (
     ('female', 'Féminin'),
     ('male', 'Masculin'),
@@ -106,7 +106,7 @@ class Profile(models.Model):
     otp = models.CharField(max_length=6, blank=True, null=True)
     saved_cart = models.CharField(max_length=255, blank=True, null=True)
     image = models.ImageField(
-        upload_to='media/users/profiles', default='../static/imgs/anon.png', blank=True, null=True)
+        upload_to='users/profiles', blank=True, null=True)
 
     def __str__(self):
         return f'{self.user.last_name} {self.user.first_name} - Profile'
@@ -118,3 +118,7 @@ class Profile(models.Model):
         return reverse('profile', kwargs={'pk': self.pk})
 
 
+class UserFirebaseProfile(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    firebase_uid = models.CharField(max_length=255, unique=True)

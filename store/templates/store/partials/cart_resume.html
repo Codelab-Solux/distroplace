@@ -24,8 +24,9 @@
   </div>
   {% else %}
   <div class="flex flex-col items-center gap-2 my-20 mx-auto">
-    <i class="fa-solid fa-shopping-cart text-teal-900 text-2xl"></i>
-    <span>Votre panier est vide</span>
+    <i class="fa-solid fa-shopping-cart text-teal-700 text-2xl"></i>
+    <span>Aucun article dans le panier</span>
+    {% if profile_page %}
     <a
       href="{% url 'products' %}"
       class="bg-yellow-200 rounded-full text-xs py-2 px-4 flex items-center gap-4 group"
@@ -35,6 +36,7 @@
         >&rarr;</span
       ></a
     >
+    {% endif %}
   </div>
   {% endif %}
 </div>

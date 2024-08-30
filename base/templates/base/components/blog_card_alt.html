@@ -2,9 +2,7 @@
 <div
   class="flex flex-col gap-1 bg-white border hover:border-teal-500 rounded-lg overflow-hidden"
 >
-  <a
-    href="{% url 'blogpost' obj.id %}"
-  >
+  <a href="{% url 'blogpost' obj.id %}">
     {% if obj.image %}
     <img
       src="{{ MEDIA_URL }} {{ obj.image.url }}"
@@ -29,6 +27,6 @@
         >Lire<span class="ml-2">&rarr;</span></a
       >
     </div>
-    <h3 class="text-teal-900 font-bold">{{obj.title}}</h3>
+    <h3 class="text-teal-700 font-bold">{{obj.title}}</h3>
   </article>
 </div>

@@ -1,3 +1,4 @@
+from django_ckeditor_5.fields import CKEditor5Field
 from django.db import models
 from django.urls import reverse
 from accounts.models import CustomUser
@@ -9,12 +10,12 @@ class Promotion(models.Model):
     title = models.CharField(max_length=255, default='')
     catch_phrase = models.TextField(default='')
     price = models.PositiveBigIntegerField(default=0)
-    timestamp = models.DateTimeField(auto_now=True)
     products = models.ManyToManyField(
         Product, related_name='promotions', blank=True)
     image = models.ImageField(
-        upload_to='base/promotions/', default='/static/imgs/promo.png')
+        upload_to='base/promotions', blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    timestamp = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
@@ -30,12 +31,12 @@ class Blogpost(models.Model):
     title = models.CharField(max_length=255, default='')
     subtitle = models.CharField(
         max_length=255, default='', blank=True, null=True)
-    content = models.TextField(default='')
+    content = CKEditor5Field('Content', config_name='extends', blank=True)
     image = models.ImageField(
-        upload_to='base/blogposts/', default='/static/imgs/blog.png')
-    timestamp = models.DateTimeField(auto_now=True)
+        upload_to='base/blogposts', blank=True, null=True)
     likes = models.ManyToManyField(
-        CustomUser, related_name='blogpost_likes', blank=True,)
+        CustomUser, related_name='blogpost_likes', blank=True)
+    timestamp = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
@@ -79,12 +80,13 @@ class NewsletterEmails(models.Model):
         return reverse('news_letter_email', kwargs={'pk': self.pk})
 
 
-class HomeImages(models.Model):
+class HomeImage(models.Model):
     title = models.CharField(max_length=255, default='')
     catch_phrase = models.TextField(default='')
     image = models.ImageField(
-        upload_to='base/home_images/', blank=True, null=True)
+        upload_to='base/home_image', blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    timestamp = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
@@ -94,3 +96,51 @@ class HomeImages(models.Model):
 
     def get_absolute_url(self):
         return reverse('home_image', kwargs={'pk': self.pk})
+
+
+class ContactMail(models.Model):
+    email = models.EmailField()
+    subject = models.CharField(max_length=255, default='')
+    message = models.TextField(default='')
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+    def get_hashid(self):
+        return h_encode(self.id)
+
+    def get_absolute_url(self):
+        return reverse('contact_mail', kwargs={'pk': self.pk})
+
+
+class Rating(models.Model):
+    title = models.CharField(max_length=255)
+    stars = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.title} - feedback'
+
+    def get_hashid(self):
+        return h_encode(self.id)
+
+    def get_absolute_url(self):
+        return reverse('rating', kwargs={'pk': self.pk})
+
+class Feedback(models.Model):
+    full_name = models.CharField(max_length=255)
+    email = models.EmailField()
+    products = models.CharField(max_length=255)
+    rating = models.ForeignKey(
+            Rating, on_delete=models.SET_NULL, null=True)
+    comment = models.TextField(default='')
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.product.name} - feedback'
+
+    def get_hashid(self):
+        return h_encode(self.id)
+
+    def get_absolute_url(self):
+        return reverse('feedback', kwargs={'pk': self.pk})

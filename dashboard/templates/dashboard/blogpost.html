@@ -1,0 +1,105 @@
+{% extends 'main_alt.html' %} {% load static %} {% block content %}
+<div class="px-4 lg:px-8 max-w-7xl mx-auto flex flex-col gap-6">
+  <div class="flex justify-between">
+    <div
+      class="bg-teal-900 py-2 px-4 rounded-full flex items-center text-white gap-4"
+    >
+      <a
+        id="back-button"
+        class="inline-block px-2 py-1 font-bold hover:bg-yellow-300 hover:text-black rounded-full transition-all duration-300"
+        href="#"
+        >&larr;</a
+      >
+      Retourner
+    </div>
+    {% if user.is_staff %}
+    <a
+    hx-boost="false"
+      href="{% url 'create_blogpost' %}"
+      class="bg-yellow-200 hover:bg-yellow-300 rounded-full py-1 px-4 text-sm flex items-center gap-4 group"
+    >
+      Nouvel article
+      <i class="fa-solid fa-plus ml-2"></i>
+    </a>
+    {% endif %}
+  </div>
+
+  <!--------------------------------------- blogpost form --------------------------------------->
+
+  <section class="grid lg:flex lg:flex-row items-start gapy-4">
+    <!--------------------- current blogpost -------------------------->
+
+    <div class="mb-8 relative bg-white border rounded-xl flex flex-col w-full">
+      {% if user.is_staff %}
+      <a
+        hx-boost="false"
+        href="{% url 'edit_blogpost' curr_obj.id %}"
+        class="absolute right-4 top-4 bg-white text-sm hover:text-teal-600 px-3 py-1 rounded-full transition ease-in duration-200"
+        ><i class="fa-solid fa-pen"></i>
+      </a>
+      {% endif %}
+      <!--  -->
+      {% if not curr_obj.image %}
+      <img
+        class="h-80 py-8 w-full rounded-t-md object-contain"
+        src="{% static 'imgs/logo-g.png' %}"
+        alt="blogpost image"
+      />
+      {% else %}
+      <img
+        class="h-80 w-full rounded-t-md object-cover"
+        src="{{curr_obj.image.url}}"
+        alt="blogpost image"
+      />
+      {% endif %}
+      <hr />
+      <div class="p-4 lg:p-6 flex flex-col gap-4">
+        <article class="flex flex-col gap-2 pt-2">
+          <h4 class="text-black text-3xl font-bold">{{curr_obj.title}}</h4>
+          <p class="text-lg">{{curr_obj.subtitle}}</p>
+          <small class="text-xs italic">{{curr_obj.timestamp}}</small>
+          <p
+            class="text-md text-gray-800 overflow-wrap:break-word word-break:break-all"
+          >
+            {{curr_obj.content|safe}}
+          </p>
+        </article>
+
+        <hr />
+        <div
+          class="grid gap-2"
+          hx-get="{% url 'blogpost_info' curr_obj.id %}"
+          hx-trigger="load, db_changed from:body"
+          hx-target="this"
+        >
+          <p
+            class="h-full w-full flex justify-center items-center text-teal-500 p-4"
+          >
+            <i class="m-auto fas fa-spinner fa-spin text-3xl animate-spin"></i>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!--------------------------------------- other blogposts --------------------------------------->
+    <div
+      class="w-full lg:w-[500px] grid md:grid-cols-2 lg:grid-cols-1 gap-4 mt-6 lg:mt-0 lg:ml-6"
+    >
+      {% for obj in blogposts %}
+      <!--  -->
+      {% include 'base/components/blog_card_alt.html' %}
+      <!--  -->
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+<script>
+  document
+    .getElementById("back-button")
+    .addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent the default anchor behavior
+      window.history.go(-1); // Go back two pages
+    });
+</script>
+{% endblock %}

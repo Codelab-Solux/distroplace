@@ -1,7 +1,6 @@
-{% load app_tags %}
 {% if not clients %}
 <div class="flex flex-col items-center gap-2 my-20 mx-auto">
-  <i class="fa-solid fa-users text-teal-900 text-9xl"></i>
+  <i class="fa-solid fa-users text-teal-700 text-9xl"></i>
   <span>Aucun produit trouvé</span>
 </div>
 {% else %}
@@ -9,7 +8,8 @@
   <thead class="bg-teal-900 border border-teal-900 bg-teal-900 text-white">
     <tr>
       <th class="px-3 py-4 text-sm">Ref.</th>
-      <th class="px-3 py-4 text-sm">Nom et prenoms</th>
+      <th class="px-3 py-4 text-sm">Nom</th>
+      <th class="px-3 py-4 text-sm">Prenoms</th>
       <th class="px-3 py-4 text-sm">Nom d'utilisateur</th>
       <th class="px-3 py-4 text-sm">Email</th>
       <th class="px-3 py-4 text-sm">Telephone</th>
@@ -25,14 +25,15 @@
     <tr
       class="text-gray-600 border text-sm hover:bg-white hover:text-black transition-all duration-300"
     >
-      <td class="px-3 py-1">Cmd N°-{{obj.id}}</td>
-      <td class="px-3 py-1">{{obj.get_full_name}}</td>
+      <td class="px-3 py-1">Clt N°-{{obj.id}}</td>
+      <td class="px-3 py-1">{{obj.last_name}}</td>
+      <td class="px-3 py-1">{{obj.first_name}}</td>
       <td class="px-3 py-1">@{{obj.username}}</td>
       <td class="px-3 py-1">{{obj.email}}</td>
       <td class="px-3 py-1">{{obj.phone}}</td>
       <td class="px-3 py-1">{{obj.role}}</td>
-      <td class="px-3 py-1">{{obj.id|user_orders}}</td>
-      <td class="px-3 py-1">{{obj.id|user_deliveries}}</td>
+      <td class="px-3 py-1">{{obj.order_set.count}}</td>
+      <td class="px-3 py-1">{{obj.delivery_set.count}}</td>
       <td class="px-3 py-1">
         <div class="w-fit mx-auto text-end relative text-gray-700">
           <button

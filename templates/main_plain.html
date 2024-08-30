@@ -28,7 +28,7 @@
     <link href="{% static 'styles.css' %}" rel="stylesheet" />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Helvetica:wght@400;700&display=swap"
     />
 
     <link
@@ -40,7 +40,7 @@
     <style>
       body {
         /* font-family: 'Noto Sans', sans-serif; */
-        font-family: "Prompt", sans-serif;
+        font-family: "Helvetica", sans-serif;
         /* font-family: 'Roboto', sans-serif; */
       }
     </style>
@@ -53,23 +53,7 @@
   <body hx-headers='{"X-CSRFToken" : "{{ csrf_token }}"}' class="flex flex-col">
     {% csrf_token %}
     <!--  -->
-    {% if messages %}
-    <div class="messages flex flex-col items-end p-4">
-      {% for message in messages %}
-      <div
-        class="alert mx-auto max-w-[400px] p-3 rounded-lg text-black flex items-center justify-between shadow-lg {% if message.tags == 'error' %} bg-red-300 {% elif message.tags == 'success' %} bg-green-300 {% elif message.tags == 'warning' %} bg-yellow-300 {% elif message.tags == 'info' %} bg-blue-300 {% endif %}"
-      >
-        <span>{{ message }}</span>
-        <button
-          class="ml-4 font-bold text-lg leading-none focus:outline-none"
-          onclick="this.parentElement.remove();"
-        >
-          ×
-        </button>
-      </div>
-      {% endfor %}
-    </div>
-    {% endif %}
+    {% include 'snackbar.html' %}
     <!--  -->
     <div
       id="base"

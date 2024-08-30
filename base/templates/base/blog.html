@@ -1,5 +1,7 @@
 {% extends 'main.html' %} {% load static %} {% block content %}
-<div class="px-4 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between gap-6">
+<div
+  class="mb-8 px-4 lg:px-8 max-w-7xl mx-auto flex flex-col justify-between gap-6"
+>
   <!--------------------------------------- mini navbar --------------------------------------->
   <div class="w-full flex justify-between">
     <div
@@ -15,7 +17,8 @@
     </div>
     {% if user.is_staff %}
     <a
-      href="{% url 'add_blogpost' %}"
+      hx-boost="false"
+      href="{% url 'create_blogpost' %}"
       class="bg-yellow-200 hover:bg-yellow-300 rounded-full py-1 px-4 text-sm flex items-center gap-4 group"
     >
       Ajouter un article
@@ -39,7 +42,7 @@
     .getElementById("back-button")
     .addEventListener("click", function (event) {
       event.preventDefault(); // Prevent the default anchor behavior
-      window.history.go(-2); // Go back two pages
+      window.history.go(-1); // Go back two pages
     });
 </script>
 {% endblock %}

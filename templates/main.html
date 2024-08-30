@@ -30,7 +30,7 @@
 
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Helvetica:wght@400;700&display=swap"
     />
     <link
       rel="shortcut icon"
@@ -41,7 +41,7 @@
     <style>
       body {
         /* font-family: 'Noto Sans', sans-serif; */
-        font-family: "Prompt", sans-serif;
+        font-family: "Helvetica", sans-serif;
         /* font-family: 'Roboto', sans-serif; */
       }
     </style>
@@ -54,31 +54,15 @@
   <body
     hx-boost="true"
     hx-headers='{"X-CSRFToken" : "{{ csrf_token }}"}'
-    class="flex flex-col bg-white"
+    class="flex flex-col bg-white relative"
   >
     {% csrf_token %}
     <!-- Navbar -->
     {% include 'navbar.html' %}
     <!--  -->
-    {% if messages %}
-    <div class="messages flex flex-col items-end p-4">
-      {% for message in messages %}
-      <div
-        class="alert mx-auto max-w-[400px] p-3 rounded-lg text-black flex items-center justify-between shadow-lg {% if message.tags == 'error' %} bg-red-300 {% elif message.tags == 'success' %} bg-green-300 {% elif message.tags == 'warning' %} bg-yellow-300 {% elif message.tags == 'info' %} bg-blue-300 {% endif %}"
-      >
-        <span>{{ message }}</span>
-        <button
-          class="ml-4 font-bold text-lg leading-none focus:outline-none"
-          onclick="this.parentElement.remove();"
-        >
-          ×
-        </button>
-      </div>
-      {% endfor %}
-    </div>
-    {% endif %}
+    {% include 'snackbar.html' %}
     <!--  -->
-    <div id="base" class="min-h-screen lg:mt-[6%]">
+    <div id="base" class="min-h-screen mt-4 lg:mt-24">
       {% block content %} {% endblock %}
     </div>
     <!--  -->
@@ -87,10 +71,22 @@
     {% include 'footer.html' %}
     <!-- Hidden CSRF token input -->
     <input type="hidden" id="csrf_token" value="{{ csrf_token }}" />
-
     <script>
       htmx.onLoad(function (content) {
         scripts.init(content);
+      });
+
+      document.addEventListener("htmx:afterSwap", function () {
+        // Get all elements with the class "navbar"
+        let navbars = document.querySelectorAll(".navbar");
+
+        // If more than one navbar exists, remove the duplicates
+        if (navbars.length > 1) {
+          // Keep the first one and remove the others
+          for (let i = 1; i < navbars.length; i++) {
+            navbars[i].remove();
+          }
+        }
       });
 
       var current_date = new Date().getFullYear();
@@ -100,7 +96,6 @@
       function add_to_cart(obj_id) {
         // Retrieve the CSRF token from the hidden input
         const csrfToken = document.getElementById("csrf_token").value;
-
         $.ajax({
           type: "POST",
           url: "{% url 'add_to_cart' %}",
@@ -110,9 +105,17 @@
             action: "post",
           },
           success: function (json) {
-            console.log(json.cart_count); // Ensure the key matches the JSON response key
-            document.getElementById("cart_counter").textContent =
-              json.cart_count;
+            let counter_span = document.getElementById("cart_counter");
+            counter_span.textContent = json.cart_count;
+
+            // Convert cart_count to an integer and check the condition
+            if (parseInt(json.cart_count) > 0) {
+              counter_span.classList.remove("bg-gray-200");
+              counter_span.classList.add("bg-yellow-400");
+            } else {
+              counter_span.classList.remove("bg-yellow-400");
+              counter_span.classList.add("bg-gray-200");
+            }
           },
           error: function (xhr, errmsg, err) {
             console.error(errmsg); // Log error message to console
@@ -121,23 +124,15 @@
       }
 
       // go back button ----------------------------------------------------------------------------------------------------
-      function initializeBackButton() {
-        const backButton = document.getElementById("back-button");
-        if (backButton) {
-          backButton.addEventListener("click", function (event) {
-            alert("go!!!");
-            event.preventDefault(); // Prevent the default anchor behavior
-            window.history.go(-1); // Go back two pages
-          });
-        }
-      }
-      // Initialize on page load
-      document.addEventListener("DOMContentLoaded", initializeBackButton);
-      // Initialize on HTMX content load
-      document.body.addEventListener("htmx:afterSettle", initializeBackButton);
-
+      document
+        .getElementById("back-button")
+        .addEventListener("click", function (event) {
+          event.preventDefault(); // Prevent the default anchor behavior
+          window.history.go(-1); // Go back two pages
+        });
       //  tabs controller ----------------------------------------------------------------------------------------------------
       document.getElementById("defaultTab").click();
+
       function openTab(event, tabName) {
         var i, tabcontent, tabBtn;
         tabcontent = document.getElementsByClassName("tabcontent");
@@ -208,12 +203,15 @@
       }
 
       function toggleMenu(e, obj_id) {
-        // alert("clicked");
         activeMenu = document.getElementById(obj_id);
         e.name === `actions`
           ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
           : ((e.name = `actions`), activeMenu.classList.add("hidden"));
       }
+
+      window.addEventListener("mouseup", function (event) {
+        activeMenu.classList.add("hidden");
+      });
 
       window.addEventListener("mouseup", function (event) {
         if (

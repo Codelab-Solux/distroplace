@@ -15,35 +15,54 @@
 
   <form
     id="filter"
-    hx-post="{% url 'filter_products' %}"
-    hx-target=".promo_list"
+    hx-post="{% url 'filter_clients' %}"
+    hx-target=".clients_list"
     class="p-2 w-full bg-gray-200 border rounded-full flex justify-between items-center gap-1 text-sm xl:text-sm"
   >
     {% csrf_token %}
     <section class="w-full flex justify-between items-center gap-1 text-xs">
       <!-- phone field -->
       <input
-        hx-post="{% url 'filter_products' %}"
-        hx-target=".promo_list"
+        hx-post="{% url 'filter_clients' %}"
+        hx-target=".clients_list"
         hx-trigger="keyup changed delay:500ms"
         placeholder="Nom"
         name="last_name"
         type="text"
         class="px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-teal-300 w-full cursor-pointer"
       />
-      <!-- price field -->
       <input
-        hx-post="{% url 'filter_products' %}"
-        hx-target=".promo_list"
+        hx-post="{% url 'filter_clients' %}"
+        hx-target=".clients_list"
         hx-trigger="keyup changed delay:500ms"
         placeholder="Prenoms"
         name="first_name"
         type="text"
         class="px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-teal-300 w-full cursor-pointer"
       />
+      <!-- email field -->
+      <input
+        hx-post="{% url 'filter_clients' %}"
+        hx-target=".clients_list"
+        hx-trigger="keyup changed delay:500ms"
+        placeholder="Email"
+        name="email"
+        type="email"
+        class="px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-teal-300 w-full cursor-pointer"
+      />
+      <!-- phone field -->
+      <input
+        hx-post="{% url 'filter_clients' %}"
+        hx-target=".clients_list"
+        hx-trigger="keyup changed delay:500ms"
+        placeholder="telephone"
+        name="phone"
+        type="text"
+        class="px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-teal-300 w-full cursor-pointer"
+      />
 
       <!-- orders counts -->
-      <select
+      <!-- <select
         name="items"
         class="hidden md:inline px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-teal-300 w-full cursor-pointer"
       >
@@ -53,7 +72,7 @@
         <option value="50">31 - 50</option>
         <option value="100">51 - 100</option>
         <option value="101">plus de 100</option>
-      </select>
+      </select> -->
     </section>
 
     <button

@@ -1,4 +1,7 @@
 {% extends 'main_plain.html' %} {% load static %} {% block content %}
+<!--  -->
+{% load socialaccount %}
+
 <div
   class="bg-teal-100 h-screen w-full flex flex-col justify-center items-center"
 >
@@ -11,7 +14,35 @@
       class="bg-gray-100 rounded-2xl p-6 flex-col h-fit w-full max-w-md shadow-md"
     >
       <h1 class="mb-4 text-black text-3xl font-bold">Inscription</h1>
-      <form class="w-full text-sm" method="POST" enctype="multipart/form-data">
+      <div class="mb-4 flex justify-between items-center gap-4">
+        <div
+          class="flex justify-between p-1 gap-1 text-xs tabbar h-fit w-fit max-w-[200px] bg-teal-700 rounded-full"
+        >
+          <button
+            class="tabBtn px-3 py-2 bg-white hover:bg-teal-900 hover:text-white rounded-full w-full"
+            onclick="openTab(event, 'email_signup')"
+            id="defaultTab"
+          >
+            <i class="fa-solid fa-at"></i>
+          </button>
+          <!-- <button
+            class="tabBtn px-3 py-2 bg-white hover:bg-teal-900 hover:text-white rounded-full w-full"
+            onclick="openTab(event, 'phone_signup')"
+          >
+            <i class="fa-solid fa-phone"></i>
+          </button> -->
+        </div>
+        <a
+          href="{% provider_login_url 'google' %}"
+          class="px-4 py-1 w-full flex justify-center items-center rounded-full text-sm text-gray-700 bg-white hover:shadow-md transition duration-300 ease-in group"
+        >
+          <i
+            class="fa-brands fa-google text-xl group-hover:text-red-500 transition duration-300 ease-in"
+          ></i>
+          <span class="ml-2">Google</span>
+        </a>
+      </div>
+      <form id="email_signup" class="tabcontent w-full text-sm" method="POST">
         {% csrf_token %} {% for field in form %}
         <div>
           <h3 class="mb-1">{{field.label}}</h3>
@@ -27,13 +58,62 @@
           <p class="text-xs">
             Vous avez déjà un compte?
             <a
-        hx-boos="true" href="{% url 'login' %}" class="text-teal-500 hover:underline"
+              hx-boos="true"
+              href="{% url 'login' %}"
+              class="text-teal-500 hover:underline"
               >Cliquez ici</a
             >
           </p>
         </div>
       </form>
+
+      <form id="phone_signupp" class="tabcontent w-full text-sm" method="POST">
+        {% csrf_token %} 
+        <!--  -->
+        {% for field in alt_form %}
+        <div>
+          <h3 class="mb-1">{{field.label}}</h3>
+          {{field}}
+        </div>
+        {% endfor %}
+        <div class="mt-2 flex justify-between items-center gap-2">
+          <input
+            class="px-8 py-2 bg-teal-700 hover:bg-teal-900 text-sm text-white rounded-full cursor-pointer"
+            type="submit"
+            value="S'inscrire"
+          />
+          <p class="text-xs">
+            Vous avez déjà un compte?
+            <a
+              hx-boos="true"
+              href="{% url 'login' %}"
+              class="text-teal-500 hover:underline"
+              >Cliquez ici</a
+            >
+          </p>
+        </div>
+      </form>
+
     </div>
   </section>
 </div>
+<script>
+    //  tabs controller ----------------------------------------------------------------------------------------------------
+  document.getElementById("defaultTab").click();
+  function openTab(event, tabName) {
+    var i, tabcontent, tabBtn;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tabBtn = document.getElementsByClassName("tabBtn");
+    for (i = 0; i < tabBtn.length; i++) {
+      tabBtn[i].className = tabBtn[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    event.currentTarget.className += " active";
+  }
+
+  
+</script>
 {% endblock %}

@@ -11,81 +11,50 @@
       Liste des promotions
       <i class="fa-solid fa-tags ml-2"></i>
     </h3>
-    <a
-      hx-target="#basic_dialog"
-      hx-get="{% url 'create_promotion' %}"
-      class="cursor-pointer bg-teal-200 hover:bg-teal-300 rounded-full py-2 px-4 text-xs flex items-center gap-4 group"
-    >
-      Nouvelle promotion
-      <i class="fa-solid fa-plus ml-2"></i
-    ></a>
+
+    <div class="flex items-center gap-2">
+      <a
+        hx-target="#basic_dialog"
+        hx-get="{% url 'create_promotion' %}"
+        class="cursor-pointer bg-teal-200 hover:bg-teal-300 rounded-full py-2 px-4 text-xs flex items-center gap-4 group"
+      >
+        Nouvelle promotion
+        <i class="fa-solid fa-plus ml-2"></i
+      ></a>
+      <form
+        id="filter"
+        hx-post="{% url 'filter_products' %}"
+        hx-target=".promo_list"
+        class="p-2 w-fit bg-gray-200 border rounded-full flex justify-between items-center gap-1 text-sm xl:text-sm"
+      >
+        {% csrf_token %}
+        <section class="w-full flex justify-between items-center gap-1 text-xs">
+          <select
+            name="is_promoted"
+            class="hidden sm:flex px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-teal-300 w-full cursor-pointer"
+          >
+            <option value="" selected="true" disabled="disabled">Status</option>
+            <option value="True">Active</option>
+            <option value="False">Inactive</option>
+          </select>
+        </section>
+
+        <button
+          class="px-3 py-2 bg-teal-700 hover:bg-teal-900 text-white hover:text-yellow-300 rounded-full transition duration-200 ease-in"
+          type="submit"
+        >
+          <i class="fa-solid fa-filter"></i>
+        </button>
+        <button
+          class="px-3 py-2 bg-gray-100 hover:bg-gray-400 hover:text-black rounded-full transition duration-200 ease-in"
+          hx-on:click="clearForm('filter')"
+          type="submit"
+        >
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+      </form>
+    </div>
   </div>
-
-  <form
-    id="filter"
-    hx-post="{% url 'filter_products' %}"
-    hx-target=".promo_list"
-    class="p-2 w-full bg-gray-200 border rounded-full flex justify-between items-center gap-1 text-sm xl:text-sm"
-  >
-    {% csrf_token %}
-    <section class="w-full flex justify-between items-center gap-1 text-xs">
-      <!-- phone field -->
-      <input
-        hx-post="{% url 'filter_products' %}"
-        hx-target=".promo_list"
-        hx-trigger="keyup changed delay:500ms"
-        placeholder="Titre ou phrase"
-        name="name_or_phrase"
-        type="text"
-        class="px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-teal-300 w-full cursor-pointer"
-      />
-      <!-- price field -->
-      <input
-        hx-post="{% url 'filter_products' %}"
-        hx-target=".promo_list"
-        hx-trigger="keyup changed delay:500ms"
-        placeholder="A partir de"
-        name="price"
-        type="text"
-        class="px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-teal-300 w-full cursor-pointer"
-      />
-
-      <!-- categories and subcategories -->
-      <select
-        name="product"
-        class="hidden sm:flex px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-teal-300 w-full cursor-pointer"
-      >
-        <option value="" selected="true" disabled="disabled">Produits</option>
-        {% for obj in products %}
-        <option value="{{obj.id}}">{{obj.name}}</option>
-        {% endfor %}
-      </select>
-
-      <select
-        name="is_promoted"
-        class="hidden sm:flex px-3 py-2 rounded-full focus:outline-none focus:ring-1 focus:ring-teal-300 w-full cursor-pointer"
-      >
-        <option value="" selected="true" disabled="disabled">Status</option>
-        <option value="True">Active</option>
-        <option value="False">Inactive</option>
-      </select>
-    </section>
-
-    <button
-      class="px-3 py-2 bg-teal-700 hover:bg-teal-900 text-white hover:text-yellow-300 rounded-full transition duration-200 ease-in"
-      type="submit"
-    >
-      <i class="fa-solid fa-filter"></i>
-    </button>
-    <button
-      class="px-3 py-2 bg-gray-100 hover:bg-gray-400 hover:text-black rounded-full transition duration-200 ease-in"
-      hx-on:click="clearForm('filter')"
-      type="submit"
-    >
-      <i class="fa-solid fa-rotate-right"></i>
-    </button>
-  </form>
-  <!--  -->
 
   <div
     class="promo_list"

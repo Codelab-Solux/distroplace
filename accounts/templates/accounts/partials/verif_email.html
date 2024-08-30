@@ -1,0 +1,14 @@
+<p>Salut {{user.get_full_name}}</p>
+<br />
+<p>
+  Vous avez créer un compte sur distroplace.com. Veuillez cliquer sur le lien
+  ci-dessous pour vérifier votre compte.
+</p>
+<br />
+<p>Au cas où ce n'était pas vous qui avez créer ce compte, veuillez ignore ce mail.</p>
+<br />
+<p>
+  <a href="{{ domain }}{% url 'verify_by_email' uidb64=uid token=token %}">
+    Verifier mon compte</a
+  >
+</p>

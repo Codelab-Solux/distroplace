@@ -1,34 +1,34 @@
 {% extends 'main.html' %} {% load static %} {% block content %}
-<section class="p-4 lg:p-8 w-full max-w-5xl mx-auto grid shadow-lg">
-  <section class="bg-white py-8">
-    <div class="container max-w-6xl mx-auto m-8 px-8">
-      <div class="grid lg:grid-cols-2 md:grid-cols-2 gap-16">
-        <div class="mt-4 rounded sm:ml-4 md:ml-4 lg:ml-0">
-          <div class="w-full overflow-hidden">
-            <img
-              src="{% static 'imgs/logo.png' %}"
-              alt=""
-              class="rounded-t-lg w-full"
-              id="cat_img"
-            />
-          </div>
-        </div>
-        <div class="">
-          <h1
-            class="text-black my-4 text-5xl font-bold leading-tight"
-            style="font-size: 60px"
-          >
-            Découvrez l'histoire et la mission de Distroplace
-          </h1>
-
-          <p class="leading-normal text-2xl mb-8">
-            Plongez dans notre passion pour la littérature africaine et explorez
-            notre engagement envers les auteurs et les lecteurs.
-          </p>
+<section
+  class="p-4 lg:p-8 h-full min-h-[900px] w-full max-w-5xl mx-auto flex flex-col justify-center gap-4 border border-b-0 rounded-t-xl shadow-lg"
+>
+  <div class="container max-w-6xl mx-auto m-8 px-8">
+    <div class="grid lg:grid-cols-2 md:grid-cols-2 gap-16">
+      <div class="mt-4 rounded sm:ml-4 md:ml-4 lg:ml-0">
+        <div class="w-full overflow-hidden">
+          <img
+            src="{% static 'imgs/logo.png' %}"
+            alt=""
+            class="rounded-t-lg w-full"
+            id="cat_img"
+          />
         </div>
       </div>
+      <div class="">
+        <h1
+          class="text-black my-4 text-5xl font-bold leading-tight"
+          style="font-size: 60px"
+        >
+          Découvrez l'histoire et la mission de Distroplace
+        </h1>
+
+        <p class="leading-normal text-2xl mb-8">
+          Plongez dans notre passion pour la littérature africaine et explorez
+          notre engagement envers les auteurs et les lecteurs.
+        </p>
+      </div>
     </div>
-  </section>
+  </div>
 
   <article>
     <h2 class="mt-4 font-bold text-lg">Notre Histoire</h2>
@@ -84,7 +84,7 @@
     <p>
       Chez Distroplace, nous proposons une large gamme de produits, notamment :
     </p>
-    <ul class="ml-4 font-bold text-teal-700">
+    <ul class="ml-4 font-bold text-black">
       <li>- Agroalimentaire</li>
       <li>- Electroménager</li>
       <li>- Electroniques</li>

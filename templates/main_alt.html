@@ -28,7 +28,7 @@
     <link href="{% static 'styles.css' %}" rel="stylesheet" />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Prompt"
+      href="https://fonts.googleapis.com/css?family=Helvetica"
     />
     <link
       rel="shortcut icon"
@@ -38,7 +38,7 @@
 
     <style>
       body {
-        font-family: "Prompt", sans-serif;
+        font-family: "Helvetica", sans-serif;
       }
     </style>
     <title>{{title}}</title>
@@ -53,6 +53,9 @@
     <div
       class="w-full ml-[60px] md:ml-[80px] xl:ml-[300px] min-h-screen overflow-auto"
     >
+      <!--  -->
+      {% include 'snackbar.html' %}
+      <!--  -->
       <div
         class="relative p-4 md:p-6 lg:p-8 w-full max-w-[1350px] mx-auto min-h-screen flex flex-col"
       >
@@ -72,29 +75,6 @@
 
     var current_date = new Date().getFullYear();
     document.getElementById("date").innerHTML = current_date;
-
-    // add to cart button ----------------------------------------------------------------------------------------------------
-    function add_to_cart(obj_id) {
-      // Retrieve the CSRF token from the hidden input
-      const csrfToken = document.getElementById("csrf_token").value;
-
-      $.ajax({
-        type: "POST",
-        url: "{% url 'add_to_cart' %}",
-        data: {
-          product_id: obj_id,
-          csrfmiddlewaretoken: csrfToken,
-          action: "post",
-        },
-        success: function (json) {
-          console.log(json.cart_count); // Ensure the key matches the JSON response key
-          document.getElementById("cart_counter").textContent = json.cart_count;
-        },
-        error: function (xhr, errmsg, err) {
-          console.error(errmsg); // Log error message to console
-        },
-      });
-    }
 
     // go back button ----------------------------------------------------------------------------------------------------
     function initializeBackButton() {
@@ -128,18 +108,6 @@
       event.currentTarget.className += " active";
     }
 
-    //  commentbox controller ----------------------------------------------------------------------------------------------------
-    function toggleCommentBox() {
-      var box = document.querySelector(`.comment_box`);
-      if (box.classList.contains("hidden")) {
-        box.classList.remove("hidden");
-        box.classList.add("block");
-      } else {
-        box.classList.remove("block");
-        box.classList.add("hidden");
-      }
-    }
-
     //  accordions controller ----------------------------------------------------------------------------------------------------
     function toggleAccordion(div_id) {
       var active_accordion = document.getElementById(div_id);
@@ -169,13 +137,6 @@
       }
     }
 
-    // nav mechanism ----------------------------------------------------------------------------------------------------
-    function toggleNav(e) {
-      e.name === "nav"
-        ? ((e.name = "close"), navlinks.classList.remove("hidden"))
-        : ((e.name = "nav"), navlinks.classList.add("hidden"));
-    }
-
     //  dropdown controllers ----------------------------------------------------------------------------------------------------
     function toggleDropdown(e) {
       e.name === "dropdownBtn"
@@ -184,12 +145,15 @@
     }
 
     function toggleMenu(e, obj_id) {
-      // alert("clicked");
       activeMenu = document.getElementById(obj_id);
       e.name === `actions`
         ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
         : ((e.name = `actions`), activeMenu.classList.add("hidden"));
     }
+
+    window.addEventListener("mouseup", function (event) {
+      activeMenu.classList.add("hidden");
+    });
 
     window.addEventListener("mouseup", function (event) {
       if (
